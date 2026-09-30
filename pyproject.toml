@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "saigo"
+version = "0.1.0"
+description = "SaiGo: Delivery route planning on Ho Chi Minh City street networks using heuristic search"
+requires-python = ">=3.11"
+# Phiên bản chỉ chốt (lock) sau smoke test trên máy của nhóm — xem docs/TOPIC.md mục 14.1.
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+]
+
+[project.optional-dependencies]
+# Chuẩn bị dữ liệu OSM; không cần cho CI.
+data = ["osmnx"]
+dev = [
+    "pytest",
+    "httpx",
+    "networkx",
+]
+bench = ["matplotlib"]
+
+[tool.setuptools.packages.find]
+where = ["backend"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["backend"]

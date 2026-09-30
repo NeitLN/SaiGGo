@@ -1,0 +1,56 @@
+:root {
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: #1f2933;
+  background: #f5f7fa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.topbar {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #d9e2ec;
+}
+
+.subtitle {
+  color: #52606d;
+}
+
+.status {
+  margin-left: auto;
+  font-size: 0.9em;
+  color: #52606d;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  height: calc(100vh - 45px);
+}
+
+.panel {
+  padding: 16px;
+  background: #ffffff;
+  border-right: 1px solid #d9e2ec;
+  overflow-y: auto;
+}
+
+#map {
+  height: 100%;
+}
+
+@media (max-width: 720px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+}

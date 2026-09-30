@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node / frontend
+node_modules/
+frontend/dist/
+
+# Dữ liệu lớn: không commit graph thô; dùng manifest + hash để tái lập
+data/raw/
+data/processed/
+*.graphml
+cache/
+
+# Đóng gói Windows
+build/
+dist/
+*.spec
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+.env
