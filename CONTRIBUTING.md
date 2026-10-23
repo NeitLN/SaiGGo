@@ -15,8 +15,10 @@ Issue (Todo) ──► nhận việc, tạo branch (In Progress) ──► mở 
    - `T11: thêm Dijkstra với lazy deletion`
    - `T11: test cạnh song song chọn đúng edge id`
 4. **Pull Request:** dùng template có sẵn; dòng đầu `Closes #<số issue>`; điền cách kiểm tra (lệnh + kết quả) và giờ thực tế. Chuyển Status sang **In Review**.
-5. **Review:** GitHub tự yêu cầu review theo `.github/CODEOWNERS`; người review đề xuất cũng có trong issue. Cần **ít nhất 1 approve** của người khác và **CI xanh** mới merge được.
-6. **Merge:** tác giả PR bấm **Squash and merge** sau khi được approve. Issue tự đóng, Project tự chuyển **Done**, burndown tự cập nhật.
+5. **Review:** GitHub tự yêu cầu review theo `.github/CODEOWNERS`; người review đề xuất cũng có trong issue. Cần **ít nhất 1 approve** của người khác và **CI xanh** mới merge được. Người approve phải khác người push commit cuối cùng; nếu reviewer tự sửa giúp rồi push, cần một người khác approve.
+6. **Merge:** tác giả PR bấm **Squash and merge** sau khi được approve. Issue tự đóng và burndown tự cập nhật. Status trên Project chuyển **Done** nhờ workflow của Project (nếu đã bật) hoặc lệnh `python scripts/tracking/setup_project.py --sync`.
+
+Cả 4 thành viên có quyền write trên Project để tự chuyển Status. Issue đóng tay (không qua PR) vẫn giảm burndown nhưng bị ghi "đóng tay, chưa có PR" và không được tính vào giờ hoàn thành của người đó.
 
 ## 2. Review
 
@@ -40,6 +42,7 @@ Mỗi thành viên review ít nhất một module của người khác (TOPIC.md
 
 - Giờ ước lượng nằm ở mục **Ước lượng (giờ)** của issue, lấy từ `docs/TASKS.md`.
 - **Không sửa ước lượng sau khi đã bắt đầu làm.** Nếu làm lâu hơn, ghi giờ thực tế trong PR; nhóm dùng chênh lệch này để rút kinh nghiệm.
+- **Không viết ghi chú vào nội dung issue task.** Nội dung được sinh lại từ `docs/TASKS.md` mỗi lần sync, nên ghi chú, tiến độ và câu hỏi phải viết bằng **bình luận**. Checkbox đã tick và nhãn như `blocked` thì được giữ.
 - Task bị cắt khỏi phạm vi: đóng issue với lý do **Close as not planned** và ghi lý do. Burndown tính phần đó là cắt phạm vi, không tính là đã làm.
 - Task mới phát sinh: thêm vào `docs/TASKS.md` + `docs/tracking/schedule.csv`, chạy `python scripts/tracking/create_backlog.py --create` và `python scripts/tracking/setup_project.py --sync`. Phạm vi tăng sẽ hiện trên burndown.
 

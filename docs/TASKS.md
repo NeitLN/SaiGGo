@@ -77,6 +77,16 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - ▶ Review thủ công; sau T11/T20 các test đọc file này phải xanh.
 - 🧠 Thứ tự pop của Dijkstra; vì sao A* không pop C và D.
 
+### T04 — Sửa hệ thống theo dõi sau review
+- 👤 Tiến (Duy Anh review) · ⏱ 3 h · ⛓ T-PLAN
+- **Mục tiêu:** số liệu theo dõi không bị viết lại, không bị "làm đẹp", và đồng bộ không xóa thông tin đang dùng.
+- **Việc cần làm:** burndown lưu số cuối ngày vào `daily.csv` (chỉ ghi thêm); tách task hoàn thành qua PR/commit với task đóng thủ công và task bị cắt; kiểm tra ước lượng; đếm review theo cặp người–PR; bình luận tổng kết tuần không trùng; `create_backlog.py` giữ checkbox, nhãn `blocked` và tìm issue theo "Mã task"; `setup_project.py` xử lý issue mở lại; thêm Bảo vào CODEOWNERS; sửa phụ thuộc T80 và hạn T03.
+- 📁 `scripts/tracking/*.py`, `.github/workflows/tracking.yml`, `.github/CODEOWNERS`, `docs/tracking/`, `docs/TASKS.md`
+- 📦 Hệ thống theo dõi đã sửa.
+- ✅ Chạy `burndown.py` tại máy ra cùng số với issue theo dõi; chạy `create_backlog.py --sync` hai lần liên tiếp không đổi gì.
+- ▶ `python scripts/tracking/burndown.py --out build/tracking` · `python scripts/tracking/create_backlog.py --dry-run`
+- 🧠 Vì sao lịch sử burndown phải chỉ ghi thêm; khác biệt giữa "đóng issue" và "hoàn thành có bằng chứng".
+
 ---
 
 ## M1 — Dijkstra trên đồ thị mẫu
@@ -406,7 +416,8 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 ## M9 — Hoàn thiện
 
 ### T80 — Đóng băng tính năng và chạy trên máy thứ hai
-- 👤 Bảo · ⏱ 2–3 h · ⛓ M6 (và M8 nếu có)
+- 👤 Bảo · ⏱ 2–3 h · ⛓ T54, T55, G1
+- **Ghi chú:** nếu G1 quyết định làm M8b thì chờ thêm T73 (UI tour) xong mới đóng băng; phụ thuộc này không ghi ở dòng ⛓ vì M8b có thể không làm.
 - **Việc cần làm:** 10/11 đóng băng tính năng; clone repo sạch trên máy khác, làm đúng theo README (tải dataset từ Release, kiểm tra hash), chạy demo; ghi mọi bước bị vướng.
 - 📦 Biên bản chạy máy thứ hai · ✅ Chạy được mà không cần ai sửa tay; hoặc README đã được sửa · ▶ Thủ công
 - 🧠 Tái lập là gì.

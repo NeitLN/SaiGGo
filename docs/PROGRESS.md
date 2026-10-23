@@ -27,6 +27,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | Task | Issue | Người | Trạng thái | Bằng chứng / ghi chú |
 |---|---|---|---|---|
 | T-PLAN Kế hoạch + theo dõi | [#1](https://github.com/NeitLN/SaiGGo/issues/1) | Tiến | ✅ | 7 tài liệu kế hoạch, 40 issue, 10 milestone, Project, burndown tự động |
+| T04 Sửa hệ thống theo dõi sau review | [#42](https://github.com/NeitLN/SaiGGo/issues/42) | Tiến | 🟨 | PR chờ review; đã chạy thử tại máy (xem nhật ký 24/10) |
 | T00 Môi trường | [#2](https://github.com/NeitLN/SaiGGo/issues/2) | Tiến | ⬜ | **Task nên làm đầu tiên** |
 | T01 Fixture + Graph loader | [#3](https://github.com/NeitLN/SaiGGo/issues/3) | Duy Anh | ⬜ | |
 | T02 OSMnx trên Windows | [#4](https://github.com/NeitLN/SaiGGo/issues/4) | Minh | ⬜ | |
@@ -112,3 +113,4 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 |---|---|---|---|
 | 23/10/2026 | Tiến | Lập bộ tài liệu kế hoạch (PROJECT_BRIEF, ARCHITECTURE, DATA_MODEL, ROADMAP, TASKS, EXPERIMENT_PLAN, PROGRESS) | Kế hoạch xong; chưa triển khai code |
 | 23/10/2026 | Tiến | Dựng hệ thống theo dõi: 10 milestone, 40 issue có phụ thuộc, GitHub Project, template issue/PR, CODEOWNERS, burndown tự động, bảo vệ branch `main` | Đã kiểm chứng: issue/Project tạo đúng; burndown chạy được tại máy |
+| 24/10/2026 | Tiến | Review hệ thống theo dõi (2 người review độc lập), sửa 13 điểm: chốt số cuối ngày vào `daily.csv`, phân biệt đóng qua PR/commit với đóng tay, kiểm tra ước lượng, đếm review theo PR, tổng kết tuần không trùng, sync giữ checkbox và nhãn `blocked`, xử lý issue mở lại, Bảo vào CODEOWNERS, cấp quyền Project cho cả nhóm, yêu cầu người approve khác người push cuối | Đã kiểm chứng tại máy: chạy burndown 2 lần cho `daily.csv` giống nhau; `--sync` 2 lần cho cùng trạng thái issue; checkbox và nhãn `blocked` được giữ. **Chưa kiểm chứng:** workflow mới trên GitHub (chỉ chạy sau khi PR được merge) |
