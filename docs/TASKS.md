@@ -87,6 +87,16 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - ▶ `python scripts/tracking/burndown.py --out build/tracking` · `python scripts/tracking/create_backlog.py --dry-run`
 - 🧠 Vì sao lịch sử burndown phải chỉ ghi thêm; khác biệt giữa "đóng issue" và "hoàn thành có bằng chứng".
 
+### T05 — Hướng dẫn bắt đầu cho từng thành viên
+- 👤 Tiến (Duy Anh review) · ⏱ 3 h · ⛓ T04
+- **Mục tiêu:** mỗi thành viên tự dựng được môi trường và bắt đầu task đầu tiên mà không phải hỏi lại.
+- **Việc cần làm:** `scripts/setup_dev.ps1` dựng môi trường bằng một lệnh; `docs/team/ONBOARDING.md` (cài đặt, git đúng tên, quy trình PR/review, lỗi thường gặp); phiếu bắt đầu cho từng người trong `docs/team/start/`; chương trình họp khởi động `docs/team/KICKOFF.md`; README dùng script mới.
+- 📁 `scripts/setup_dev.ps1`, `docs/team/`, `README.md`
+- 📦 Bộ tài liệu bắt đầu + script.
+- ✅ Script chạy tới `==> Xong` trên Windows PowerShell 5.1; mọi link trong tài liệu mở được.
+- ▶ `powershell -ExecutionPolicy Bypass -File scripts\setup_dev.ps1`
+- 🧠 Vì sao commit phải mang tên đúng người; vì sao `pip install -e` lỗi với đường dẫn có dấu trên Windows.
+
 ---
 
 ## M1 — Dijkstra trên đồ thị mẫu

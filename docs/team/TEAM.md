@@ -7,6 +7,8 @@
 | Võ Hoàng Minh | [@Jayson135724](https://github.com/Jayson135724) | Pipeline dữ liệu OSM, bản đồ, giao diện | Đóng đường, test dữ liệu thật |
 | Đỗ Quốc Bảo | [@dobaovlu](https://github.com/dobaovlu) | Ca kiểm thử tính tay, case demo, kiểm thử thủ công, chạy trên máy thứ hai, biểu đồ, tài liệu | Tài liệu, case demo |
 
+Bắt đầu làm việc: [ONBOARDING.md](ONBOARDING.md) (cài đặt, quy trình) và phiếu riêng trong [start/](start/).
+
 Phân công chi tiết từng task: tab [Issues](https://github.com/NeitLN/SaiGGo/issues?q=label%3Atask) (lọc theo người được giao) hoặc [Project](https://github.com/users/NeitLN/projects/3).
 
 ## Cam kết làm việc [Đề xuất — cả nhóm xác nhận ở buổi họp đầu]

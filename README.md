@@ -48,30 +48,26 @@ Kế hoạch triển khai: [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) · ti�
 
 ## Chạy local (Windows)
 
-Yêu cầu: Python 3.11+, Node.js 20+.
+Yêu cầu: Git, Python 3.11+, Node.js 20+. Thành viên mới: đọc [docs/team/ONBOARDING.md](docs/team/ONBOARDING.md).
 
 ```powershell
+# Dựng môi trường một lần: tạo .venv, cài thư viện, chạy test, build frontend
+powershell -ExecutionPolicy Bypass -File scripts\setup_dev.ps1          # thêm -Data để cài OSMnx
+
 # Backend
-python -m venv .venv
-.venv\Scripts\activate
-pip install -e ".[dev]"
+.venv\Scripts\Activate.ps1
 uvicorn app.main:app --reload --app-dir backend
 
 # Frontend (terminal khác)
 cd frontend
-npm install
 npm run dev
 ```
 
 Mở http://localhost:5173. Frontend gọi backend qua proxy `/api` → `http://127.0.0.1:8000`.
 
-Chạy test:
+Chạy test: `.venv\Scripts\python.exe -m pytest -q`.
 
-```powershell
-pytest -q
-```
-
-Công cụ tải dữ liệu OSM: `pip install -e ".[data]"`.
+Nên clone vào thư mục không dấu (ví dụ `C:\dev\SaiGGo`): trên Windows, `pip install -e` lỗi khi đường dẫn có chữ tiếng Việt. Script ở trên không dùng `-e` nên vẫn chạy được ở đường dẫn có dấu.
 
 ## Dữ liệu và giấy phép
 
