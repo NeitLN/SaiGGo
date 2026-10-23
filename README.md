@@ -18,6 +18,18 @@ Không cung cấp ETA giao thông trực tiếp hay điều hướng thương m�
 - Benchmark offline có thể tái lập
 
 Đặc tả đầy đủ: [docs/TOPIC.md](docs/TOPIC.md).
+Kế hoạch triển khai: [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) · tiến độ: [docs/PROGRESS.md](docs/PROGRESS.md).
+
+## Theo dõi công việc nhóm
+
+| | |
+|---|---|
+| Bảng công việc | [GitHub Project — SaiGo Delivery Plan](https://github.com/users/NeitLN/projects/3) |
+| Burndown (cập nhật mỗi ngày) | Issue ghim có nhãn [`tracking`](https://github.com/NeitLN/SaiGGo/issues?q=label%3Atracking) |
+| Mốc | [Milestones](https://github.com/NeitLN/SaiGGo/milestones) |
+| Thành viên và phân công | [docs/team/TEAM.md](docs/team/TEAM.md) |
+| Quy trình (branch, PR, review) | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| Cách đọc số liệu theo dõi | [docs/tracking/README.md](docs/tracking/README.md) |
 
 ## Cấu trúc
 

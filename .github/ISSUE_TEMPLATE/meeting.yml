@@ -1,0 +1,50 @@
+name: Biên bản họp
+description: Ghi lại buổi họp nhóm (họp tuần hoặc họp đột xuất)
+title: "Họp nhóm dd/mm/yyyy"
+labels: ["meeting"]
+body:
+  - type: input
+    id: date
+    attributes:
+      label: Thời gian và hình thức
+      placeholder: "26/10/2026 20:00–20:45, Google Meet"
+    validations:
+      required: true
+  - type: checkboxes
+    id: attendees
+    attributes:
+      label: Có mặt
+      options:
+        - label: Võ Việt Tiến
+        - label: Bùi Duy Anh
+        - label: Đỗ Quốc Bảo
+        - label: Võ Hoàng Minh
+  - type: textarea
+    id: done
+    attributes:
+      label: Đã làm từ buổi trước
+      description: Mỗi người một dòng, kèm link issue/PR.
+      placeholder: "- Duy Anh: xong #7 (Dijkstra), PR #45 chờ review"
+    validations:
+      required: true
+  - type: textarea
+    id: next
+    attributes:
+      label: Kế hoạch đến buổi sau
+      placeholder: "- Minh: #13, #14"
+    validations:
+      required: true
+  - type: textarea
+    id: blockers
+    attributes:
+      label: Vướng mắc
+  - type: textarea
+    id: decisions
+    attributes:
+      label: Quyết định
+      description: Quyết định về phạm vi, thiết kế, phân công. Nếu đổi kế hoạch thì ghi lý do.
+  - type: textarea
+    id: actions
+    attributes:
+      label: Việc giao sau buổi họp
+      placeholder: "- [ ] @anh7032 review PR #46 trước 27/10"

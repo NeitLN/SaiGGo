@@ -1,0 +1,60 @@
+name: Tracking
+
+# Cập nhật burndown và báo cáo tiến độ từ dữ liệu issue/PR thật.
+# Kết quả: issue có nhãn `tracking` + branch `tracking` (burndown.png, burndown.csv, history/<ngày>.csv).
+
+on:
+  schedule:
+    - cron: "0 17 * * *"   # 00:00 giờ VN mỗi ngày
+    - cron: "0 1 * * 1"    # 08:00 giờ VN thứ Hai: thêm bình luận tổng kết tuần
+  issues:
+    types: [closed, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: read
+
+concurrency:
+  group: tracking
+  cancel-in-progress: false
+
+jobs:
+  burndown:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install matplotlib
+      - name: Tính burndown
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/tracking/burndown.py --out out --image-version "${{ github.run_id }}"
+      - name: Ghi vào branch tracking
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin tracking >/dev/null; then
+            git fetch origin tracking
+            git worktree add ../trk origin/tracking
+            cd ../trk && git checkout -B tracking
+          else
+            git worktree add --detach ../trk
+            cd ../trk && git checkout --orphan tracking && git rm -rfq .
+          fi
+          cp "$GITHUB_WORKSPACE"/out/burndown.png "$GITHUB_WORKSPACE"/out/burndown.csv "$GITHUB_WORKSPACE"/out/REPORT.md .
+          mkdir -p history
+          cp burndown.csv "history/$(TZ=Asia/Ho_Chi_Minh date +%F).csv"
+          git add -A
+          git diff --cached --quiet || git commit -qm "Cập nhật burndown $(TZ=Asia/Ho_Chi_Minh date '+%F %H:%M')"
+          git push origin tracking
+      - name: Cập nhật issue theo dõi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ARGS="--out out --image-version ${{ github.run_id }} --update-issue"
+          if [ "${{ github.event.schedule }}" = "0 1 * * 1" ]; then ARGS="$ARGS --weekly-comment"; fi
+          python scripts/tracking/burndown.py $ARGS

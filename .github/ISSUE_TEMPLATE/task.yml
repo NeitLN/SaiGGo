@@ -1,0 +1,68 @@
+name: Task
+description: Một hạng mục công việc trong backlog (được tính vào burndown)
+title: "Txx · "
+labels: ["task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Task mới nên được thêm vào `docs/TASKS.md` và `docs/tracking/schedule.csv` rồi chạy `python scripts/tracking/create_backlog.py --create`.
+        Chỉ dùng form này cho việc phát sinh nhỏ; nhớ gắn milestone và nhãn `P0/P1/P2`, `area:*`, `type:*`.
+  - type: input
+    id: task_id
+    attributes:
+      label: Mã task
+      placeholder: T90
+    validations:
+      required: true
+  - type: input
+    id: estimate
+    attributes:
+      label: Ước lượng (giờ)
+      description: Một con số. Không sửa sau khi đã bắt đầu làm; nếu lệch, ghi giờ thực tế trong PR.
+      placeholder: "3"
+    validations:
+      required: true
+  - type: input
+    id: owner
+    attributes:
+      label: Người phụ trách
+      placeholder: "@username (Tên)"
+    validations:
+      required: true
+  - type: input
+    id: reviewer
+    attributes:
+      label: Người review đề xuất
+      placeholder: "@username (Tên)"
+    validations:
+      required: true
+  - type: input
+    id: dates
+    attributes:
+      label: Thời gian dự kiến
+      placeholder: "01/11/2026 → 02/11/2026"
+    validations:
+      required: true
+  - type: textarea
+    id: deps
+    attributes:
+      label: Phụ thuộc
+      placeholder: "- [ ] #12"
+  - type: textarea
+    id: body
+    attributes:
+      label: Mô tả
+      description: Mục tiêu, việc cần làm, file tác động, đầu ra, điều kiện hoàn thành, lệnh kiểm tra, kiến thức cần hiểu.
+    validations:
+      required: true
+  - type: checkboxes
+    id: dod
+    attributes:
+      label: Definition of Done
+      options:
+        - label: Làm trên branch riêng, mở PR có `Closes #<số issue này>`
+        - label: Ít nhất 1 thành viên khác review và approve
+        - label: CI xanh; lệnh kiểm tra trong mô tả chạy đạt
+        - label: Cập nhật `docs/PROGRESS.md`
+        - label: Người phụ trách giải thích được phần kiến thức cho nhóm

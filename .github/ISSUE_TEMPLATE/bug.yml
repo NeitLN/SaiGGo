@@ -1,0 +1,29 @@
+name: Lỗi
+description: Báo một lỗi đã tái hiện được
+labels: ["bug"]
+body:
+  - type: textarea
+    id: steps
+    attributes:
+      label: Cách tái hiện
+      description: Lệnh hoặc thao tác, dataset_id, kịch bản, cạnh đóng (nếu có).
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Kết quả mong đợi
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Kết quả thực tế
+      description: Dán output, log hoặc ảnh chụp.
+    validations:
+      required: true
+  - type: input
+    id: related
+    attributes:
+      label: Task liên quan
+      placeholder: "#7"
