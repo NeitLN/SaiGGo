@@ -38,7 +38,7 @@ python scripts/tracking/burndown.py --out build/tracking
 | Việc | Lệnh |
 |---|---|
 | Thêm/sửa task | Sửa `docs/TASKS.md` + `docs/tracking/schedule.csv`, rồi `python scripts/tracking/create_backlog.py --create` (thêm mới) hoặc `--sync` (cập nhật nội dung, nhãn, người được giao) |
-| Đồng bộ trường trên Project (Hours, Start, Due, Week) | `python scripts/tracking/setup_project.py --sync` |
+| Đồng bộ trường trên Project (Hours, Start, Due, Week; issue đã đóng → Done) | `python scripts/tracking/setup_project.py --sync` |
 | Giao task cho thành viên mới vào repo | `--sync` sẽ tự giao khi tài khoản đã là collaborator |
 
 ## Thiết lập một lần trên giao diện GitHub (API không làm được)

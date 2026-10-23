@@ -179,8 +179,9 @@ def main(sync_only: bool) -> None:
         set_value(pid, iid, f["Start"]["id"], {"date": s["start"]})
         set_value(pid, iid, f["Due"]["id"], {"date": s["due"]})
         set_value(pid, iid, f["Week"]["id"], {"singleSelectOptionId": option_id(f["Week"], week_of(date.fromisoformat(s["due"])))})
-        if item["status"] is None:
-            status = "Done" if issue["state"] == "closed" else "Todo"
+        closed = issue["state"] == "closed"
+        if item["status"] is None or (closed and item["status"] != "Done"):
+            status = "Done" if closed else "Todo"
             set_value(pid, iid, f["Status"]["id"], {"singleSelectOptionId": option_id(f["Status"], status)})
         print(f"item #{issue['number']} {tid}")
     print(f"https://github.com/users/{OWNER}/projects/{project['number']}")
