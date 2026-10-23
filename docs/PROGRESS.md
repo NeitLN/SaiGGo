@@ -30,7 +30,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | T04 Sửa hệ thống theo dõi sau review | [#42](https://github.com/NeitLN/SaiGGo/issues/42) | Tiến | 🟨 | PR chờ review; đã chạy thử tại máy (xem nhật ký 24/10) |
 | T00 Môi trường | [#2](https://github.com/NeitLN/SaiGGo/issues/2) | Tiến | ⬜ | **Task nên làm đầu tiên** |
 | T01 Fixture + Graph loader | [#3](https://github.com/NeitLN/SaiGGo/issues/3) | Duy Anh | ⬜ | |
-| T02 OSMnx trên Windows | [#4](https://github.com/NeitLN/SaiGGo/issues/4) | Minh | ⬜ | |
+| T02 OSMnx trên Windows | [#4](https://github.com/NeitLN/SaiGGo/issues/4) | Minh | 🟨 | PR chờ review. `prepare_data.py --smoke` chạy được trên Windows 11 bằng pip (không cần conda): 41 node, 69 cạnh, 47 cạnh một chiều |
 | T03 Đáp án tính tay | [#5](https://github.com/NeitLN/SaiGGo/issues/5) | Bảo | ⬜ | |
 | T10 Hàm địa lý | [#6](https://github.com/NeitLN/SaiGGo/issues/6) | Duy Anh | ⬜ | |
 | T11 Dijkstra | [#7](https://github.com/NeitLN/SaiGGo/issues/7) | Duy Anh | ⬜ | |
@@ -38,7 +38,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | T20 A* | [#9](https://github.com/NeitLN/SaiGGo/issues/9) | Duy Anh | ⬜ | |
 | T21 Đối chứng ngẫu nhiên | [#10](https://github.com/NeitLN/SaiGGo/issues/10) | Duy Anh | ⬜ | |
 | T22 Kiểm tra heuristic | [#11](https://github.com/NeitLN/SaiGGo/issues/11) | Duy Anh | ⬜ | |
-| T30 Tải dữ liệu | [#12](https://github.com/NeitLN/SaiGGo/issues/12) | Minh | ⬜ | |
+| T30 Tải dữ liệu | [#12](https://github.com/NeitLN/SaiGGo/issues/12) | Minh | 🟨 | PR chờ review. Đã tải 24/10: 12.131 node, 27.693 cạnh; `data/processed/raw_manifest.json` (sha256 `24a28327…`). File GraphML 13,4 MB chưa chia sẻ cho nhóm |
 | T31 Chuyển đổi + báo cáo | [#13](https://github.com/NeitLN/SaiGGo/issues/13) | Minh + Tiến | ⬜ | |
 | T32 Vẽ mạng đường | [#14](https://github.com/NeitLN/SaiGGo/issues/14) | Minh | ⬜ | |
 | T33 Dữ liệu thật + đối chứng | [#15](https://github.com/NeitLN/SaiGGo/issues/15) | Duy Anh + Tiến | ⬜ | |
@@ -114,3 +114,5 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | 23/10/2026 | Tiến | Lập bộ tài liệu kế hoạch (PROJECT_BRIEF, ARCHITECTURE, DATA_MODEL, ROADMAP, TASKS, EXPERIMENT_PLAN, PROGRESS) | Kế hoạch xong; chưa triển khai code |
 | 23/10/2026 | Tiến | Dựng hệ thống theo dõi: 10 milestone, 40 issue có phụ thuộc, GitHub Project, template issue/PR, CODEOWNERS, burndown tự động, bảo vệ branch `main` | Đã kiểm chứng: issue/Project tạo đúng; burndown chạy được tại máy |
 | 24/10/2026 | Tiến | Review hệ thống theo dõi (2 người review độc lập), sửa 13 điểm: chốt số cuối ngày vào `daily.csv`, phân biệt đóng qua PR/commit với đóng tay, kiểm tra ước lượng, đếm review theo PR, tổng kết tuần không trùng, sync giữ checkbox và nhãn `blocked`, xử lý issue mở lại, Bảo vào CODEOWNERS, cấp quyền Project cho cả nhóm, yêu cầu người approve khác người push cuối | Đã kiểm chứng tại máy: chạy burndown 2 lần cho `daily.csv` giống nhau; `--sync` 2 lần cho cùng trạng thái issue; checkbox và nhãn `blocked` được giữ. **Chưa kiểm chứng:** workflow mới trên GitHub (chỉ chạy sau khi PR được merge) |
+| 24/10/2026 | Minh | T02: thêm `scripts/prepare_data.py --smoke`, tải bbox 500 m × 500 m quanh Bến Thành (`network_type="drive"`), lưu `data/raw/smoke.graphml` | Đã kiểm chứng trên Windows 11, Python 3.14.4, cài bằng `pip install -e ".[dev,data]"`: osmnx 2.1.1, networkx 3.7, geopandas 1.2.0, shapely 2.2.0, pyproj 3.8.0. Kết quả: `MultiDiGraph`, 41 node, 69 cạnh, 47 cạnh một chiều; loại đường tertiary 27, residential 21, primary 16, secondary 4, primary_link 1. Vùng nhỏ bị cắt sát nên có 19 thành phần liên thông mạnh, lớn nhất 20 node: minh họa vì sao T30 cần vùng đệm và bước chọn SCC |
+| 24/10/2026 | Minh | T30: `data/config/areas.json`, `data/config/speeds.json`, lệnh `prepare_data.py download` (tải một lần, từ chối tải lại nếu không có `--force`), `raw_manifest.json` được commit | Đã kiểm chứng: tải bbox 10 km × 10 km quanh Bến Thành (nửa cạnh 4,5 km + đệm 0,5 km) lúc 03:13 24/10/2026, mất ~1 phút 50 giây. Số đo: 12.131 node, 27.693 cạnh, 4.983 cạnh một chiều, 255 thành phần liên thông yếu (do `retain_all=True`; T31 sẽ chọn SCC). `outer.graphml` 13,4 MB, sha256 `24a283275b0f65836bd51d7efc7110a566b658ff3a6a5bccef1a0db576ed5398`. **Chưa làm:** đưa file GraphML lên Release/thư mục chung để T31 dùng cùng một bản |
