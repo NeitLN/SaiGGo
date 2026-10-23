@@ -1,9 +1,10 @@
 id,milestone,start,due,area,type,priority
 T-PLAN,M0,2026-10-23,2026-10-23,docs,docs,P0
+T04,M0,2026-10-24,2026-10-24,infra,chore,P0
 T00,M0,2026-10-23,2026-10-24,infra,chore,P0
 T01,M0,2026-10-23,2026-10-24,graph,feature,P0
 T02,M0,2026-10-23,2026-10-24,data,chore,P0
-T03,M0,2026-10-23,2026-10-25,algorithms,test,P0
+T03,M0,2026-10-23,2026-10-24,algorithms,test,P0
 T10,M1,2026-10-24,2026-10-25,graph,feature,P0
 T11,M1,2026-10-24,2026-10-26,algorithms,feature,P0
 T12,M1,2026-10-25,2026-10-26,api,feature,P0

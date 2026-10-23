@@ -6,9 +6,12 @@ Nguồn dữ liệu:
 
 Cách dùng (cần `gh` đã đăng nhập):
     python scripts/tracking/create_backlog.py --dry-run   # chỉ in kết quả phân tích
-    python scripts/tracking/create_backlog.py --create    # tạo những gì còn thiếu
-    python scripts/tracking/create_backlog.py --sync      # cập nhật nội dung/nhãn/người làm của issue đã có
+    python scripts/tracking/create_backlog.py --create    # chỉ tạo task còn thiếu; không sửa issue đã có
+    python scripts/tracking/create_backlog.py --sync      # cập nhật mọi issue theo TASKS.md
 
+Issue được nhận diện qua mục "Mã task" trong nội dung, không qua tiêu đề hay nhãn.
+--sync giữ checkbox đã tick và các nhãn không do script quản lý (blocked, bug, …),
+đồng thời thêm/bỏ quan hệ "blocked by" cho khớp TASKS.md.
 Script không đổi trạng thái mở/đóng của issue.
 """
 
@@ -171,7 +174,7 @@ def parse_tasks() -> list[dict]:
             cur["owner_text"] = m.group("owner")
             cur["owners"], cur["reviewers"] = parse_people(m.group("owner"))
             cur["hours"] = parse_hours(m.group("hours"))
-            cur["deps"] = re.findall(r"\b(T\d\d|G1)\b", m.group("deps"))
+            cur["deps"] = re.findall(r"\b(T-PLAN|T\d\d|G1)\b", m.group("deps"))
             continue
         cur["body"].append(line)
     for t in tasks:
@@ -256,6 +259,26 @@ def labels_for(sched: dict) -> list[str]:
     return ["task", sched["priority"], f"area:{sched['area']}", f"type:{sched['type']}"]
 
 
+# Nhãn do script quản lý; các nhãn khác (blocked, bug, …) do người dùng gắn và được giữ nguyên.
+MANAGED_LABELS = {n for n in LABELS if n == "task" or n in ("P0", "P1", "P2") or n.startswith(("area:", "type:"))}
+
+
+def merge_labels(managed: list[str], current: list[dict]) -> list[str]:
+    return managed + [l["name"] for l in current if l["name"] not in MANAGED_LABELS]
+
+
+def keep_checked(new_body: str, old_body: str) -> str:
+    """Giữ các checkbox người dùng đã tick trong nội dung cũ."""
+    checked = {line.strip()[6:] for line in (old_body or "").splitlines()
+               if line.strip().lower().startswith("- [x] ")}
+    out = []
+    for line in new_body.splitlines():
+        if line.startswith("- [ ] ") and line[6:] in checked:
+            line = "- [x] " + line[6:]
+        out.append(line)
+    return "\n".join(out) + ("\n" if new_body.endswith("\n") else "")
+
+
 # ---------- GitHub ----------
 
 def ensure_labels() -> None:
@@ -283,12 +306,28 @@ def ensure_milestones() -> dict[str, int]:
     return out
 
 
+def task_id_of(issue: dict) -> str | None:
+    """Mã task lấy từ mục "Mã task" trong nội dung; tiêu đề chỉ là phương án dự phòng."""
+    m = re.search(r"###[^\S\n]*Mã task[^\S\n]*\n\s*(T-PLAN|T\d\d|G1)\s*(?:\n|$)", issue.get("body") or "")
+    if m:
+        return m.group(1)
+    head = issue["title"].split(" · ", 1)[0]
+    return head if HEADER.match(f"### {head} — x") else None
+
+
 def existing_task_issues() -> dict[str, dict]:
-    found = {}
-    for issue in gh_paged(f"repos/{REPO}/issues?state=all&labels=task"):
+    """Tìm trên mọi issue (kể cả đã bỏ nhãn `task`) để không tạo trùng."""
+    found: dict[str, dict] = {}
+    for issue in gh_paged(f"repos/{REPO}/issues?state=all"):
         if "pull_request" in issue:
             continue
-        tid = issue["title"].split(" · ", 1)[0]
+        tid = task_id_of(issue)
+        if not tid:
+            continue
+        if tid in found:
+            print(f"CẢNH BÁO: {tid} có nhiều issue (#{found[tid]['number']}, #{issue['number']}); dùng issue cũ hơn")
+            if issue["number"] > found[tid]["number"]:
+                continue
         found[tid] = issue
     return found
 
@@ -297,22 +336,23 @@ def assignable() -> set[str]:
     return {c["login"] for c in gh_paged(f"repos/{REPO}/collaborators")}
 
 
-def add_native_dependencies(tasks: list[dict], issues: dict[str, dict]) -> None:
-    """Quan hệ 'blocked by' của GitHub; bỏ qua nếu API không hỗ trợ."""
+def sync_native_dependencies(tasks: list[dict], issues: dict[str, dict], remove_extra: bool) -> None:
+    """Quan hệ 'blocked by' của GitHub khớp với ⛓ trong TASKS.md; bỏ qua nếu API không hỗ trợ."""
+    by_number = {i["number"]: i for i in issues.values()}
     for t in tasks:
         num = issues[t["id"]]["number"]
-        current = set()
         try:
-            for dep in gh([f"repos/{REPO}/issues/{num}/dependencies/blocked_by"]):
-                current.add(dep["number"])
+            current = {d["number"]: d for d in gh_paged(f"repos/{REPO}/issues/{num}/dependencies/blocked_by")}
         except RuntimeError as e:
             print(f"bỏ qua dependency API: {e}")
             return
-        for d in t["deps"]:
-            dep_issue = issues.get(d)
-            if dep_issue and dep_issue["number"] not in current:
-                gh(["-X", "POST", f"repos/{REPO}/issues/{num}/dependencies/blocked_by"],
-                   {"issue_id": dep_issue["id"]})
+        wanted = {issues[d]["number"] for d in t["deps"] if d in issues}
+        for n in wanted - set(current):
+            gh(["-X", "POST", f"repos/{REPO}/issues/{num}/dependencies/blocked_by"], {"issue_id": by_number[n]["id"]})
+        if remove_extra:
+            for n in set(current) - wanted:
+                gh(["-X", "DELETE", f"repos/{REPO}/issues/{num}/dependencies/blocked_by/{current[n]['id']}"])
+                print(f"#{num}: bỏ phụ thuộc cũ #{n}")
 
 
 def run(mode: str) -> None:
@@ -339,35 +379,40 @@ def run(mode: str) -> None:
     can_assign = assignable()
     issues = existing_task_issues()
 
+    created = []
     for t in tasks:
         s = sched[t["id"]]
+        if t["id"] in issues:
+            continue
         payload = {
             "title": issue_title(t),
             "labels": labels_for(s),
             "milestone": ms[s["milestone"]],
             "assignees": [PEOPLE[n] for n in t["owners"] if PEOPLE[n] in can_assign],
+            "body": issue_body(t, s, {}),
         }
-        if t["id"] not in issues:
-            payload["body"] = issue_body(t, s, {})
-            issues[t["id"]] = gh(["-X", "POST", f"repos/{REPO}/issues"], payload)
-            print(f"issue + #{issues[t['id']]['number']} {payload['title']}")
-            time.sleep(1)  # tránh giới hạn tốc độ tạo nội dung của GitHub
+        issues[t["id"]] = gh(["-X", "POST", f"repos/{REPO}/issues"], payload)
+        created.append(t["id"])
+        print(f"issue + #{issues[t['id']]['number']} {payload['title']}")
+        time.sleep(1)  # tránh giới hạn tốc độ tạo nội dung của GitHub
 
+    # --create chỉ hoàn thiện issue mới tạo; --sync cập nhật mọi issue nhưng giữ checkbox và nhãn người dùng gắn.
     numbers = {tid: i["number"] for tid, i in issues.items()}
-    for t in tasks:
+    targets = tasks if mode == "sync" else [t for t in tasks if t["id"] in created]
+    for t in targets:
         s = sched[t["id"]]
+        old = issues[t["id"]]
         payload = {
-            "body": issue_body(t, s, numbers),
-            "labels": labels_for(s),
+            "title": issue_title(t),
+            "body": keep_checked(issue_body(t, s, numbers), old.get("body", "")),
+            "labels": merge_labels(labels_for(s), old.get("labels", [])),
             "milestone": ms[s["milestone"]],
+            "assignees": [PEOPLE[n] for n in t["owners"] if PEOPLE[n] in can_assign],
         }
-        if mode == "sync":
-            payload["title"] = issue_title(t)
-            payload["assignees"] = [PEOPLE[n] for n in t["owners"] if PEOPLE[n] in can_assign]
         gh(["-X", "PATCH", f"repos/{REPO}/issues/{numbers[t['id']]}"], payload)
 
-    add_native_dependencies(tasks, issues)
-    print(f"xong: {len(tasks)} issue")
+    sync_native_dependencies(targets, issues, remove_extra=(mode == "sync"))
+    print(f"xong: {len(created)} issue mới, {len(targets)} issue được cập nhật")
 
 
 if __name__ == "__main__":

@@ -1,12 +1,12 @@
 name: Tracking
 
 # Cập nhật burndown và báo cáo tiến độ từ dữ liệu issue/PR thật.
-# Kết quả: issue có nhãn `tracking` + branch `tracking` (burndown.png, burndown.csv, history/<ngày>.csv).
+# Kết quả: issue #41 (nhãn `tracking`) + branch `tracking`
+# (daily.csv chỉ ghi thêm, burndown.png, burndown.csv, REPORT.md, history/<ngày>.csv).
 
 on:
   schedule:
-    - cron: "0 17 * * *"   # 00:00 giờ VN mỗi ngày
-    - cron: "0 1 * * 1"    # 08:00 giờ VN thứ Hai: thêm bình luận tổng kết tuần
+    - cron: "17 17 * * *"   # ~00:17 giờ VN mỗi ngày (tránh phút 00 vì GitHub hay trễ lịch)
   issues:
     types: [closed, reopened]
   workflow_dispatch:
@@ -20,6 +20,9 @@ concurrency:
   group: tracking
   cancel-in-progress: false
 
+env:
+  TRACKING_ISSUE: "41"
+
 jobs:
   burndown:
     runs-on: ubuntu-latest
@@ -29,32 +32,33 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install matplotlib
-      - name: Tính burndown
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python scripts/tracking/burndown.py --out out --image-version "${{ github.run_id }}"
-      - name: Ghi vào branch tracking
+      - name: Lấy branch tracking
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if git ls-remote --exit-code --heads origin tracking >/dev/null; then
             git fetch origin tracking
             git worktree add ../trk origin/tracking
-            cd ../trk && git checkout -B tracking
+            git -C ../trk checkout -B tracking
           else
             git worktree add --detach ../trk
-            cd ../trk && git checkout --orphan tracking && git rm -rfq .
+            git -C ../trk checkout --orphan tracking
+            git -C ../trk rm -rfq .
           fi
-          cp "$GITHUB_WORKSPACE"/out/burndown.png "$GITHUB_WORKSPACE"/out/burndown.csv "$GITHUB_WORKSPACE"/out/REPORT.md .
+      - name: Tính burndown (một lần)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/tracking/burndown.py --out out --history ../trk/daily.csv --image-version "${{ github.run_id }}"
+      - name: Ghi vào branch tracking
+        working-directory: ../trk
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp "$GITHUB_WORKSPACE"/out/{daily.csv,burndown.png,burndown.csv,REPORT.md} .
           mkdir -p history
           cp burndown.csv "history/$(TZ=Asia/Ho_Chi_Minh date +%F).csv"
           git add -A
           git diff --cached --quiet || git commit -qm "Cập nhật burndown $(TZ=Asia/Ho_Chi_Minh date '+%F %H:%M')"
           git push origin tracking
-      - name: Cập nhật issue theo dõi
+      - name: Đăng lên issue theo dõi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          ARGS="--out out --image-version ${{ github.run_id }} --update-issue"
-          if [ "${{ github.event.schedule }}" = "0 1 * * 1" ]; then ARGS="$ARGS --weekly-comment"; fi
-          python scripts/tracking/burndown.py $ARGS
+        run: python scripts/tracking/burndown.py --publish out

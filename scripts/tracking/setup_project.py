@@ -4,7 +4,11 @@ Trường: Status (Todo / In Progress / In Review / Blocked / Done), Hours, Star
 Giá trị Hours/Start/Due/Week lấy từ docs/TASKS.md và docs/tracking/schedule.csv.
 
     python scripts/tracking/setup_project.py           # tạo project nếu chưa có, thêm và cập nhật item
-    python scripts/tracking/setup_project.py --sync    # chỉ cập nhật item (không đụng Status của item đã có)
+    python scripts/tracking/setup_project.py --sync    # chỉ cập nhật item của project đã có
+
+Status chỉ bị đổi trong ba trường hợp: item mới (Todo/Done), issue đã đóng mà chưa Done (→ Done),
+issue đã mở lại mà vẫn Done (→ Todo). Các trạng thái In Progress / In Review / Blocked do thành viên tự chuyển.
+Thành viên trong PEOPLE được cấp quyền write trên project để tự chuyển trạng thái.
 """
 
 from __future__ import annotations
@@ -17,7 +21,7 @@ from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from create_backlog import REPO, existing_task_issues, load_schedule, parse_tasks  # noqa: E402
+from create_backlog import PEOPLE, REPO, existing_task_issues, load_schedule, parse_tasks  # noqa: E402
 
 OWNER = "NeitLN"
 TITLE = "SaiGo — Delivery Plan"
@@ -74,7 +78,7 @@ def week_of(d: date) -> str:
 
 
 def find_project() -> dict | None:
-    data = graphql("""query($login:String!){ user(login:$login){ projectsV2(first:50){ nodes{ id number title } } } }""",
+    data = graphql("""query($login:String!){ user(login:$login){ projectsV2(first:100){ nodes{ id number title } } } }""",
                    login=OWNER)
     for p in data["user"]["projectsV2"]["nodes"]:
         if p["title"] == TITLE:
@@ -151,6 +155,18 @@ def option_id(field: dict, name: str) -> str:
     return next(o["id"] for o in field["options"] if o["name"] == name)
 
 
+def ensure_collaborators(project_id: str) -> None:
+    """Cấp quyền write trên project cho các thành viên (quyền repo không bao gồm quyền project)."""
+    users = []
+    for login in PEOPLE.values():
+        if login == OWNER:
+            continue
+        users.append(graphql("query($l:String!){ user(login:$l){ id } }", l=login)["user"]["id"])
+    graphql("""mutation($p:ID!,$c:[ProjectV2Collaborator!]!){
+        updateProjectV2Collaborators(input:{projectId:$p,collaborators:$c}){ collaborators{ totalCount } } }""",
+            p=project_id, c=[{"userId": u, "role": "WRITER"} for u in users])
+
+
 def main(sync_only: bool) -> None:
     project = find_project()
     if project is None:
@@ -158,6 +174,7 @@ def main(sync_only: bool) -> None:
             sys.exit("chưa có project; chạy không kèm --sync trước")
         project = create_project()
     pid = project["id"]
+    ensure_collaborators(pid)
     f = ensure_fields(pid)
     tasks = {t["id"]: t for t in parse_tasks()}
     sched = load_schedule()
@@ -166,6 +183,7 @@ def main(sync_only: bool) -> None:
 
     for tid, issue in sorted(issues.items(), key=lambda kv: kv[1]["number"]):
         if tid not in tasks:
+            print(f"CẢNH BÁO: #{issue['number']} {tid} không có trong docs/TASKS.md, bỏ qua (xem CONTRIBUTING mục 4)")
             continue
         s = sched[tid]
         if issue["node_id"] in items:
@@ -180,8 +198,14 @@ def main(sync_only: bool) -> None:
         set_value(pid, iid, f["Due"]["id"], {"date": s["due"]})
         set_value(pid, iid, f["Week"]["id"], {"singleSelectOptionId": option_id(f["Week"], week_of(date.fromisoformat(s["due"])))})
         closed = issue["state"] == "closed"
-        if item["status"] is None or (closed and item["status"] != "Done"):
+        status = None
+        if item["status"] is None:
             status = "Done" if closed else "Todo"
+        elif closed and item["status"] != "Done":
+            status = "Done"
+        elif not closed and item["status"] == "Done":
+            status = "Todo"  # issue đã mở lại
+        if status:
             set_value(pid, iid, f["Status"]["id"], {"singleSelectOptionId": option_id(f["Status"], status)})
         print(f"item #{issue['number']} {tid}")
     print(f"https://github.com/users/{OWNER}/projects/{project['number']}")
