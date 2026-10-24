@@ -18,7 +18,7 @@ Không cung cấp ETA giao thông trực tiếp hay điều hướng thương m�
 - Benchmark offline có thể tái lập
 
 Đặc tả đầy đủ: [docs/TOPIC.md](docs/TOPIC.md).
-Kế hoạch triển khai: [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) · tiến độ: [docs/PROGRESS.md](docs/PROGRESS.md).
+Kế hoạch triển khai: [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) · **trạng thái hiện tại (đọc đầu tiên):** [docs/STATUS.md](docs/STATUS.md) · bằng chứng: [docs/PROGRESS.md](docs/PROGRESS.md).
 
 ## Theo dõi công việc nhóm
 
