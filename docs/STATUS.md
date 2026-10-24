@@ -20,7 +20,8 @@ Bộ nhớ dự án: mục tiêu/phạm vi/deadline ở [PROJECT_BRIEF.md](PROJE
   - PR #45: T05, hướng dẫn bắt đầu.
   - PR #46: T02, Minh. `--smoke` PASS trên Python 3.11.9 và 3.14.4, ra cùng số.
   - PR #47: T30, Minh. Đã tải 12.131 node / 27.693 cạnh, sha256 `24a28327…`.
-- Đang làm: T06 (bộ nhớ dự án + hàng rào, branch `t06-build-to-last`, tách từ T05); T00 (#2), còn mở trang web + PR.
+  - PR #52: T06, bộ nhớ dự án + hàng rào. CI 3 job PASS ở `f57d319`; job `audit` đã bắt và sửa lỗ hổng `vite` 8.3.1 → 8.3.5.
+- Đang dở: T00 (#2), còn mở trang web + PR.
 - **Trễ hạn 24/10, chưa có hoạt động:**
   - T01 (#3, Duy Anh): chặn T11, nên chặn cả skeleton.
   - T03 (#5, Bảo): chỉ chặn khâu chấp nhận của T11.
@@ -41,7 +42,7 @@ Bộ nhớ dự án: mục tiêu/phạm vi/deadline ở [PROJECT_BRIEF.md](PROJE
 | Vùng demo 2 km, `speeds.json`, ngưỡng snap 150 m (Q3, Q4, PROJECT_BRIEF mục 5) | **[Đề xuất]**, chờ nhóm xác nhận ở buổi họp | — |
 
 ## Bước tiếp theo
-1. Tiến merge #45, rồi #46 (sửa xung đột PROGRESS), rồi #47 (cập nhật branch sau #46), rồi PR T06.
+1. Tiến merge #45, rồi #46 (sửa xung đột PROGRESS), rồi #47 (cập nhật branch sau #46), rồi #52 (T06); sau #52 chạy `create_backlog.py --sync` để T51/T52 có phụ thuộc T13/T14.
 2. Họp khởi động ([team/KICKOFF.md](team/KICKOFF.md)): duyệt kế hoạch tuần 2, chốt Q3/Q4; nhắc T01, T03.
 3. Minh đưa `outer.graphml` lên Release `data-raw-20261024`, ghi cách tải + kiểm sha256.
 4. Sau khi nhóm duyệt kế hoạch tuần 2: cập nhật ⛓ và `schedule.csv`, chạy `create_backlog.py --sync` + `setup_project.py --sync`.
