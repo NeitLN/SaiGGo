@@ -44,6 +44,9 @@ MILESTONES = {
     "M1": ("M1 — Dijkstra trên đồ thị mẫu", "2026-10-26",
            "CLI tìm đường trên mini.json khớp bảng tính tay. "
            "Chứng minh: python -m app.cli route --graph tests/fixtures/mini.json --from S --to T --algo dijkstra"),
+    "MW": ("MW — Walking skeleton", "2026-10-29",
+           "Bấm 2 điểm trên bản đồ → /api/route → Dijkstra trên mini.json → vẽ tuyến; chạy được trên máy thứ hai. "
+           "Chứng minh: pytest tests/test_api_route.py; thao tác ✅ của T14 và T15"),
     "M2": ("M2 — A* và đối chứng", "2026-10-28",
            "A* cùng chi phí, ít node hơn; test ngẫu nhiên khớp NetworkX. "
            "Chứng minh: pytest tests/test_astar.py tests/test_oracle_networkx.py"),

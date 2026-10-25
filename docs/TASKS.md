@@ -97,6 +97,16 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - ▶ `powershell -ExecutionPolicy Bypass -File scripts\setup_dev.ps1`
 - 🧠 Vì sao commit phải mang tên đúng người; vì sao `pip install -e` lỗi với đường dẫn có dấu trên Windows.
 
+### T06 — Bộ nhớ dự án, quyết định đắt nếu đổi, hàng rào kỹ thuật
+- 👤 Tiến (Duy Anh review) · ⏱ 3 h · ⛓ T05
+- **Mục tiêu:** session hoặc thành viên mới đọc một file là biết dự án đang ở đâu; các quyết định khó đổi được chốt trước task cần chúng; mọi máy và CI dùng cùng phiên bản thư viện.
+- **Việc cần làm:** `docs/STATUS.md` (≤ 100 dòng, ghi đè mỗi cuối session); ROADMAP mục 5 (quyết định đắt nếu đổi Q1–Q8) và mục 6 (kế hoạch tuần 2, chờ nhóm duyệt); thêm mốc walking skeleton (T13–T15) và contract `/api/route` v1 (ARCHITECTURE mục 4.1); `requirements-lock.txt` + CI cài theo file này; job `audit` (pip-audit, npm audit); `setup_dev.ps1` dùng file khóa và nâng setuptools.
+- 📁 `docs/STATUS.md`, `docs/ROADMAP.md`, `docs/ARCHITECTURE.md`, `docs/TASKS.md`, `requirements-lock.txt`, `.github/workflows/ci.yml`, `scripts/setup_dev.ps1`
+- 📦 Bộ nhớ dự án + hàng rào.
+- ✅ CI xanh với file khóa; `pip-audit -r requirements-lock.txt` không có lỗ hổng; `setup_dev.ps1 -Data` chạy tới `==> Xong`.
+- ▶ `pip-audit -r requirements-lock.txt` · `powershell -ExecutionPolicy Bypass -File scripts\setup_dev.ps1 -Data`
+- 🧠 Vì sao khóa phiên bản là điều kiện để benchmark tái lập được; vì sao job audit không bắt buộc để merge.
+
 ---
 
 ## M1 — Dijkstra trên đồ thị mẫu
@@ -134,6 +144,47 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - ✅ Kết quả in ra khớp `mini_expected.json`.
 - ▶ `python -m app.cli route --graph tests/fixtures/mini.json --from S --to T --algo dijkstra` (chạy trong thư mục `backend/` hoặc với `PYTHONPATH=backend`)
 - 🧠 Đo thời gian bằng `perf_counter_ns` chỉ quanh lời gọi thuật toán.
+
+---
+
+## MW — Walking skeleton
+
+Đường mỏng nhất chạy xuyên mọi tầng của hành trình chính, xong trước **29/10**: bấm 2 điểm trên bản đồ → `/api/route` → Dijkstra trên `mini.json` → vẽ tuyến. Mục đích là để lỗi nối ghép (contract API, thứ tự lat/lon, chạy trên máy khác) lộ ra sớm, thay vì đến M6. Contract: [ARCHITECTURE.md](ARCHITECTURE.md) mục 4.1. T51 và T52 sau này mở rộng trên chính code này, không viết lại.
+
+### T13 — Skeleton phía API: `/api/route` tối giản trên `mini.json`
+- 👤 Tiến (Duy Anh review) · ⏱ 3 h · ⛓ T11
+- **Mục tiêu:** API thật, mỏng nhất, trả tuyến Dijkstra theo đúng contract v1.
+- **Việc cần làm:**
+  1. Nạp đồ thị khi khởi động từ `SAIGO_GRAPH` (mặc định `tests/fixtures/mini.json`); `/api/health` báo `dataset_loaded: true`.
+  2. `POST /api/route` theo contract v1: snap về node gần nhất (duyệt tuyến tính, chưa giới hạn 150 m), chạy `dijkstra()` của T11, trả geometry `[lon, lat]`, `cost_s`, `distance_m`, `expanded`, `runtime_ms`.
+  3. Test bằng TestClient: S→T trả `cost_s = 80`; T→S trả 100; geometry bắt đầu ở S và kết thúc ở T.
+- **Phụ thuộc theo mức:** T11 chặn ở mức *tích hợp*: viết route và test với contract trước, nối `dijkstra()` khi T11 merge.
+- 📁 `backend/app/main.py`, `backend/app/api/routes.py`, `backend/app/api/schemas.py`, `backend/app/services/routing.py`, `tests/test_api_route.py`
+- 📦 API skeleton.
+- ✅ Test API xanh; gọi thử bằng `http://127.0.0.1:8000/docs` ra đúng contract.
+- ▶ `pytest tests/test_api_route.py -q`
+- 🧠 Vì sao làm API mỏng trước rồi mới mở rộng; ranh giới API / service / thuật toán.
+
+### T14 — Skeleton phía bản đồ: bấm 2 điểm, vẽ tuyến
+- 👤 Minh (Tiến review) · ⏱ 3 h · ⛓ T13
+- **Mục tiêu:** trình duyệt gọi API thật và vẽ đúng tuyến trên nền OSM.
+- **Việc cần làm:** bấm lần 1 = điểm đi, lần 2 = điểm đến; gọi `POST /api/route`; vẽ polyline (đổi `[lon, lat]` → `[lat, lon]`); hiện `cost_s` và `expanded`; hiện lỗi khi API lỗi. Kiểu dữ liệu response đặt trong `frontend/src/api.ts` theo contract v1.
+- **Phụ thuộc theo mức:** contract v1 chặn ở mức *bắt đầu* (đã chốt); T13 chặn ở mức *tích hợp*: code trước với response mẫu trong contract, nối API thật khi T13 merge.
+- 📁 `frontend/src/main.ts`, `frontend/src/api.ts`
+- 📦 UI skeleton.
+- ✅ Bấm gần S rồi gần T: tuyến đi S→A→T nằm đúng quanh chợ Bến Thành trên nền OSM, hiện 80 s; đảo lại hiện 100 s.
+- ▶ Chạy backend + frontend, thao tác như trên; `npm run build` không lỗi.
+- 🧠 Thứ tự `[lon, lat]` và `[lat, lon]`; luồng trình duyệt → proxy Vite → FastAPI.
+
+### T15 — Chạy skeleton trên máy thứ hai
+- 👤 Bảo (Tiến review) · ⏱ 2 h · ⛓ T13, T14
+- **Mục tiêu:** chứng minh người khác chạy được app chỉ bằng tài liệu. Đây là bản sớm của T80.
+- **Việc cần làm:** trên máy của Bảo: clone sạch, làm ONBOARDING mục 1–3, chạy backend + frontend, làm lại thao tác ✅ của T14, chụp màn hình; mọi bước vướng thì mở issue *Lỗi* và sửa tài liệu trong cùng PR.
+- 📁 `docs/team/ONBOARDING.md` (nếu cần sửa), `docs/PROGRESS.md`, `docs/img/skeleton-bao.png`
+- 📦 Biên bản chạy trên máy thứ hai.
+- ✅ Thấy tuyến 80 s trên máy của Bảo mà không cần ai sửa tay; hoặc tài liệu đã được sửa cho tới khi chạy được.
+- ▶ Thủ công, theo ONBOARDING.
+- 🧠 Vì sao phải thử trên máy khác từ sớm, không đợi tới tuần cuối.
 
 ---
 
@@ -280,8 +331,8 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - 🧠 Vì sao node gần nhất có thể ở bên kia sông/cầu; ngưỡng 150 m là giả định.
 
 ### T51 — API `/api/route` và `/api/dataset`
-- 👤 Tiến · ⏱ 3–4 h · ⛓ T33, T40, T41, T50
-- **Việc cần làm:** schema Pydantic theo ARCHITECTURE mục 4; `services/routing.py` (snap → snapshot → chạy thuật toán → đo thời gian → gắn geometry); `costs_match`; lỗi 422 có thông báo tiếng Việt; test bằng TestClient với fixture.
+- 👤 Tiến · ⏱ 3 h · ⛓ T13, T33, T40, T41, T50
+- **Việc cần làm:** mở rộng API skeleton của T13, chỉ thêm trường, không đổi contract v1; schema Pydantic theo ARCHITECTURE mục 4; `services/routing.py` (snap → snapshot → chạy thuật toán → đo thời gian → gắn geometry); `costs_match`; lỗi 422 có thông báo tiếng Việt; test bằng TestClient với fixture.
 - 📁 `backend/app/api/schemas.py`, `routes.py`, `backend/app/services/routing.py`, `tests/test_api_route.py`
 - 📦 API tìm đường.
 - ✅ Test: route bình thường, `no_path`, cạnh đóng không tồn tại → 422, điểm quá xa → 422.
@@ -289,8 +340,8 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - 🧠 Tách API / service / thuật toán; vì sao request không lưu trạng thái.
 
 ### T52 — UI: chọn hai điểm, vẽ hai tuyến, bảng so sánh
-- 👤 Minh · ⏱ 4 h · ⛓ T51, T32
-- **Việc cần làm:** click lần 1 = điểm đi, lần 2 = điểm đến; nút **Tìm đường**, **Đảo chiều**, **Xóa**; vẽ tuyến Dijkstra và A*; bảng: chi phí (s, phút), quãng đường (m), node mở rộng, thời gian tính (ms), "Chi phí trùng khớp: có/không"; hiển thị trạng thái đang tính/lỗi; bỏ qua response cũ nếu đã có request mới.
+- 👤 Minh · ⏱ 3 h · ⛓ T14, T51, T32
+- **Việc cần làm:** mở rộng UI skeleton của T14; nút **Tìm đường**, **Đảo chiều**, **Xóa**; vẽ tuyến Dijkstra và A*; bảng: chi phí (s, phút), quãng đường (m), node mở rộng, thời gian tính (ms), "Chi phí trùng khớp: có/không"; hiển thị trạng thái đang tính/lỗi; bỏ qua response cũ nếu đã có request mới.
 - 📁 `frontend/src/main.ts`, `panel.ts`, `layers.ts`, `api.ts`
 - 📦 Tìm đường trên web.
 - ✅ Checklist UI-1…UI-4 trong PROGRESS.md đạt.
