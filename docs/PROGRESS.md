@@ -34,7 +34,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | T02 OSMnx trên Windows | [#4](https://github.com/NeitLN/SaiGGo/issues/4) | Minh | ⬜ | |
 | T03 Đáp án tính tay | [#5](https://github.com/NeitLN/SaiGGo/issues/5) | Bảo | ⬜ | |
 | T10 Hàm địa lý | [#6](https://github.com/NeitLN/SaiGGo/issues/6) | Duy Anh | ⬜ | |
-| T11 Dijkstra | [#7](https://github.com/NeitLN/SaiGGo/issues/7) | Duy Anh | ⬜ | |
+| T11 Dijkstra | [#7](https://github.com/NeitLN/SaiGGo/issues/7) | Tiến (chuyển từ Duy Anh 26/10) | 🟨 | PR chờ review (xếp chồng trên T01). `tests/test_dijkstra.py` 13 passed; khớp 6/6 tình huống tính tay của Bảo (#54) về chi phí, tuyến, `expanded`, và khớp chi phí với NetworkX |
 | T12 CLI | [#8](https://github.com/NeitLN/SaiGGo/issues/8) | Tiến | ⬜ | |
 | T20 A* | [#9](https://github.com/NeitLN/SaiGGo/issues/9) | Duy Anh | ⬜ | |
 | T21 Đối chứng ngẫu nhiên | [#10](https://github.com/NeitLN/SaiGGo/issues/10) | Duy Anh | ⬜ | |
