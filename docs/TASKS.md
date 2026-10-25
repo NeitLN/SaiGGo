@@ -67,7 +67,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - 🧠 OSMnx trả `MultiDiGraph`; `network_type="drive"` gồm những loại đường nào; vì sao không tải lại dữ liệu mỗi lần chạy.
 
 ### T03 — Bảng kết quả tính tay cho đồ thị mẫu
-- 👤 Bảo (Tiến review) · ⏱ 2 h · ⛓ — (chỉ cần DATA_MODEL mục 7) · ✅ đã merge 25/10 (#54)
+- 👤 Bảo (Tiến review) · ⏱ 2 h · ⛓ — (chỉ cần DATA_MODEL mục 7) · ✅ đã merge 26/10 (#54)
 - **Mục tiêu:** có đáp án độc lập để kiểm tra code Dijkstra/A*.
 - **Việc cần làm:**
   1. Với 6 tình huống ở DATA_MODEL mục 7, chạy tay Dijkstra: ghi bảng từng bước (heap, `g`, node pop).
@@ -155,7 +155,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 Đường mỏng nhất chạy xuyên mọi tầng của hành trình chính, xong trước **29/10**: bấm 2 điểm trên bản đồ → `/api/route` → Dijkstra trên `mini.json` → vẽ tuyến. Mục đích là để lỗi nối ghép (contract API, thứ tự lat/lon, chạy trên máy khác) lộ ra sớm, thay vì đến M6. Contract: [ARCHITECTURE.md](ARCHITECTURE.md) mục 4.1. T51 và T52 sau này mở rộng trên chính code này, không viết lại.
 
 ### T13 — Skeleton phía API: `/api/route` tối giản trên `mini.json`
-- 👤 Minh (Tiến review) · ⏱ 3 h · ⛓ T11
+- 👤 Minh (Tiến review) · ⏱ 3 h · ⛓ T11, T10 (đã merge)
 - **Chuyển 26/10:** từ Tiến sang Minh; Minh làm trọn lát dọc skeleton (T13 + T14).
 - **Mục tiêu:** API thật, mỏng nhất, trả tuyến Dijkstra theo đúng contract v1.
 - **Việc cần làm:**
@@ -195,7 +195,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 ## M2 — A* và đối chứng
 
 ### T20 — A* với heuristic địa lý
-- 👤 Tiến (Minh review) · ⏱ 3 h · ⛓ T10, T11 (đã merge)
+- 👤 Tiến (Minh review) · ⏱ 3 h · ⛓ T10, T11 (đã merge); PR kiểm thứ tự ID cạnh trong `load_graph` merge trước
 - **Mục tiêu:** A* cho cùng chi phí với Dijkstra nhưng mở rộng ít node hơn trên fixture.
 - **Việc cần làm:**
   1. `astar(graph, snap, source, target, heuristic, trace_limit=0)`: ưu tiên `g + h`, cho phép mở lại, đếm `reopened`.
@@ -208,7 +208,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - 🧠 `f = g + h`; admissible và consistent; chứng minh phác thảo ở DATA_MODEL mục 5.2; vì sao `h = 0` biến A* thành Dijkstra.
 
 ### T21 — Đối chứng NetworkX trên đồ thị ngẫu nhiên
-- 👤 Bảo (Tiến review) · ⏱ 3 h · ⛓ T20
+- 👤 Bảo (Tiến review) · ⏱ 3 h · ⛓ T20, T15 (bắt đầu khi A* đã merge và MW đã đạt)
 - **Chuyển 26/10:** từ Duy Anh sang Bảo, dùng 3 giờ dự phòng tuần 2; chỉ bắt đầu khi MW đạt và T20 đã merge, không thì dời tuần 3.
 - **Mục tiêu:** bằng chứng thực nghiệm rằng code đúng trên nhiều đồ thị, không chỉ fixture.
 - **Việc cần làm:**

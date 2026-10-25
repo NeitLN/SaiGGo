@@ -131,7 +131,7 @@ Mức chặn:
 | T13 | T11, T10 đã có: dùng trực tiếp `dijkstra()` và `geo.haversine_m` |
 | T14 | Contract `/api/route` v1 (bắt đầu, đã chốt) · T13 (tích hợp, cùng người làm) |
 | T15 | T13 và T14 đã merge (bắt đầu) |
-| T20 | T11 và T10 đã có (bắt đầu được ngay) |
+| T20 | T11 và T10 đã có · PR kiểm thứ tự ID cạnh (bắt đầu: merge trước T20) |
 | T12 | T11 đã có (bắt đầu) · T13 (tích hợp: `--from-latlon` dùng `nearest_node_naive` của T13) · T20 (chấp nhận: phải gọi được cả A* mới tính là xong) |
 | T21 | T20 đã merge và MW đã đạt (bắt đầu) |
 | T34 | — |
