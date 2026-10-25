@@ -1,0 +1,53 @@
+{
+  "graph": "tests/fixtures/mini.json",
+  "cases": [
+    {
+      "name": "co-so-S-T",
+      "source": "S", "target": "T",
+      "scenario": null,
+      "blocked": [],
+      "dijkstra": {"status": "ok", "cost_s": 80.0, "path": ["S", "A", "T"], "expanded": 5},
+      "astar":    {"status": "ok", "cost_s": 80.0, "path": ["S", "A", "T"], "expanded": 2}
+    },
+    {
+      "name": "co-so-T-S",
+      "source": "T", "target": "S",
+      "scenario": null,
+      "blocked": [],
+      "dijkstra": {"status": "ok", "cost_s": 100.0, "path": ["T", "B", "S"], "expanded": 2},
+      "astar":    {"status": "ok", "cost_s": 100.0, "path": ["T", "B", "S"], "expanded": 2}
+    },
+    {
+      "name": "un-tac-tam-A",
+      "source": "S", "target": "T",
+      "scenario": {"circle": {"center": "A", "radius_m": 220}, "alpha": 2},
+      "blocked": [],
+      "dijkstra": {"status": "ok", "cost_s": 100.0, "path": ["S", "B", "T"], "expanded": 5},
+      "astar":    {"status": "ok", "cost_s": 100.0, "path": ["S", "B", "T"], "expanded": 2}
+    },
+    {
+      "name": "un-tac-deu",
+      "source": "S", "target": "T",
+      "scenario": {"all": 2},
+      "blocked": [],
+      "dijkstra": {"status": "ok", "cost_s": 160.0, "path": ["S", "A", "T"], "expanded": 5},
+      "astar":    {"status": "ok", "cost_s": 160.0, "path": ["S", "A", "T"], "expanded": 4}
+    },
+    {
+      "name": "dong-A-T",
+      "source": "S", "target": "T",
+      "scenario": null,
+      "blocked": ["A->T"],
+      "dijkstra": {"status": "ok", "cost_s": 100.0, "path": ["S", "B", "T"], "expanded": 5},
+      "astar":    {"status": "ok", "cost_s": 100.0, "path": ["S", "B", "T"], "expanded": 3}
+    },
+    {
+      "name": "dong-A-T-va-B-T",
+      "source": "S", "target": "T",
+      "scenario": null,
+      "blocked": ["A->T", "B->T"],
+      "dijkstra": {"status": "no_path", "cost_s": null, "path": [], "expanded": 5},
+      "astar":    {"status": "no_path", "cost_s": null, "path": [], "expanded": 5}
+    }
+  ]
+}
