@@ -1,5 +1,5 @@
 # STATUS
-Cập nhật: 25/10/2026 (cuối tuần 1) · Người tích hợp: Tiến · Đọc file này đầu mỗi session; giữ ≤ 100 dòng, ghi đè mỗi cuối session.
+Cập nhật: 25/10/2026, 23:50 (cuối tuần 1) · Người tích hợp: Tiến · Đọc file này đầu mỗi session; giữ ≤ 100 dòng, ghi đè mỗi cuối session.
 
 Bộ nhớ dự án: mục tiêu/phạm vi/deadline ở [PROJECT_BRIEF.md](PROJECT_BRIEF.md) · quyết định kỹ thuật ở [ARCHITECTURE.md](ARCHITECTURE.md) và [DATA_MODEL.md](DATA_MODEL.md) · mốc, quyết định đắt nếu đổi, kế hoạch tuần ở [ROADMAP.md](ROADMAP.md) · từng task ở [TASKS.md](TASKS.md) + GitHub Issues · bằng chứng chi tiết và lỗi tồn tại ở [PROGRESS.md](PROGRESS.md).
 
@@ -14,21 +14,20 @@ Bộ nhớ dự án: mục tiêu/phạm vi/deadline ở [PROJECT_BRIEF.md](PROJE
 - **Chưa biết:** app chạy trên máy của Duy Anh và Bảo chưa; Leaflet vẽ ~28k cạnh có mượt không; Python chạy đồ thị lớn nhất mất bao lâu.
 
 ## Đang ở đâu
-- Mốc: M0 (hạn 24/10) **chưa xong**; MW (skeleton), M1–M3 làm trong tuần 2.
-- Đã tích hợp vào `main`: T-PLAN (#1), T04 (#42, PR #43). Bằng chứng: CI xanh; workflow Tracking chạy sau merge, `daily.csv` có ngày 23/10.
-- Đã kiểm, chờ merge (đủ approve, CI xanh):
-  - PR #45: T05, hướng dẫn bắt đầu.
-  - PR #46: T02, Minh. `--smoke` PASS trên Python 3.11.9 và 3.14.4, ra cùng số.
-  - PR #47: T30, Minh. Đã tải 12.131 node / 27.693 cạnh, sha256 `24a28327…`.
-  - PR #52: T06, bộ nhớ dự án + hàng rào. CI 3 job PASS ở `f57d319`; job `audit` đã bắt và sửa lỗ hổng `vite` 8.3.1 → 8.3.5.
-- Đang dở: T00 (#2), còn mở trang web + PR.
-- **Trễ hạn 24/10, chưa có hoạt động:**
-  - T01 (#3, Duy Anh): chặn T11, nên chặn cả skeleton.
-  - T03 (#5, Bảo): chỉ chặn khâu chấp nhận của T11.
+- Mốc: M0 (hạn 24/10) **chưa xong**, còn T01; MW (skeleton), M1–M3 làm trong tuần 2.
+- Đã tích hợp vào `main`: T-PLAN (#1), T04 (#42, PR #43), T05 (#44, PR #45, 25/10).
+- Đã kiểm, chờ merge:
+  - PR #46: T02 (Minh), đủ approve.
+  - PR #47: T30 (Minh), đủ approve.
+  - PR #53: T31 (Minh), đủ approve. Build trên Python 3.11.9 PASS, ổn định 2 lần; test `realdata` 5 passed.
+  - PR #52: T06. Có commit mới sau khi merge `main` + sửa 3 góp ý, nên **cần approve lại**; CI 3 job PASS.
+  - PR #55: T00. Khung chạy trên Windows: `/api/health` qua proxy OK, trang hiện đúng trạng thái.
+  - PR #54: T03 (Bảo), chờ Duy Anh review.
+- **Trễ hạn 24/10, chưa có hoạt động:** T01 (#3, Duy Anh). T01 chặn T11, nên chặn cả skeleton.
 
 ## Bị chặn / rủi ro
-- `outer.graphml` (13,4 MB) chỉ có trên máy Minh. T31 cần cùng một bản → đưa lên GitHub Release trước khi làm T31.
-- Merge #45 → #46 → #47 → T06 sẽ xung đột ở `docs/PROGRESS.md` và `docs/TASKS.md` (các dòng sát nhau). Người tích hợp sửa khi ghép, giữ nội dung của cả hai bên.
+- `outer.graphml` (sha256 `24a28327…`) chỉ có trên máy Minh. Tải lại ngày 25/10 đã ra số khác (12.130 so với 12.131 node), nên chưa ai tái lập được dữ liệu cho tới khi Minh đưa file lên Release.
+- Thứ tự merge còn lại: #46 → #47 → #53 (PR xếp chồng), rồi #52 và #55. Có thể xung đột nhẹ ở `docs/PROGRESS.md`; sửa thì giữ nội dung của cả hai bên.
 - Minh dùng Python 3.14 (networkx 3.7); nhóm chuẩn là 3.11 (networkx 3.6.1). Benchmark chỉ chạy trên 3.11.
 
 ## Quyết định
@@ -42,10 +41,11 @@ Bộ nhớ dự án: mục tiêu/phạm vi/deadline ở [PROJECT_BRIEF.md](PROJE
 | Vùng demo 2 km, `speeds.json`, ngưỡng snap 150 m (Q3, Q4, PROJECT_BRIEF mục 5) | **[Đề xuất]**, chờ nhóm xác nhận ở buổi họp | — |
 
 ## Bước tiếp theo
-1. Tiến merge #45, rồi #46 (sửa xung đột PROGRESS), rồi #47 (cập nhật branch sau #46), rồi #52 (T06); sau #52 chạy `create_backlog.py --sync` để T51/T52 có phụ thuộc T13/T14.
-2. Họp khởi động ([team/KICKOFF.md](team/KICKOFF.md)): duyệt kế hoạch tuần 2, chốt Q3/Q4; nhắc T01, T03.
-3. Minh đưa `outer.graphml` lên Release `data-raw-20261024`, ghi cách tải + kiểm sha256.
-4. Sau khi nhóm duyệt kế hoạch tuần 2: cập nhật ⛓ và `schedule.csv`, chạy `create_backlog.py --sync` + `setup_project.py --sync`.
+1. Minh hoặc Bảo approve lại #52; Duy Anh, Minh hoặc Bảo approve #55. Merge cả hai.
+2. Minh: đưa `outer.graphml` lên Release `data-raw-20261024`, merge #46 → #47 → #53.
+3. Duy Anh: bắt đầu T01 (gấp), review #54. Nếu hết 26/10 chưa có, Tiến vào làm cùng.
+4. Họp khởi động: duyệt kế hoạch tuần 2 (ROADMAP mục 6), chốt Q3/Q4.
+5. Sau khi merge #52: `create_backlog.py --sync` + `setup_project.py --sync` (T51/T52 nhận phụ thuộc T13/T14).
 
 ## Bộ kiểm nhanh (chạy đầu mỗi session)
 - `.venv\Scripts\python.exe -m pytest -q` → hiện `1 passed`
