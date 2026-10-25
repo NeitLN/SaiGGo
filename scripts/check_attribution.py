@@ -19,7 +19,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 ALLOWED_FILE = ROOT / ".github" / "allowed-identities.txt"
 CO_AUTHOR = re.compile(r"^\s*co-authored-by:\s*(.*?)\s*<([^>]+)>\s*$", re.IGNORECASE | re.MULTILINE)
-PROMO = re.compile(r"generated (with|by)\b", re.IGNORECASE)
+# Dòng quảng cáo do công cụ tự thêm: cụm "Generated with/by" ở đầu dòng (có thể có biểu tượng phía trước).
+PROMO = re.compile(r"^[^\w\n]*generated (with|by)\b", re.IGNORECASE | re.MULTILINE)
 
 
 def allowed_emails() -> set[str]:
