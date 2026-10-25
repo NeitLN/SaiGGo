@@ -48,6 +48,7 @@ $vpy = ".venv\Scripts\python.exe"
 $groups = if ($Data) { "dev,bench,data" } else { "dev,bench" }
 $deps = & $vpy -c "import sys, tomllib; p = tomllib.load(open('pyproject.toml', 'rb'))['project']; print('\n'.join(p['dependencies'] + [d for g in sys.argv[1].split(',') for d in p['optional-dependencies'][g]]))" $groups
 $lock = if ($py -eq "3.11") { @("-c", "requirements-lock.txt") } else { @() }
+Write-Host "Đang tải và cài thư viện Python. Lần đầu có thể mất 5–15 phút và không in gì trong lúc chạy; đừng tắt cửa sổ."
 & $vpy -m pip install --quiet @($deps) @lock
 if ($LASTEXITCODE -ne 0) { Fail "pip install thất bại" }
 

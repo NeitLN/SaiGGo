@@ -48,7 +48,7 @@ Kế hoạch triển khai: [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) · **t
 
 ## Chạy local (Windows)
 
-Yêu cầu: Git, Python 3.11+, Node.js 20+. Thành viên mới: đọc [docs/team/ONBOARDING.md](docs/team/ONBOARDING.md).
+Yêu cầu: Git, **Python 3.11.9** ([bộ cài Windows](https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe); CI và file khóa phiên bản dùng 3.11), Node.js 20+. Thành viên mới: đọc [docs/team/ONBOARDING.md](docs/team/ONBOARDING.md).
 
 ```powershell
 # Dựng môi trường một lần: tạo .venv, cài thư viện, chạy test, build frontend

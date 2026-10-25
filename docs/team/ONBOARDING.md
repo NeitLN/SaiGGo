@@ -14,7 +14,7 @@ Làm lần lượt từ mục 1 đến mục 5 trong buổi đầu tiên (khoả
 | Công cụ | Phiên bản | Ghi chú |
 |---|---|---|
 | Git | mới nhất | https://git-scm.com/download/win |
-| Python | **3.11** trở lên | Khi cài, tick "Add python.exe to PATH" |
+| Python | **3.11.9**, đúng bản này | [Bộ cài Windows 64-bit](https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe). Khi cài, tick "Add python.exe to PATH". Trang python.org để bản mới hơn (3.13–3.15) ở đầu; bản đó vẫn chạy được nhưng không dùng file khóa phiên bản, nên số liệu benchmark phải chạy trên 3.11 |
 | Node.js | **20** trở lên (LTS) | https://nodejs.org |
 | VS Code | mới nhất | Extension gợi ý: Python, Pylance, GitLens |
 | GitHub CLI `gh` | tùy chọn | Mở PR, xem issue bằng lệnh; không bắt buộc |
