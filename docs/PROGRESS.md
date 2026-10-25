@@ -33,7 +33,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | T01 Fixture + Graph loader | [#3](https://github.com/NeitLN/SaiGGo/issues/3) | Tiến (chuyển từ Duy Anh 26/10) | 🟨 | PR chờ review. `tests/test_graph_model.py` 17 passed trên fixture `mini.json`. **Chưa kiểm chứng:** nạp đồ thị thật của T31 (chờ Release của T34; Python trên máy Tiến không kết nối được Overpass để tự build lại) |
 | T02 OSMnx trên Windows | [#4](https://github.com/NeitLN/SaiGGo/issues/4) | Minh | ⬜ | |
 | T03 Đáp án tính tay | [#5](https://github.com/NeitLN/SaiGGo/issues/5) | Bảo | ⬜ | |
-| T10 Hàm địa lý | [#6](https://github.com/NeitLN/SaiGGo/issues/6) | Duy Anh | ⬜ | |
+| T10 Hàm địa lý | [#6](https://github.com/NeitLN/SaiGGo/issues/6) | Tiến (chuyển từ Duy Anh 26/10) | 🟨 | PR chờ review. `tests/test_geo.py` 13 passed; `haversine_m` khớp `osmnx.distance.great_circle` (sai số < 0,5 m) và trùng hàm của T31 tới 1e-9 m |
 | T11 Dijkstra | [#7](https://github.com/NeitLN/SaiGGo/issues/7) | Tiến (chuyển từ Duy Anh 26/10) | 🟨 | PR chờ review (xếp chồng trên T01). `tests/test_dijkstra.py` 13 passed; khớp 6/6 tình huống tính tay của Bảo (#54) về chi phí, tuyến, `expanded`, và khớp chi phí với NetworkX |
 | T12 CLI | [#8](https://github.com/NeitLN/SaiGGo/issues/8) | Tiến | ⬜ | |
 | T20 A* | [#9](https://github.com/NeitLN/SaiGGo/issues/9) | Duy Anh | ⬜ | |
