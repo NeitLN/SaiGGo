@@ -88,6 +88,7 @@ Vì sao dùng adjacency list theo **edge id** thay vì `dict[node] -> dict[node]
 
 - `0 ≤ u, v < N`; `length_m ≥ 0` và hữu hạn; `speed_kmh > 0` và hữu hạn.
 - `edges[j].id == j`, `nodes[i].id == i`.
+- Cạnh sắp tăng nghiêm ngặt theo `(u, v, key)` (không có hai cạnh trùng bộ ba này). Sai thì báo lỗi, không tự sắp lại, vì sắp lại sẽ đổi ID cạnh.
 - `out_edges` khớp với `edge_u`.
 
 ## 3. Trọng số cạnh
