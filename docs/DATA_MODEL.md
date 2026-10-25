@@ -47,6 +47,8 @@ Nguyên tắc **[Đã chốt]**: thuật toán không bao giờ sửa đồ th�
 | `nodes[i].id` | Chỉ số 0..N−1 | Trùng vị trí trong mảng, để tra cứu O(1) |
 | `osmid` | ID gốc của OSM | Chỉ để truy vết, thuật toán không dùng |
 | `lat`, `lon` | Tọa độ WGS84 | Tên trường rõ ràng; **không** dùng cặp `[a, b]` không tên |
+| `in_scc` (tùy chọn) | Node có thuộc thành phần liên thông mạnh lớn nhất không | Do T31 ghi. Thiếu trường này thì `load_graph` coi là `true` (fixture không cần ghi). Node `false` vẫn được vẽ nhưng không dùng làm điểm snap hay điểm benchmark (mục 8.4) **[chờ chốt Q1 ở buổi họp 26/10]** |
+| `name` (tùy chọn) | Tên node | Chỉ dùng trong fixture (`S`, `A`, …) để test và CLI gọi theo tên |
 | `edges[j].id` | Chỉ số 0..M−1 | Sắp xếp cạnh theo `(u, v, key)` trước khi đánh số, nên ID ổn định với cùng dữ liệu |
 | `u → v` | Cạnh **có hướng** | Đường hai chiều = 2 cạnh; đường một chiều = 1 cạnh |
 | `key` | Phân biệt cạnh song song cùng `u → v` | Lấy từ OSMnx `(u, v, key)` |
