@@ -1,6 +1,6 @@
 # SaiGo — Project Brief
 
-**Phiên bản:** 2.0 — 23/10/2026 · **Thay cho:** phần phạm vi/timeline của [TOPIC.md](TOPIC.md) (v1.0, 01/10/2026). TOPIC.md vẫn là đặc tả nền; khi hai tài liệu khác nhau, tài liệu này được ưu tiên.
+**Phiên bản:** 2.1 — 26/10/2026 (đồng bộ [đề xuất đổi phạm vi](proposals/2026-10-26-pham-vi.md) đã duyệt 26/10) · **Thay cho:** phần phạm vi/timeline của [TOPIC.md](TOPIC.md) (v1.0, 01/10/2026). TOPIC.md vẫn là đặc tả nền; khi hai tài liệu khác nhau, tài liệu này được ưu tiên.
 
 Bộ tài liệu kế hoạch:
 
@@ -36,6 +36,8 @@ Quy ước nhãn trong toàn bộ tài liệu:
 
 **Trạng thái thực tế ngày 23/10:** repo mới có khung (FastAPI `/api/health`, Vite + Leaflet trống, script rỗng). Chưa có dữ liệu, thuật toán hay kết quả. Mốc "scope gate 23/10" trong proposal **không đạt**, nên phạm vi được sắp lại dưới đây.
 
+**Ngày 26/10:** Duy Anh vắng tuần 2 và chưa có ngày quay lại; ba người còn lại không đủ giờ cho phạm vi cũ. Nhóm duyệt [đề xuất đổi phạm vi](proposals/2026-10-26-pham-vi.md): cắt tour, rút gọn bản đồ, RQ1b còn 3 kích thước, điểm kiểm bằng chứng 05/11 và MVP tích hợp 08/11 (D10–D13 ở mục 4).
+
 ## 2. Mục tiêu
 
 **Một câu:** SaiGo tìm đường trên mạng đường thật của trung tâm TP.HCM bằng Dijkstra và A* do nhóm tự cài, cho thấy A* tiết kiệm bao nhiêu công tìm kiếm mà vẫn ra cùng chi phí tối ưu, khi có ùn tắc hoặc đóng đường mô phỏng và khi bản đồ lớn dần.
@@ -57,15 +59,15 @@ Hệ quả cần hiểu: heuristic của A* phải đổi mét sang giây bằng
 | Mã | Câu hỏi | Trạng thái |
 |---|---|---|
 | RQ1 | A* có giảm số node mở rộng và thời gian truy vấn so với Dijkstra trong khi vẫn cho cùng chi phí tối ưu không? | Từ proposal |
-| RQ1b | Mức chênh lệch đó thay đổi thế nào khi đồ thị lớn dần (số node tăng)? | **Mới** — theo yêu cầu thử nghiệm tăng quy mô |
-| RQ2 | NN + 2-opt có hướng cải thiện tour bao nhiêu so với thứ tự nhập và NN đơn lẻ; cách tối ưu Held–Karp bao xa trên case nhỏ? | Từ proposal; làm sau phần lõi |
+| RQ1b | Mức chênh lệch đó thay đổi thế nào khi đồ thị lớn dần (số node tăng)? | **Mới** — theo yêu cầu thử nghiệm tăng quy mô; 3 kích thước lồng nhau, chỉ workload "fixed trips" (D11) |
+| RQ2 | NN + 2-opt có hướng cải thiện tour bao nhiêu so với thứ tự nhập và NN đơn lẻ; cách tối ưu Held–Karp bao xa trên case nhỏ? | Từ proposal. **Ngoài phạm vi cam kết từ 26/10** (D10); chỉ làm nếu sau 08/11 còn thời gian |
 | RQ3 | Ùn tắc và đóng đường ảnh hưởng thế nào tới tính khả thi, chi phí tuyến, số node A* mở rộng và thời gian lập lại kế hoạch? | Từ proposal, thêm chỉ số A* |
 
 Không đặt trước kết luận "A* luôn nhanh hơn". Nếu kết quả không cải thiện, báo cáo đúng như vậy.
 
 ## 3. Phạm vi
 
-### 3.1. Bản tối thiểu (MVP) — phải xong trước 05/11
+### 3.1. Bản tối thiểu (MVP) — bằng chứng ở điểm kiểm 05/11, tích hợp xong 08/11
 
 | # | Chức năng | Ghi chú |
 |---|---|---|
@@ -73,25 +75,26 @@ Không đặt trước kết luận "A* luôn nhanh hơn". Nếu kết quả kh�
 | 2 | Dijkstra và A* tự cài, khôi phục tuyến theo **cạnh** | Không dùng hàm shortest path của thư viện trong sản phẩm |
 | 3 | Kiểm thử đối chứng với NetworkX (chỉ trong test) | So chi phí và `no_path` |
 | 4 | Snapshot: kịch bản ùn tắc theo vùng + danh sách cạnh bị đóng | Đồ thị gốc không bị sửa |
-| 5 | API `/api/route`, `/api/network`, `/api/dataset` | FastAPI |
-| 6 | Bản đồ: chọn 2 điểm, xem tuyến Dijkstra và A*, bảng so sánh, chấm các node đã mở rộng, chọn kịch bản, bấm để đóng một đoạn đường, báo "không có đường" | Leaflet, TypeScript thuần |
-| 7 | Benchmark offline: 1.000 truy vấn trên vùng demo + thí nghiệm tăng quy mô 4 kích thước | CSV/JSON + biểu đồ |
+| 5 | API `/api/route`, `/api/dataset` | FastAPI. Không có `/api/network` (không vẽ toàn mạng đường, D12) |
+| 6 | Bản đồ: chọn 2 điểm, xem tuyến Dijkstra và A*, bảng so sánh, chọn kịch bản và vẽ vùng ùn tắc, bấm vào một đoạn trên tuyến để đóng (đóng cả cạnh đối nếu có) rồi tìm lại, nút mở lại, báo "không có đường" | Leaflet, TypeScript thuần; nền tile OSM, chỉ vẽ tuyến và các cạnh của tuyến (D12) |
+| 7 | Benchmark offline: 1.000 truy vấn trên vùng demo + thí nghiệm tăng quy mô 3 kích thước, chỉ "fixed trips" | CSV/JSON + biểu đồ |
 
-### 3.2. Mở rộng có điều kiện — làm theo thứ tự, chỉ khi MVP đạt
+### 3.2. Mở rộng — chỉ làm nếu sau 08/11 còn thời gian
 
-| Thứ tự | Phần | Điều kiện bắt đầu tích hợp |
+Từ 26/10 không còn mở rộng nào nằm trong phạm vi cam kết (D10). Nếu MVP đạt ở 08/11 và còn thời gian, xét theo thứ tự:
+
+| Thứ tự | Phần | Ghi chú |
 |---|---|---|
-| E1 | **Tour nhiều điểm:** ma trận chi phí, NN, 2-opt có hướng, Held–Karp (n ≤ 10, offline) | Thuật toán viết song song trên ma trận nhỏ từ 29/10; tích hợp vào API/UI chỉ khi MVP đạt trước **05/11** |
+| E1 | **Tour nhiều điểm:** ma trận chi phí, NN, 2-opt có hướng, Held–Karp (n ≤ 10, offline) | Task T70–T74 đóng *not planned* ngày 26/10; mở lại thì nhóm chốt lại |
 | E2 | UI tour: preset kho + 5 điểm, 3 thẻ so sánh | Sau E1 |
-| E3 | Phát lại trace dạng animation | Còn thời gian sau 08/11 |
 
-**Thứ tự cắt khi trễ** (cắt mục đầu tiên trước): E3 → E2 (giữ tour ở CLI/benchmark) → workload "growing trips" của thí nghiệm tăng quy mô (giữ "fixed trips") → vùng ùn tắc dạng polygon (giữ hình tròn) → Held–Karp n = 10 (giữ n ≤ 8).
+**Thứ tự cắt khi thiếu giờ** (đã duyệt 26/10, dùng ở điểm kiểm 01/11 và 05/11): xem [đề xuất phạm vi](proposals/2026-10-26-pham-vi.md) mục 4. Khoản 1–3 kích hoạt ở điểm kiểm khi thiếu giờ; khoản 4 (đóng đường qua API/CLI thay vì bản đồ) và 5 (RQ1b còn 2 kích thước) cần nhóm đồng ý riêng.
 
-**Không bao giờ cắt:** test đối chứng, Dijkstra = A* về chi phí, xử lý `no_path`, số liệu đo thật.
+**Không bao giờ cắt:** test đối chứng, Dijkstra = A* về chi phí, xử lý `no_path`, số liệu đo thật, phần ùn tắc của RQ3.
 
 ### 3.3. Ngoài phạm vi
 
-ALT, Simulated Annealing, tìm kiếm hai chiều, nhiều shipper, time window, giao thông/GPS thật, cấm rẽ, đóng gói `.exe`, deploy web, editor kéo thả điểm giao, cache kết quả.
+ALT, Simulated Annealing, tìm kiếm hai chiều, nhiều shipper, time window, giao thông/GPS thật, cấm rẽ, đóng gói `.exe`, deploy web, editor kéo thả điểm giao, cache kết quả. Từ 26/10 thêm: vẽ toàn bộ mạng đường (T32), lớp chấm node đã mở rộng trên bản đồ, đóng đường hai chế độ, animation trace, workload "growing trips".
 
 ## 4. Quyết định so với TOPIC.md / proposal
 
@@ -106,8 +109,12 @@ ALT, Simulated Annealing, tìm kiếm hai chiều, nhiều shipper, time window,
 | D7 | Heuristic có hệ số an toàn `c` tính từ dữ liệu | Bảo đảm cận dưới ngay cả khi dữ liệu có cạnh ngắn hơn khoảng cách thẳng (xem DATA_MODEL mục 5) |
 | D8 | Không cam kết `.exe`; app chạy local bằng lệnh trong README | PDF không yêu cầu; đóng gói geospatial tốn thời gian |
 | D9 | Cài OSMnx bằng `pip install -e ".[data]"` trong cùng venv; nếu lỗi trên Windows thì dùng môi trường conda-forge riêng cho bước chuẩn bị dữ liệu | Ứng dụng demo chỉ đọc JSON, không cần OSMnx |
+| D10 | **Cắt tour** (RQ2, T70–T74) khỏi phạm vi cam kết; báo giảng viên *(26/10)* | Duy Anh vắng; tuần 3–4 thiếu 20–23 giờ nếu giữ phạm vi cũ |
+| D11 | RQ1b: **3 kích thước lồng nhau, chỉ "fixed trips"** *(26/10)* | Giữ được xu hướng theo kích thước với ít giờ chạy và giờ làm hơn |
+| D12 | Bản đồ rút gọn: không vẽ toàn mạng đường (T32), không có lớp chấm node mở rộng; đóng đường một chế độ *(26/10)* | Giữ đủ các bước demo cho RQ1, RQ3; `expanded` vẫn có trong bảng và benchmark |
+| D13 | Mốc: **điểm kiểm bằng chứng 05/11**, **MVP tích hợp 08/11**, 09–12/11 không thêm tính năng; essay bắt đầu từ tuần 3 *(26/10)* | Thay cổng G1 "có tích hợp tour không", vì tour đã cắt |
 
-Nên báo giảng viên ngắn gọn ở buổi gần nhất về D1 và D2 **[Đề xuất]**, vì đây là thay đổi so với proposal.
+Báo giảng viên về D1 và D10, vì đây là thay đổi so với proposal: Tiến gửi thư theo mẫu ở [đề xuất phạm vi](proposals/2026-10-26-pham-vi.md) mục 6.
 
 ## 5. Giả định
 
@@ -121,14 +128,14 @@ Nên báo giảng viên ngắn gọn ở buổi gần nhất về D1 và D2 **[�
 | A6 | **[Đề xuất]** Điểm người dùng chọn được ánh xạ về node gần nhất trong thành phần liên thông mạnh, tối đa 150 m | Điểm xa hơn bị từ chối, có thông báo |
 | A7 | **[Giả định]** Dữ liệu OSM tải một lần rồi đóng băng; mọi thực nghiệm dùng cùng bản có hash | Tải lại có thể ra số node/cạnh khác |
 
-## 6. Phân công [Đề xuất]
+## 6. Phân công (cập nhật 26/10)
 
 | Người | Vai trò chính | Ghi chú |
 |---|---|---|
-| Võ Việt Tiến | Điều phối, snapshot/kịch bản, API, benchmark, tour (E1) | Có thể vào làm cùng ở phần dữ liệu/bản đồ và phần thuật toán tìm kiếm |
-| Bùi Duy Anh | Dijkstra, A*, heuristic, test đối chứng | |
-| Võ Hoàng Minh | Pipeline dữ liệu, bản đồ, giao diện | |
-| Đỗ Quốc Bảo | Ca kiểm thử tính tay, file case demo, kiểm thử thủ công, chạy thử trên máy thứ hai, ảnh chụp, tài liệu, hỗ trợ demo | Các mốc lõi không phụ thuộc task của vai trò này |
+| Võ Việt Tiến | Điều phối và tích hợp; Dijkstra, A*, heuristic (nhận từ Duy Anh 26/10); snapshot/kịch bản; benchmark | Có thể vào làm cùng ở phần dữ liệu/bản đồ |
+| Bùi Duy Anh | Vắng tuần 2; sức làm tính là 0 cho tới khi báo ngày quay lại (hạn báo 01/11) | Khi quay lại, trước hết nhận việc kiểm chứng có giới hạn rõ (review, T21/T22) |
+| Võ Hoàng Minh | Pipeline dữ liệu, bản đồ, giao diện; API skeleton (T13) | Làm trọn lát dọc của walking skeleton |
+| Đỗ Quốc Bảo | Ca kiểm thử tính tay, CLI (T12), file case demo, kiểm thử thủ công, chạy thử trên máy thứ hai, ảnh chụp, tài liệu, hỗ trợ demo; đối chứng NetworkX (T21) khi còn dự phòng | Thư ký các buổi họp |
 
 Mỗi người phải giải thích được toàn bộ mô hình, không chỉ phần mình làm. Mỗi module được ít nhất một người khác review.
 
@@ -138,27 +145,29 @@ Mọi case được chạy thử trước trên đúng snapshot dùng để demo
 
 | Bước | Thao tác | Màn hình | Người xem hiểu | RQ |
 |---|---|---|---|---|
-| 1 | Mở app, chọn case "Hai điểm qua trung tâm" | Mạng đường vùng demo, 2 marker đã snap | Bài toán: đồ thị có hướng thật, chi phí là giây | — |
+| 1 | Mở app, chọn case "Hai điểm qua trung tâm" | Nền bản đồ OSM vùng demo, 2 marker đã snap | Bài toán: đồ thị có hướng thật, chi phí là giây | — |
 | 2 | Bấm **Tìm đường** (chạy cả hai thuật toán) | Hai tuyến trùng nhau; bảng: chi phí bằng nhau, số node mở rộng, thời gian tính | A* cho cùng chi phí tối ưu | RQ1 |
-| 3 | Bật lớp "Node đã mở rộng" | Dijkstra lan rộng mọi phía, A* tập trung về đích | Heuristic dẫn hướng tìm kiếm | RQ1 |
+| ~~3~~ | *Đã cắt 26/10 (D12): lớp "Node đã mở rộng". Số node mở rộng vẫn có trong bảng ở bước 2* | | | |
 | 4 | Đảo chiều đi/đến | Tuyến và chi phí khác chiều ban đầu | Đường một chiều: A→B ≠ B→A | — |
 | 5 | Chọn kịch bản "Cao điểm mô phỏng — trung tâm" | Vùng ùn tắc tô màu; tuyến đổi sang đường vòng; chi phí tăng | Ùn tắc theo vùng làm đổi lựa chọn | RQ3 |
-| 6 | Bấm vào một đoạn trên tuyến → **Đóng đoạn đường** | Đoạn đỏ; tuyến cũ mờ; tuyến mới; nhật ký "Đóng cạnh …" | Lập lại tuyến, không dùng cạnh bị đóng | RQ3 |
+| 6 | Bấm vào một đoạn trên tuyến → **Đóng đoạn đường** | Đoạn đỏ; tuyến mới; nhật ký "Đóng cạnh …"; nút mở lại | Lập lại tuyến, không dùng cạnh bị đóng | RQ3 |
 | 7 | Chọn case "Không còn đường" | Thông báo không có đường; không vẽ đường thẳng | Hệ thống báo đúng giới hạn | RQ3 |
 | 8 | Chuyển sang slide biểu đồ tăng quy mô | Node mở rộng / thời gian theo số node đồ thị | Lợi thế của A* khi bản đồ lớn — số đo thật | RQ1b |
-| 9 | *(Nếu có E2)* Case kho + 5 điểm: thẻ Thứ tự nhập / NN / NN + 2-opt | Thứ tự giao đổi, chi phí trước/sau | Tầng thứ hai của bài toán | RQ2 |
+| ~~9~~ | *Đã cắt 26/10 (D10): tour kho + 5 điểm* | | | |
 
 Dự phòng: quay màn hình toàn bộ kịch bản trước buổi thuyết trình.
 
 ## 8. Câu hỏi giảng viên có thể hỏi
 
+Người trả lời là phân công tạm; chia lại ở buổi họp tuần 3 theo người đã làm từng phần.
+
 | # | Câu hỏi | Ý chính để trả lời | Người trả lời |
 |---|---|---|---|
-| 1 | Vì sao tối ưu thời gian mà không phải quãng đường? | Ùn tắc chỉ đổi thời gian; tốc độ khác nhau theo loại đường; quãng đường vẫn hiển thị | Duy Anh |
-| 2 | Vì sao heuristic của A* không đánh giá quá cao? | Không tuyến nào ngắn hơn đường thẳng; không cạnh nào nhanh hơn `v_max`; `α ≥ 1` chỉ làm chậm thêm; hệ số `c` xử lý cạnh lệch dữ liệu | Duy Anh |
-| 3 | Admissible khác consistent thế nào? Heuristic của nhóm là loại nào? | Consistent: `h(u) ≤ w(u,v) + h(v)`; chứng minh bằng bất đẳng thức tam giác; consistent suy ra admissible và không cần mở lại node | Duy Anh |
-| 4 | Vì sao ít node mở rộng hơn chưa chắc nhanh hơn? | A* tốn thêm phép tính heuristic cho mỗi node; truy vấn ngắn thì phần tiết kiệm nhỏ | Duy Anh |
-| 5 | Nếu ùn tắc làm `v_max` thay đổi thì sao? | Ùn tắc chỉ nhân `α ≥ 1` → chậm hơn → cận dưới cũ vẫn đúng; nếu có kịch bản làm nhanh hơn thì phải tính lại `v_max` | Duy Anh |
+| 1 | Vì sao tối ưu thời gian mà không phải quãng đường? | Ùn tắc chỉ đổi thời gian; tốc độ khác nhau theo loại đường; quãng đường vẫn hiển thị | Tiến |
+| 2 | Vì sao heuristic của A* không đánh giá quá cao? | Không tuyến nào ngắn hơn đường thẳng; không cạnh nào nhanh hơn `v_max`; `α ≥ 1` chỉ làm chậm thêm; hệ số `c` xử lý cạnh lệch dữ liệu | Tiến |
+| 3 | Admissible khác consistent thế nào? Heuristic của nhóm là loại nào? | Consistent: `h(u) ≤ w(u,v) + h(v)`; chứng minh bằng bất đẳng thức tam giác; consistent suy ra admissible và không cần mở lại node | Tiến |
+| 4 | Vì sao ít node mở rộng hơn chưa chắc nhanh hơn? | A* tốn thêm phép tính heuristic cho mỗi node; truy vấn ngắn thì phần tiết kiệm nhỏ | Tiến |
+| 5 | Nếu ùn tắc làm `v_max` thay đổi thì sao? | Ùn tắc chỉ nhân `α ≥ 1` → chậm hơn → cận dưới cũ vẫn đúng; nếu có kịch bản làm nhanh hơn thì phải tính lại `v_max` | Tiến |
 | 6 | Vì sao A→B khác B→A? | Đồ thị có hướng; đường một chiều chỉ có cạnh một phía | Minh |
 | 7 | Dữ liệu nào thật, dữ liệu nào mô phỏng? | Thật: hình học, chiều đường, loại đường từ OSM. Mô phỏng: tốc độ, ùn tắc, đóng đường | Minh |
 | 8 | Điểm người dùng bấm không nằm trên đường thì sao? | Ánh xạ về node gần nhất trong thành phần liên thông mạnh, tối đa 150 m; xa hơn thì từ chối | Minh |
@@ -166,7 +175,8 @@ Dự phòng: quay màn hình toàn bộ kịch bản trước buổi thuyết tr
 | 10 | Ùn tắc được mô phỏng thế nào? Vì sao không nhân đều toàn bản đồ? | Luật theo vùng + loại đường, lấy α lớn nhất; nhân đều không đổi tuyến tối ưu | Tiến |
 | 11 | Khi tăng quy mô, nhóm so sánh công bằng thế nào? | Cùng một lần tải, cắt lồng nhau; bộ cặp cố định dùng lại ở mọi kích thước; đo theo số node thực | Tiến |
 | 12 | Thời gian đo có bị ảnh hưởng bởi vẽ bản đồ không? | Benchmark chạy CLI riêng, tắt trace, warm-up, lặp nhiều lần, lấy median/p95 | Tiến |
-| 13 | Phần nào nhóm tự viết, phần nào dùng thư viện? | Tự viết: Dijkstra, A*, heuristic, snapshot, snap, benchmark, (tour). Thư viện: OSMnx tải dữ liệu; NetworkX chỉ đối chứng trong test; FastAPI/Leaflet là lớp web | Tiến |
-| 14 | Vì sao 2-opt không bảo đảm tối ưu toàn cục? Vì sao tính lại toàn bộ chi phí tour? | Tìm kiếm cục bộ dừng ở cực trị địa phương; với ma trận bất đối xứng, đảo đoạn làm đảo chiều các chặng bên trong | Tiến |
-| 15 | Độ phức tạp của Dijkstra với binary heap? | `O((V + E) log V)`; nhóm dùng lazy deletion nên heap có thể chứa entry trùng, bỏ qua entry lỗi thời khi pop | Duy Anh |
-| 16 | Giới hạn lớn nhất của kết quả? | Một khu vực, tốc độ giả định, không cấm rẽ, ETA không phải thực tế | Tiến |
+| 13 | Phần nào nhóm tự viết, phần nào dùng thư viện? | Tự viết: Dijkstra, A*, heuristic, snapshot, snap, benchmark. Thư viện: OSMnx tải dữ liệu; NetworkX chỉ đối chứng trong test; FastAPI/Leaflet là lớp web | Tiến |
+| 14 | *(Chỉ khi làm tour sau 08/11)* Vì sao 2-opt không bảo đảm tối ưu toàn cục? Vì sao tính lại toàn bộ chi phí tour? | Tìm kiếm cục bộ dừng ở cực trị địa phương; với ma trận bất đối xứng, đảo đoạn làm đảo chiều các chặng bên trong | Tiến |
+| 15 | Độ phức tạp của Dijkstra với binary heap? | `O((V + E) log V)`; nhóm dùng lazy deletion nên heap có thể chứa entry trùng, bỏ qua entry lỗi thời khi pop | Tiến |
+| 16 | Giới hạn lớn nhất của kết quả? | Một khu vực, tốc độ giả định, không cấm rẽ, ETA không phải thực tế; tour trong proposal đã chuyển thành hướng mở rộng | Tiến |
+| 17 | Vì sao bỏ tour so với proposal? | Thiếu nhân lực tuần 2; nhóm chọn làm chắc phần tìm đường (đúng đắn, tăng quy mô, ùn tắc/đóng đường) thay vì làm dở cả hai; nhóm báo giảng viên bằng thư ngay sau khi quyết định (26/10) | Tiến |

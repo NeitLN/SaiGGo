@@ -2,11 +2,11 @@
 
 Mỗi phiếu tự đủ: người nhận chỉ cần đọc phiếu (và các file phiếu trỏ tới) là làm được. Phiếu bổ sung cho mô tả gốc trong [TASKS.md](../TASKS.md): ghi rõ ai sở hữu file nào, phải dùng interface nào, và phụ thuộc chặn ở mức nào.
 
-**Trạng thái: Đã duyệt 26/10** ([ROADMAP](../ROADMAP.md) mục 6). Người tích hợp (Tiến) cập nhật GitHub và phần TASKS.md ngoài tuần 2 trong PR đồng bộ.
+**Trạng thái: Đã duyệt 26/10** ([ROADMAP](../ROADMAP.md) mục 6). TASKS.md đã đồng bộ; người tích hợp (Tiến) cập nhật GitHub bằng `--sync` sau khi PR đồng bộ merge.
 
 | Phiếu | Người | Ngày | Issue | Trạng thái 26/10 |
 |---|---|---|---|---|
-| [T34 — Release dữ liệu thô](T34-release-data.md) | Minh | 26/10 | tạo trong PR đồng bộ | |
+| [T34 — Release dữ liệu thô](T34-release-data.md) | Minh | 26/10 | tạo khi chạy `--sync` | |
 | [T01 — Định dạng đồ thị, fixture, `load_graph`](T01-graph-format.md) | Tiến | 26–27/10 | [#3](https://github.com/NeitLN/SaiGGo/issues/3) | ✅ #57; còn kiểm dữ liệu thật (chờ T34) |
 | [T10 — Hàm địa lý](T10-geo.md) | Tiến | 26–27/10 | [#6](https://github.com/NeitLN/SaiGGo/issues/6) | ✅ #58 |
 | [T11 — Dijkstra](T11-dijkstra.md) | Tiến | 27–28/10 | [#7](https://github.com/NeitLN/SaiGGo/issues/7) | ✅ #59 |

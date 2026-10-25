@@ -1,6 +1,6 @@
 # SaiGo — Kế hoạch thực nghiệm
 
-Kết quả đo được ghi ở [EXPERIMENTS.md](EXPERIMENTS.md). Tài liệu này chỉ mô tả **cách đo**. Mọi ô số liệu ở đây là **[Chưa đo]**; không điền số khi chưa chạy, không ước lượng thay cho số đo.
+Kết quả đo được ghi ở [EXPERIMENTS.md](EXPERIMENTS.md). Tài liệu này chỉ mô tả **cách đo**. Cập nhật 26/10 theo [đề xuất đổi phạm vi](proposals/2026-10-26-pham-vi.md) đã duyệt: E3 còn 3 kích thước, chỉ fixed trips; E5 ngoài phạm vi cam kết. Mọi ô số liệu ở đây là **[Chưa đo]**; không điền số khi chưa chạy, không ước lượng thay cho số đo.
 
 ## 1. Các thực nghiệm
 
@@ -8,9 +8,9 @@ Kết quả đo được ghi ở [EXPERIMENTS.md](EXPERIMENTS.md). Tài liệu n
 |---|---|---|---|
 | E1 | Code có đúng không? | Fixture, đồ thị ngẫu nhiên, đồ thị thật | Có |
 | E2 | A* vs Dijkstra trên vùng demo (RQ1) | Vùng demo | Có |
-| E3 | Lợi thế của A* khi đồ thị lớn dần (RQ1b) | 4 vùng cắt lồng nhau | Có |
+| E3 | Lợi thế của A* khi đồ thị lớn dần (RQ1b) | 3 vùng cắt lồng nhau, chỉ fixed trips | Có |
 | E4 | Ảnh hưởng của ùn tắc và đóng đường (RQ3) | Vùng demo | Có |
-| E5 | Chất lượng tour (RQ2) | Vùng demo | Chỉ khi có E1 tour (M8) |
+| E5 | Chất lượng tour (RQ2) | Vùng demo | **Không** — ngoài phạm vi cam kết từ 26/10; chỉ làm nếu sau 08/11 còn thời gian |
 
 ## 2. Truy vấn
 
@@ -29,7 +29,7 @@ Kết quả đo được ghi ở [EXPERIMENTS.md](EXPERIMENTS.md). Tài liệu n
 |---|---|---|
 | E2 vùng demo | 1.000 | Như đã nêu trong proposal |
 | E3 fixed trips | 250, dùng chung cho mọi kích thước | Không trùng với bộ E2 |
-| E3 growing trips | 250 mỗi kích thước | Không trùng với bộ E2 |
+| ~~E3 growing trips~~ | — | Đã cắt 26/10 |
 | E4 kịch bản | 300 cặp lấy từ bộ E2 (seed riêng) | |
 | E4 đóng đường | 100 cặp lấy từ bộ E2 có tuyến cơ sở ≥ 3 cạnh | |
 
@@ -88,20 +88,20 @@ Thư mục: `results/<run_id>/` với `run_id = YYYYMMDD-HHMM-<suite>-<git7>`. M
 
 ### 6.1. Đồ thị [Đề xuất]
 
-- Tải **một lần** vùng nửa cạnh 4,5 km + đệm 0,5 km quanh Bến Thành (T30), rồi cắt 4 hình vuông lồng nhau, nửa cạnh **1 / 2 / 3 / 4,5 km** (T61).
+- Tải **một lần** vùng nửa cạnh 4,5 km + đệm 0,5 km quanh Bến Thành (T30), rồi cắt **3** hình vuông lồng nhau (T61), chọn trong các nửa cạnh ứng viên **1 / 2 / 3 / 4,5 km**. Ba kích thước cụ thể chốt sau pilot của T61 (Q3); không giảm xuống 2 kích thước nếu nhóm chưa đồng ý riêng.
 - Chọn SCC lồng nhau (DATA_MODEL mục 8.4), nên SCC nhỏ luôn nằm trong SCC lớn.
 - Trục hoành của mọi biểu đồ là **`|V|` đo được**, không phải bán kính: tăng gấp đôi bán kính không bảo đảm số node tăng gấp bốn.
 - Pilot ở kích thước lớn nhất: nếu median Dijkstra > ~1 s/truy vấn thì giảm hoặc bỏ kích thước đó và ghi lý do. Một giây là trần thực tế cho thời gian chạy, không phải mục tiêu.
 - Đồ thị lưới tổng hợp: **không làm** ở bản đầu. Nếu thêm sau này thì chỉ là bổ sung có kiểm soát, không phải bằng chứng về TP.HCM.
 
-### 6.2. Hai workload
+### 6.2. Workload (chỉ fixed trips từ 26/10)
 
 | Workload | Cách lấy cặp | Đo điều gì |
 |---|---|---|
 | **Fixed trips** | 250 cặp từ SCC của vùng nhỏ nhất, dùng lại y hệt ở mọi kích thước | Bản đồ lớn hơn ảnh hưởng thế nào khi chuyến đi giữ nguyên (có thể xuất hiện đường vòng mới qua vùng ngoài) |
-| **Growing trips** | 250 cặp mỗi kích thước, phân tầng theo `δ` của **vùng đó** | Bản đồ lớn hơn **và** chuyến đi dài hơn, giống người dùng thật trên bản đồ lớn |
+| ~~Growing trips~~ | *Đã cắt 26/10 (D11)* | Nếu làm lại: bản đồ lớn hơn **và** chuyến đi dài hơn |
 
-Kết luận phải nói rõ đang dùng workload nào. Growing trips đo hai hiệu ứng cùng lúc, không phải riêng kích thước đồ thị.
+Kết luận chỉ nói về fixed trips: bản đồ lớn hơn khi chuyến đi giữ nguyên. Không suy ra kết luận cho chuyến đi dài hơn trên bản đồ lớn hơn.
 
 ### 6.3. Chỉ số bổ sung
 
@@ -110,7 +110,7 @@ Kết luận phải nói rõ đang dùng workload nào. Growing trips đo hai hi
 
 ### 6.4. Giả thuyết cần kiểm chứng (không phải kết luận)
 
-- H1: Với growing trips, `expanded` của Dijkstra tăng nhanh hơn của A*, nên tỉ lệ `r` giảm khi `|V|` tăng.
+- ~~H1~~ (growing trips): không kiểm ở bản này vì workload đã cắt.
 - H2: Với fixed trips, `expanded` của cả hai thuật toán thay đổi ít theo kích thước, vì Dijkstra chỉ mở rộng các node có chi phí nhỏ hơn chi phí tới đích. Nếu đúng thì "khoảng cách chuyến đi" quan trọng hơn "kích thước bản đồ".
 
 ## 7. E4 — Ùn tắc và đóng đường (RQ3)
@@ -128,7 +128,7 @@ Kết luận phải nói rõ đang dùng workload nào. Growing trips đo hai hi
 - Chỉ số: tỉ lệ còn đường, % tăng chi phí, thời gian lập lại = thời gian tạo snapshot + thời gian tìm (ghi riêng hai phần).
 - **Bộ không còn đường:** 30 cặp, đóng mọi cạnh đi vào đích. Đo thời gian để kết luận `no_path` của hai thuật toán. Dự kiến A* không có lợi thế (ví dụ ở DATA_MODEL mục 7); cần số đo để xác nhận.
 
-## 8. E5 — Tour (chỉ khi có M8)
+## 8. E5 — Tour (ngoài phạm vi cam kết từ 26/10)
 
 - n ∈ {4, 6, 8, 10} điểm giao, 20 bộ mỗi n (seed); kho và điểm giao lấy từ SCC vùng demo, cách nhau ≥ 150 m; thứ tự nhập = thứ tự sinh ngẫu nhiên.
 - Phương án: thứ tự nhập, NN, NN + 2-opt, Held–Karp (tối ưu).
@@ -155,10 +155,10 @@ Kết luận phải nói rõ đang dùng workload nào. Growing trips đo hai hi
 
 1. Boxplot `expanded` của Dijkstra và A* theo tầng (E2).
 2. Scatter `expanded_D` với `expanded_A*` trên trục log, kèm đường y = x (E2).
-3. Median `expanded` và median thời gian theo `|V|`, mỗi workload một đường (E3).
+3. Median `expanded` và median thời gian theo `|V|`, fixed trips (E3).
 4. Median `r` theo `|V|` (E3).
 5. Boxplot `r` theo kịch bản (E4).
-6. *(E5)* Improvement và gap theo n.
+6. ~~*(E5)* Improvement và gap theo n~~ (đã cắt 26/10).
 
 Mỗi hình ghi `run_id`, số cặp và `dataset_id` trong chú thích.
 

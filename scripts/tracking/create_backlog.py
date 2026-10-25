@@ -37,44 +37,48 @@ PEOPLE = {
     "Bảo": "dobaovlu",
 }
 
+# Tiêu đề là khóa để tìm milestone đã có (ensure_milestones): đổi tiêu đề sẽ tạo milestone mới.
+# Mô tả và hạn cập nhật theo kế hoạch đã duyệt 26/10 (docs/proposals/2026-10-26-pham-vi.md).
 MILESTONES = {
     "M0": ("M0 — Nền móng", "2026-10-24",
            "Khung chạy trên Windows; fixture mini.json nạp được; OSMnx tải được vùng nhỏ. "
            "Chứng minh: pytest -q xanh; python scripts/prepare_data.py --smoke"),
-    "M1": ("M1 — Dijkstra trên đồ thị mẫu", "2026-10-26",
-           "CLI tìm đường trên mini.json khớp bảng tính tay. "
-           "Chứng minh: python -m app.cli route --graph tests/fixtures/mini.json --from S --to T --algo dijkstra"),
+    "M1": ("M1 — Dijkstra trên đồ thị mẫu", "2026-10-31",
+           "Dijkstra khớp bảng tính tay trên mini.json; CLI chạy được cả Dijkstra và A* (T12). "
+           "Chứng minh: python -m app.cli route --graph tests/fixtures/mini.json --from S --to T --algo both"),
     "MW": ("MW — Walking skeleton", "2026-10-29",
            "Bấm 2 điểm trên bản đồ → /api/route → Dijkstra trên mini.json → vẽ tuyến; chạy được trên máy thứ hai. "
            "Chứng minh: pytest tests/test_api_route.py; thao tác ✅ của T14 và T15"),
-    "M2": ("M2 — A* và đối chứng", "2026-10-28",
-           "A* cùng chi phí, ít node hơn; test ngẫu nhiên khớp NetworkX. "
+    "M2": ("M2 — A* và đối chứng", "2026-11-03",
+           "A* cùng chi phí, ít node hơn; test ngẫu nhiên khớp NetworkX; kiểm heuristic trên dữ liệu thật (T22). "
            "Chứng minh: pytest tests/test_astar.py tests/test_oracle_networkx.py"),
     "M3": ("M3 — Dữ liệu thật trên bản đồ", "2026-10-28",
-           "JSON vùng demo + manifest; trình duyệt vẽ mạng đường thật. "
-           "Chứng minh: python scripts/prepare_data.py; mở http://localhost:5173"),
-    "M4": ("M4 — Tìm đường trên dữ liệu thật", "2026-10-29",
+           "Từ 26/10: dữ liệu thô đóng băng dùng chung qua Release (T34), JSON vùng demo + manifest (T31). "
+           "Không vẽ toàn mạng đường (T32 đã cắt). Chứng minh: hai máy ra cùng sha256; pytest -m realdata"),
+    "M4": ("M4 — Tìm đường trên dữ liệu thật", "2026-11-03",
            "Dijkstra/A* trên đồ thị thật; 200 cặp khớp NetworkX. Chứng minh: pytest -m realdata"),
-    "M5": ("M5 — Ùn tắc và đóng đường", "2026-10-31",
+    "M5": ("M5 — Ùn tắc và đóng đường", "2026-11-04",
            "Snapshot với vùng ùn tắc và cạnh đóng; tuyến đổi, no_path khi cần. "
            "Chứng minh: pytest tests/test_scenario.py tests/test_closures.py"),
-    "M6": ("M6 — Bản đồ tương tác", "2026-11-04",
-           "Bấm 2 điểm → 2 tuyến + bảng so sánh + node mở rộng; kịch bản; đóng đoạn đường. "
-           "Chứng minh: checklist UI-1…UI-8 trong docs/PROGRESS.md"),
-    "M7": ("M7 — Benchmark và tăng quy mô", "2026-11-06",
-           "CSV đo thật + biểu đồ: 1.000 cặp, 4 kích thước, ùn tắc/đóng đường; cổng G1 ngày 05/11. "
-           "Chứng minh: python scripts/run_benchmarks.py --suite all"),
+    "M6": ("M6 — Bản đồ tương tác", "2026-11-07",
+           "Bản rút gọn (26/10): bấm 2 điểm → tuyến + bảng Dijkstra/A*; chọn kịch bản, vẽ vùng ùn tắc; "
+           "bấm đoạn trên tuyến để đóng, mở lại; báo no_path. Không có lớp chấm node mở rộng. "
+           "Chứng minh: checklist UI trong docs/PROGRESS.md"),
+    "M7": ("M7 — Benchmark và tăng quy mô", "2026-11-08",
+           "CSV đo thật + biểu đồ: 1.000 cặp, 3 kích thước (chỉ fixed trips), ùn tắc/đóng đường; "
+           "điểm kiểm bằng chứng 05/11 (G1); MVP tích hợp 08/11. Chứng minh: python scripts/run_benchmarks.py --suite all"),
     "M8": ("M8 — Tour (mở rộng E1)", "2026-11-08",
-           "NN, 2-opt có hướng, Held–Karp; tích hợp API/UI chỉ khi qua G1. Chứng minh: pytest tests/test_tour.py"),
+           "Đã cắt khỏi phạm vi cam kết ngày 26/10 (T70–T74 đóng not planned). Chỉ làm lại nếu sau 08/11 còn thời gian."),
     "M9": ("M9 — Hoàn thiện", "2026-11-12",
-           "Freeze 10/11; chạy trên máy thứ hai; video demo; số liệu vào essay. Final ready 12/11."),
+           "09–12/11 không thêm tính năng: chạy lại trên máy thứ hai, sửa lỗi, video demo; essay bắt đầu từ tuần 3. "
+           "Final ready 12/11."),
 }
 
 LABELS = {
     "task": ("5319e7", "Hạng mục trong backlog, được tính vào burndown"),
     "P0": ("b60205", "Bắt buộc cho bản tối thiểu"),
     "P1": ("d93f0b", "Nên có; cắt được khi trễ"),
-    "P2": ("fbca04", "Mở rộng có điều kiện (sau cổng G1)"),
+    "P2": ("fbca04", "Mở rộng, ngoài phạm vi cam kết"),
     "area:algorithms": ("1d76db", "Dijkstra, A*, heuristic"),
     "area:graph": ("0e8a16", "Mô hình đồ thị, snapshot, snap, đóng đường"),
     "area:data": ("006b75", "Dữ liệu OSM, cấu hình, kịch bản"),
@@ -190,11 +194,14 @@ def load_schedule() -> dict[str, dict]:
         return {row["id"]: row for row in csv.DictReader(f)}
 
 
+AWAY = {"Duy Anh"}   # vắng từ 26/10 (ROADMAP mục 6): không tự giao review; bỏ tên khi quay lại
+
+
 def default_reviewer(task: dict, area: str) -> list[str]:
     """Người review luôn khác người phụ trách; rỗng nghĩa là cả nhóm review chéo."""
     preferred = ["Minh", "Duy Anh"] if area in ("frontend", "data") else ["Duy Anh", "Minh"]
-    for name in [*task["reviewers"], "Tiến", *preferred]:
-        if name not in task["owners"]:
+    for name in [*task["reviewers"], "Tiến", *preferred, "Bảo"]:
+        if name not in task["owners"] and name not in AWAY:
             return [name]
     return []
 
