@@ -2,7 +2,7 @@
 
 Tuần mục tiêu: 2 (30–31/10) · Giao cho: Tiến (thay Duy Anh) · Nhánh: `t20-astar` · Issue: [#9](https://github.com/NeitLN/SaiGGo/issues/9)
 Review: Minh · Người tích hợp: Tiến
-Phụ thuộc: T11 và T10 (**bắt đầu**) · Ước lượng: 3 giờ
+Phụ thuộc: T11 và T10 (**bắt đầu**; đã merge #59, #58) · kiểm thứ tự ID cạnh trong `load_graph` (PR nhỏ, làm trước) · Ước lượng: 3 giờ
 
 ## Mục tiêu
 A* cho **cùng chi phí** với Dijkstra nhưng mở rộng ít node hơn trên fixture. Đây là lõi của RQ1.
@@ -31,6 +31,8 @@ def astar(graph: Graph, snap: Snapshot, source: int, target: int,
 ## Sở hữu (chỉ task này được tạo/sửa)
 - `backend/app/algorithms/heuristics.py`, `astar.py`
 - `tests/test_astar.py`
+- `tests/mini_cases.py`: `_dist_m` đổi sang dùng `geo.haversine_m` (góp ý review T11 của Bảo)
+- `_comment` trong `tests/fixtures/mini.json`: ghi hằng số 111 320 m/độ dùng để đổi tọa độ (góp ý review T11 của Bảo)
 
 ## Dùng (chỉ đọc)
 - `geo.py` (T10), `dijkstra.py`, `result.py` và `graph/scenario.py` (T11)

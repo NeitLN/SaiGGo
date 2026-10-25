@@ -1,8 +1,10 @@
 # T11 — Dijkstra và SearchResult
 
+**Trạng thái: ✅ đã merge 26/10 ([#59](https://github.com/NeitLN/SaiGGo/pull/59)).**
+
 Tuần mục tiêu: 2 (27–28/10) · Giao cho: Tiến (thay Duy Anh) · Nhánh: `t11-dijkstra` · Issue: [#7](https://github.com/NeitLN/SaiGGo/issues/7)
 Review: Bảo (đối chiếu với đáp án T03) · Người tích hợp: Tiến
-Phụ thuộc: T01 (**tích hợp**: code theo interface `Graph` đã duyệt, ghép khi T01 merge) · T03/#54 (**chấp nhận**) · Ước lượng: 4 giờ
+Phụ thuộc: T01 (**tích hợp**; đã merge #57) · T03/#54 (**chấp nhận**; đã merge) · Ước lượng: 4 giờ
 
 ## Mục tiêu
 Dijkstra đúng theo quy tắc ở DATA_MODEL mục 6, trả về `SearchResult` mà T13, T20, T12 dùng chung.
@@ -50,10 +52,10 @@ def dijkstra(graph: Graph, snap: Snapshot, source: int, target: int, *, trace_li
 - `tests/fixtures/mini.json`, `mini_expected.json`
 
 ## Tiêu chí chấp nhận
-- [ ] `pytest tests/test_dijkstra.py -q` → PASS
-- [ ] Tình huống cơ sở S→T: `cost_s = 80`, tuyến S→A→T, `expanded = 5`
-- [ ] T→S: 100. Đóng A→T và B→T: `no_path`
-- [ ] Bảo approve sau khi đối chiếu đủ 6 tình huống với bảng tính tay
+- [x] `pytest tests/test_dijkstra.py -q` → PASS
+- [x] Tình huống cơ sở S→T: `cost_s = 80`, tuyến S→A→T, `expanded = 5`
+- [x] T→S: 100. Đóng A→T và B→T: `no_path`
+- [x] Bảo approve sau khi đối chiếu đủ 6 tình huống với bảng tính tay (review #59)
 
 ## Ngoài phạm vi
 A* (T20); luật ùn tắc theo vùng (T40); CLI (T12).

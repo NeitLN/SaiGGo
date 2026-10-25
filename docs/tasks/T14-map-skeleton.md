@@ -2,7 +2,7 @@
 
 Tuần mục tiêu: 2 (27–28/10) · Giao cho: Minh · Nhánh: `t14-map-skeleton` · Issue: [#50](https://github.com/NeitLN/SaiGGo/issues/50)
 Review: Tiến · Người tích hợp: Tiến
-Phụ thuộc: contract v1 (**bắt đầu**, đã chốt) · T13 (**tích hợp**: code trước với response mẫu, nối API thật khi T13 merge) · Ước lượng: 3 giờ
+Phụ thuộc: contract v1 (**bắt đầu**, đã chốt) · T13 (**tích hợp**: code trước với response mẫu, nối API thật khi T13 xong; Minh làm cả T13) · Ước lượng: 3 giờ
 
 ## Mục tiêu
 Trình duyệt gọi API thật và vẽ đúng tuyến trên nền OSM.
@@ -27,9 +27,9 @@ Trình duyệt gọi API thật và vẽ đúng tuyến trên nền OSM.
 - Tọa độ trong `tests/fixtures/mini.json` (T01)
 
 ## Tiêu chí chấp nhận
-- [ ] **28/10 tối:** chạy cùng API của T13 trên máy Tiến; bấm gần S rồi gần T thấy tuyến S→A→T nằm đúng quanh chợ Bến Thành, hiện 80 s; đảo lại hiện 100 s
+- [ ] **28/10 tối:** chạy cùng API của T13 trên máy Minh, Tiến làm lại khi review; bấm gần S rồi gần T thấy tuyến S→A→T nằm đúng quanh chợ Bến Thành, hiện 80 s; đảo lại hiện 100 s
 - [ ] `npm run build` không lỗi
 - [ ] Không vẽ đường thẳng khi API trả `no_path`
 
 ## Ngoài phạm vi
-Bảng so sánh Dijkstra/A* (T52); chọn kịch bản, đóng đường (tuần 3); vẽ mạng đường (đề xuất cắt).
+Bảng so sánh Dijkstra/A* (T52); chọn kịch bản, đóng đường (tuần 3); vẽ toàn bộ mạng đường (T32, đã cắt 26/10).

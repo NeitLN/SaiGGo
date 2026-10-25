@@ -2,6 +2,8 @@
 
 Mỗi task vừa sức một buổi (khoảng 2–4 giờ). Nếu một task kéo dài quá hai buổi, tách nhỏ và ghi lý do vào [PROGRESS.md](PROGRESS.md). Người phụ trách là **[Đề xuất]**: Tiến có thể vào làm cùng ở mọi task. Ngày 26/10, T01, T10, T11, T20 chuyển từ Duy Anh sang Tiến vì Duy Anh vắng tuần 2.
 
+> **26/10: nhóm đã duyệt kế hoạch tuần 2** ([ROADMAP](ROADMAP.md) mục 6): T12 → Bảo, T13 → Minh, T21 → Bảo (dự phòng). Các task tuần 2 dưới đây đã cập nhật theo quyết định đó. **Phần ngoài tuần 2 chưa đồng bộ** với [đề xuất phạm vi đã duyệt](proposals/2026-10-26-pham-vi.md) (cắt T32 và tour T70–T74, RQ1b 3 kích thước chỉ fixed trips, T53/T54 rút gọn, G1 thành điểm kiểm bằng chứng); PR đồng bộ theo sau, trong lúc chờ thì đề xuất phạm vi được ưu tiên.
+
 Ký hiệu: 👤 phụ trách · ⏱ ước lượng · ⛓ phụ thuộc · 📁 file · 📦 đầu ra · ✅ hoàn thành khi · ▶ kiểm tra · 🧠 kiến thức cần hiểu để giải thích.
 
 Thứ tự gợi ý trong tuần đầu: **T00 → T01 → T03 → T10 → T11 → T12 → T20 → T21 → T22**, song song **T02 → T30 → T31 → T32**.
@@ -38,12 +40,12 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - 🧠 Vai trò venv; vì sao frontend gọi `/api` qua proxy của Vite (`vite.config.ts`).
 
 ### T01 — Chốt định dạng đồ thị, tạo fixture mẫu và bộ nạp Graph
-- 👤 Tiến (Bảo review) · ⏱ 3 h · ⛓ T00
+- 👤 Tiến (Bảo review) · ⏱ 3 h · ⛓ T00 · ✅ đã merge 26/10 (#57); còn kiểm dữ liệu thật khi có Release
 - **Mục tiêu:** có một đồ thị nhỏ tính tay được và một hàm nạp dùng chung cho mọi phần sau.
 - **Việc cần làm:**
   1. Viết `tests/fixtures/mini.json` theo đúng `saigo-graph/1`, dựa trên ví dụ ở [DATA_MODEL.md](DATA_MODEL.md) mục 7. Đổi mét sang lat/lon quanh tâm (10.7725, 106.6980); mỗi node có thêm trường tùy chọn `"name": "S"`.
   2. Viết `Graph` (dataclass) và `load_graph(path)` trong `backend/app/graph/model.py`: đọc JSON, kiểm tra (DATA_MODEL mục 2.3), dựng `out_edges`, tính `base_time_s`, `v_max_mps`.
-  3. Hàm `node_by_name(graph, "S")` để test và CLI dùng tên.
+  3. Hàm `node_by_name(meta, "S")` để test và CLI dùng tên (tên node nằm trong `GraphMeta`).
   4. Test: số node/cạnh, đường một chiều (A→T có, T→A không), cạnh lỗi (tốc độ ≤ 0) bị từ chối.
 - 📁 `backend/app/graph/model.py`, `tests/fixtures/mini.json`, `tests/test_graph_model.py`
 - 📦 Bộ nạp đồ thị + fixture.
@@ -65,7 +67,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - 🧠 OSMnx trả `MultiDiGraph`; `network_type="drive"` gồm những loại đường nào; vì sao không tải lại dữ liệu mỗi lần chạy.
 
 ### T03 — Bảng kết quả tính tay cho đồ thị mẫu
-- 👤 Bảo (Duy Anh review) · ⏱ 2 h · ⛓ — (chỉ cần DATA_MODEL mục 7)
+- 👤 Bảo (Tiến review) · ⏱ 2 h · ⛓ — (chỉ cần DATA_MODEL mục 7) · ✅ đã merge 25/10 (#54)
 - **Mục tiêu:** có đáp án độc lập để kiểm tra code Dijkstra/A*.
 - **Việc cần làm:**
   1. Với 6 tình huống ở DATA_MODEL mục 7, chạy tay Dijkstra: ghi bảng từng bước (heap, `g`, node pop).
@@ -73,7 +75,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
   3. Ghi kết quả vào `tests/fixtures/mini_expected.json`: chi phí, tuyến, số node mở rộng.
 - 📁 `tests/fixtures/mini_expected.json`, `docs/ALGORITHMS.md` (thêm bảng chạy tay)
 - 📦 Đáp án + bảng giải thích.
-- ✅ Duy Anh đối chiếu và xác nhận; có ít nhất một bảng từng bước cho Dijkstra và một cho A*.
+- ✅ Tiến đối chiếu và xác nhận (thay Duy Anh); có ít nhất một bảng từng bước cho Dijkstra và một cho A*.
 - ▶ Review thủ công; sau T11/T20 các test đọc file này phải xanh.
 - 🧠 Thứ tự pop của Dijkstra; vì sao A* không pop C và D.
 
@@ -112,7 +114,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 ## M1 — Dijkstra trên đồ thị mẫu
 
 ### T10 — Hàm địa lý
-- 👤 Tiến (Bảo review) · ⏱ 1–2 h · ⛓ T00
+- 👤 Tiến (Bảo review) · ⏱ 1–2 h · ⛓ T00 · ✅ đã merge 26/10 (#58)
 - **Mục tiêu:** có hàm khoảng cách dùng chung cho heuristic, snap và ùn tắc.
 - **Việc cần làm:** `haversine_m(lat1, lon1, lat2, lon2)` với R = 6 371 009 m; `polyline_midpoint(coords)` (điểm ở 50% chiều dài); test với một cặp điểm có khoảng cách đã biết, test 2 điểm trùng nhau = 0 và test thứ tự `[lon, lat]` của GeoJSON.
 - 📁 `backend/app/graph/geo.py`, `tests/test_geo.py`
@@ -122,26 +124,27 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - 🧠 Công thức haversine; vì sao GeoJSON là `[lon, lat]` còn Leaflet là `[lat, lon]`.
 
 ### T11 — Dijkstra và SearchResult
-- 👤 Tiến (Bảo review) · ⏱ 3–4 h · ⛓ T01, T03
+- 👤 Tiến (Bảo review) · ⏱ 3–4 h · ⛓ T01, T03 · ✅ đã merge 26/10 (#59)
 - **Mục tiêu:** cài Dijkstra đúng quy tắc ở DATA_MODEL mục 6.
 - **Việc cần làm:**
   1. `SearchResult` + hàm dựng tuyến từ `pred_edge` trong `algorithms/result.py`.
   2. `dijkstra(graph, snap, source, target, trace_limit=0)` với heap `(g, counter, node)`, lazy deletion, dừng khi pop đích, đếm `expanded`, `relaxations`, `pushes`, `max_frontier`.
-  3. Tạm thời tạo `Snapshot` cơ sở bằng hàm nhỏ `baseline_snapshot(graph)` (T40 sẽ thay).
+  3. `Snapshot` và `baseline_snapshot(graph)` trong `graph/scenario.py`. Đây là định nghĩa **duy nhất**; T40 thêm `Scenario` và `build_snapshot` vào cùng file, không tạo kiểu mới.
   4. Test: 6 tình huống trong `mini_expected.json`; `source == target`; cạnh song song (thêm vào bản sao fixture một cạnh S→A nhanh hơn → tuyến phải dùng đúng edge id đó); tổng `weights` theo `edge_ids` bằng `cost_s`.
-- 📁 `backend/app/algorithms/result.py`, `dijkstra.py`, `tests/test_dijkstra.py`
+- 📁 `backend/app/algorithms/result.py`, `dijkstra.py`, `backend/app/graph/scenario.py`, `tests/test_dijkstra.py`
 - 📦 Dijkstra chạy trên fixture.
 - ✅ Mọi test xanh; `expanded` = 5 ở tình huống cơ sở.
 - ▶ `pytest tests/test_dijkstra.py -q`
 - 🧠 Vì sao Dijkstra đúng khi trọng số không âm; lazy deletion; độ phức tạp `O((V+E) log V)`; vì sao lưu predecessor là **cạnh**.
 
 ### T12 — CLI tìm đường
-- 👤 Tiến (Bảo review) · ⏱ 2 h · ⛓ T11
+- 👤 Bảo (Tiến review) · ⏱ 2 h · ⛓ T11 (bắt đầu), T13 (tích hợp, cho `--from-latlon`), T20 (chấp nhận)
+- **Chuyển 26/10:** từ Tiến sang Bảo (giảm tải cho Tiến).
 - **Mục tiêu:** chạy thuật toán từ dòng lệnh để kiểm tra và giải thích, chưa cần web.
 - **Việc cần làm:** `python -m app.cli route --graph <file> --from S --to T --algo dijkstra|astar|both` (nhận tên node hoặc `--from-latlon lat,lon`); in tuyến (tên/ID), chi phí (s), quãng đường (m), số node mở rộng, thời gian chạy (ms).
 - 📁 `backend/app/cli.py`
 - 📦 Lệnh CLI.
-- ✅ Kết quả in ra khớp `mini_expected.json`.
+- ✅ Kết quả in ra khớp `mini_expected.json` cho cả Dijkstra và A* (`--algo both`); chỉ tính là xong khi gọi được A*.
 - ▶ `python -m app.cli route --graph tests/fixtures/mini.json --from S --to T --algo dijkstra` (chạy trong thư mục `backend/` hoặc với `PYTHONPATH=backend`)
 - 🧠 Đo thời gian bằng `perf_counter_ns` chỉ quanh lời gọi thuật toán.
 
@@ -152,13 +155,14 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 Đường mỏng nhất chạy xuyên mọi tầng của hành trình chính, xong trước **29/10**: bấm 2 điểm trên bản đồ → `/api/route` → Dijkstra trên `mini.json` → vẽ tuyến. Mục đích là để lỗi nối ghép (contract API, thứ tự lat/lon, chạy trên máy khác) lộ ra sớm, thay vì đến M6. Contract: [ARCHITECTURE.md](ARCHITECTURE.md) mục 4.1. T51 và T52 sau này mở rộng trên chính code này, không viết lại.
 
 ### T13 — Skeleton phía API: `/api/route` tối giản trên `mini.json`
-- 👤 Tiến (Minh review) · ⏱ 3 h · ⛓ T11
+- 👤 Minh (Tiến review) · ⏱ 3 h · ⛓ T11
+- **Chuyển 26/10:** từ Tiến sang Minh; Minh làm trọn lát dọc skeleton (T13 + T14).
 - **Mục tiêu:** API thật, mỏng nhất, trả tuyến Dijkstra theo đúng contract v1.
 - **Việc cần làm:**
   1. Nạp đồ thị khi khởi động từ `SAIGO_GRAPH` (mặc định `tests/fixtures/mini.json`); `/api/health` báo `dataset_loaded: true`.
-  2. `POST /api/route` theo contract v1: snap về node gần nhất (duyệt tuyến tính, chưa giới hạn 150 m), chạy `dijkstra()` của T11, trả geometry `[lon, lat]`, `cost_s`, `distance_m`, `expanded`, `runtime_ms`.
+  2. `POST /api/route` theo contract v1: snap về node gần nhất bằng `nearest_node_naive(graph, meta, lat, lon)` (duyệt tuyến tính, chưa giới hạn 150 m, chỉ xét node có `meta.node_in_scc`), chạy `dijkstra()` của T11, trả geometry `[lon, lat]`, `cost_s`, `distance_m`, `expanded`, `runtime_ms`.
   3. Test bằng TestClient: S→T trả `cost_s = 80`; T→S trả 100; geometry bắt đầu ở S và kết thúc ở T.
-- **Phụ thuộc theo mức:** T11 chặn ở mức *tích hợp*: viết route và test với contract trước, nối `dijkstra()` khi T11 merge.
+- **Phụ thuộc:** T11 và T10 đã merge (#59, #58): dùng trực tiếp `dijkstra()` và `geo.haversine_m`.
 - 📁 `backend/app/main.py`, `backend/app/api/routes.py`, `backend/app/api/schemas.py`, `backend/app/services/routing.py`, `tests/test_api_route.py`
 - 📦 API skeleton.
 - ✅ Test API xanh; gọi thử bằng `http://127.0.0.1:8000/docs` ra đúng contract.
@@ -191,20 +195,21 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 ## M2 — A* và đối chứng
 
 ### T20 — A* với heuristic địa lý
-- 👤 Tiến (Minh review) · ⏱ 3 h · ⛓ T10, T11
+- 👤 Tiến (Minh review) · ⏱ 3 h · ⛓ T10, T11 (đã merge)
 - **Mục tiêu:** A* cho cùng chi phí với Dijkstra nhưng mở rộng ít node hơn trên fixture.
 - **Việc cần làm:**
   1. `astar(graph, snap, source, target, heuristic, trace_limit=0)`: ưu tiên `g + h`, cho phép mở lại, đếm `reopened`.
   2. `make_geo_heuristic(graph, target, c=1.0)` và `zero_heuristic`.
   3. Test: chi phí bằng Dijkstra ở cả 6 tình huống; `expanded` = 2 ở tình huống cơ sở; với `zero_heuristic` thì `expanded` giống hệt Dijkstra; `reopened == 0`.
-- 📁 `backend/app/algorithms/astar.py`, `heuristics.py`, `tests/test_astar.py`
+- 📁 `backend/app/algorithms/astar.py`, `heuristics.py`, `tests/test_astar.py`; `tests/mini_cases.py` (`_dist_m` dùng `geo.haversine_m`) và `_comment` của `tests/fixtures/mini.json` (hằng số 111 320 m/độ), theo góp ý review T11
 - 📦 A* chạy trên fixture.
 - ✅ Mọi test xanh.
 - ▶ `pytest tests/test_astar.py -q` · CLI `--algo both`
 - 🧠 `f = g + h`; admissible và consistent; chứng minh phác thảo ở DATA_MODEL mục 5.2; vì sao `h = 0` biến A* thành Dijkstra.
 
 ### T21 — Đối chứng NetworkX trên đồ thị ngẫu nhiên
-- 👤 Duy Anh (Tiến review) · ⏱ 3 h · ⛓ T20
+- 👤 Bảo (Tiến review) · ⏱ 3 h · ⛓ T20
+- **Chuyển 26/10:** từ Duy Anh sang Bảo, dùng 3 giờ dự phòng tuần 2; chỉ bắt đầu khi MW đạt và T20 đã merge, không thì dời tuần 3.
 - **Mục tiêu:** bằng chứng thực nghiệm rằng code đúng trên nhiều đồ thị, không chỉ fixture.
 - **Việc cần làm:**
   1. Bộ sinh đồ thị ngẫu nhiên có seed: node có tọa độ, cạnh có hướng, `length ≥ haversine` (nhân một hệ số ≥ 1), có cạnh song song và cặp không tới được.

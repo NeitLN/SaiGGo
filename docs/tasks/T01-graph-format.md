@@ -1,13 +1,15 @@
 # T01 — Chốt định dạng đồ thị, fixture mẫu và `load_graph`
 
+**Trạng thái: ✅ đã merge 26/10 ([#57](https://github.com/NeitLN/SaiGGo/pull/57)).** Còn một tiêu chí chờ dữ liệu thật (T34).
+
 Tuần mục tiêu: 2 (26–27/10, **trễ từ 24/10**) · Giao cho: Tiến (thay Duy Anh, vắng tuần 2; đã chuyển 26/10) · Nhánh: `t01-graph-model` · Issue: [#3](https://github.com/NeitLN/SaiGGo/issues/3)
 Review: Bảo (đối chiếu fixture với bảng tính tay T03); Minh xác nhận `load_graph` đọc được file của T31 · Người tích hợp: Tiến
-Phụ thuộc: interface `Graph`/`GraphMeta` được duyệt ở buổi họp 26/10 (chặn **bắt đầu**) · Ước lượng: 3 giờ
+Phụ thuộc: interface `Graph`/`GraphMeta` (chặn **bắt đầu**; đã chốt cùng #57) · Ước lượng: 3 giờ
 
 ## Mục tiêu
 Một bộ nạp đồ thị dùng chung đọc được **cả** fixture 6 node **lẫn** đồ thị vùng demo do T31 xuất ra. Đây là **Q1**: T11, T13, T20 code theo interface này ngay từ 27/10.
 
-## Interface (duyệt ở buổi họp; đổi sau đó phải báo Tiến và Bảo)
+## Interface (đã chốt cùng #57; đổi sau đó phải báo Tiến và Bảo)
 ```python
 @dataclass(frozen=True)
 class Graph:                 # chỉ những thứ thuật toán cần (DATA_MODEL mục 2.2)
@@ -32,7 +34,7 @@ def node_by_name(meta: GraphMeta, name: str) -> int: ...
 ## Việc cần làm
 1. **`tests/fixtures/mini.json`** theo `saigo-graph/1`, dựa trên ví dụ ở DATA_MODEL mục 7:
    - 6 node id 0–5 theo thứ tự S, A, T, B, C, D, mỗi node có `"name"`.
-   - Đổi tọa độ (x, y) mét sang độ quanh (10.7725, 106.6980): `lat = 10.7725 + y/111320`, `lon = 106.6980 + x/(111320·cos(10.7725°))`. Với công thức này, haversine thấp hơn `length_m` khoảng 0,3 m, đã kiểm.
+   - Đổi tọa độ (x, y) mét sang độ quanh (10.7725, 106.6980): `lat = 10.7725 + y/111320`, `lon = 106.6980 + x/(111320·cos(10.7725°))`. Với công thức này, haversine thấp hơn `length_m` từ 0,33 đến 0,57 m tùy cạnh, đã kiểm.
    - `length_m` giữ đúng 400 / 500 / 300.
    - 8 cạnh, `speed_kmh: 36`, `highway: "residential"`. Đánh `id` sau khi sắp theo `(u, v, key)`: (0,1), (0,3), (0,4), (0,5), (1,2), (2,3), (3,0), (3,2).
 2. **`backend/app/graph/model.py`**: `Graph`, `GraphMeta`, `load_graph`, `node_by_name`. Kiểm tra khi nạp theo DATA_MODEL mục 2.3; sai thì raise `ValueError` có thông báo rõ.
@@ -45,7 +47,7 @@ def node_by_name(meta: GraphMeta, name: str) -> int: ...
    - `speed_kmh: 0` bị từ chối.
    - Nếu có `data/processed/manifest.json` thì nạp được đồ thị vùng demo (đánh dấu `realdata`).
 4. **DATA_MODEL mục 2.1**: thêm một dòng mô tả trường `in_scc` (theo quyết định Q1).
-5. Bật lại test `load_graph` đang bị bỏ qua trong `tests/test_realdata.py`.
+5. Test `load_graph` trong `tests/test_realdata.py` (nằm ở #53 của Minh) tự bật khi có `app.graph.model`. Test này phải nhận đúng cặp trả về: `g, _ = model.load_graph(...)` (sửa trong #53, xem T34).
 
 ## Sở hữu (chỉ task này được tạo/sửa)
 - `backend/app/graph/model.py`
@@ -60,10 +62,10 @@ def node_by_name(meta: GraphMeta, name: str) -> int: ...
 - `tests/fixtures/mini_expected.json` (T03, PR #54)
 
 ## Tiêu chí chấp nhận
-- [ ] `pytest tests/test_graph_model.py -q` → PASS
-- [ ] `pytest -m realdata -q` → `load_graph` đọc được đồ thị vùng demo (1.889 node, 4.004 cạnh nếu dùng bản trên Release)
-- [ ] Bảo xác nhận fixture khớp DATA_MODEL mục 7 và bảng tính tay của T03
-- [ ] Không đồ thị nào bị chuyển sang vô hướng; cạnh song song có ID riêng
+- [x] `pytest tests/test_graph_model.py -q` → PASS (17 test, #57)
+- [ ] `pytest -m realdata -q` → `load_graph` đọc được đồ thị vùng demo (1.889 node, 4.004 cạnh). **Chờ T34:** Release chưa có, chưa máy nào ngoài máy Minh có file
+- [x] Bảo xác nhận fixture khớp DATA_MODEL mục 7 và bảng tính tay của T03 (review #57)
+- [x] Không đồ thị nào bị chuyển sang vô hướng; cạnh song song có ID riêng (`test_directed_one_way`; cạnh song song kiểm trong `test_dijkstra.py`)
 
 ## Ngoài phạm vi
 Dijkstra/A* (T11, T20); haversine dùng chung (T10); snap (T50).

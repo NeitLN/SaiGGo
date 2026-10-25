@@ -2,7 +2,7 @@
 
 Tuần mục tiêu: 2 (30–31/10) · Giao cho: Bảo (thay Tiến, vì Tiến nhận thêm T11, T20) · Nhánh: `t12-cli` · Issue: [#8](https://github.com/NeitLN/SaiGGo/issues/8)
 Review: Tiến · Người tích hợp: Tiến
-Phụ thuộc: T11 (**bắt đầu**) · T20 (**chấp nhận**: chỉ tính là xong khi gọi được cả A*) · Ước lượng: 2 giờ
+Phụ thuộc: T11 (**bắt đầu**; đã merge #59) · T13 (**tích hợp**: `--from-latlon` dùng hàm snap của T13; làm phần tên node trước) · T20 (**chấp nhận**: chỉ tính là xong khi gọi được cả A*) · Ước lượng: 2 giờ
 
 ## Mục tiêu
 Chạy thuật toán bằng dòng lệnh để kiểm tra và giải thích, chưa cần web. T22 và T33 (tuần 3) sẽ dùng CLI này trên dữ liệu thật.
@@ -13,7 +13,7 @@ Chạy thuật toán bằng dòng lệnh để kiểm tra và giải thích, ch�
    python -m app.cli route --graph <file> --from S --to T --algo dijkstra|astar|both
    python -m app.cli route --graph <file> --from-latlon 10.7725,106.6980 --to-latlon 10.7730,106.7050 --algo both
    ```
-   - Nhận tên node (`--from S`) hoặc tọa độ (`--from-latlon`); với tọa độ thì tạm dùng `nearest_node_naive` của T13.
+   - Nhận tên node (`--from S`, dùng `node_by_name(meta, "S")`) hoặc tọa độ (`--from-latlon`); với tọa độ thì tạm dùng `nearest_node_naive(graph, meta, lat, lon)` của T13.
    - In ra: tuyến (tên hoặc ID node), chi phí (s), quãng đường (m), `expanded`, thời gian chạy (ms), và dòng "Chi phí trùng khớp: có/không" khi `--algo both`.
 2. **`tests/test_cli.py`:** chạy `main([...])` với `mini.json`, kiểm chuỗi in ra có `80.0` và `expanded` đúng.
 

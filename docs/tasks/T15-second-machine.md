@@ -24,4 +24,4 @@ Chứng minh người khác chạy được app chỉ bằng tài liệu, từ c
 - [ ] Ghi vào PROGRESS: commit `main` đã chạy, phiên bản Python/Node, thời gian chạy `setup_dev`
 
 ## Ngoài phạm vi
-Sửa code của T13/T14. Nếu có lỗi code thì mở issue cho Tiến hoặc Minh.
+Sửa code của T13/T14. Nếu có lỗi code thì mở issue *Lỗi* giao Minh (người làm T13, T14); Tiến điều phối. Bảo đã chạy được bản khung (`/api/health`) ngày 25/10 khi review #55; việc đó chưa tính là xong T15.

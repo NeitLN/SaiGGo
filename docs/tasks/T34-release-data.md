@@ -8,6 +8,7 @@ Cả nhóm dùng **đúng một** bản dữ liệu thô: `outer.graphml` tải 
 
 ## Việc cần làm
 1. Merge theo thứ tự **#46 → #47 → #53**. Trước mỗi lần merge bấm *Update branch*; nếu approve bị hủy thì nhờ approve lại.
+   - Trước khi merge #53: trong `tests/test_realdata.py::test_load_graph_reads_file`, đổi `g = model.load_graph(...)` thành `g, _ = model.load_graph(...)`. `load_graph` (T01, đã merge) trả về cặp `(Graph, GraphMeta)`; để nguyên thì test sẽ lỗi trên máy có dữ liệu (CI không có dữ liệu nên không thấy).
 2. Tạo Release chứa file thô (13,4 MB):
    ```powershell
    gh release create data-raw-20261024 data\raw\outer.graphml --title "Dữ liệu OSM thô 24/10/2026" --notes "outer.graphml, sha256 24a283275b0f65836bd51d7efc7110a566b658ff3a6a5bccef1a0db576ed5398. © OpenStreetMap contributors, ODbL."
@@ -25,11 +26,11 @@ Cả nhóm dùng **đúng một** bản dữ liệu thô: `outer.graphml` tải 
 
 ## Tiêu chí chấp nhận
 - [ ] #46, #47, #53 đã merge; CI xanh trên `main`.
-- [ ] **Tiến** (máy thứ hai) tải từ Release ra đúng sha256 `24a28327…`, chạy `build --area demo` ra `sha256 928c1f8b…` như PR #53. Nếu sha256 của file JSON khác, ghi lại trên issue: việc này cho biết kết quả có phụ thuộc phiên bản Python 3.14 / 3.11 hay không.
+- [ ] **Tiến** (máy thứ hai) tải từ Release ra đúng sha256 `24a28327…`, chạy `build --area demo` ra `sha256 928c1f8b…` như PR #53. Nếu sha256 của file JSON khác, ghi lại trên issue: việc này chỉ cho biết **tái lập chưa khớp**; nguyên nhân (Python 3.14 / 3.11, phiên bản thư viện, …) phải kiểm thêm, chưa được kết luận ngay.
 - [ ] Lệnh kiểm: `gh release view data-raw-20261024` có file `outer.graphml`.
 
 ## Ngoài phạm vi
 Tải lại dữ liệu; đổi vùng tải; xử lý dữ liệu đã build.
 
 ## Khi xong
-Ghi bằng chứng (sha256 trên cả hai máy) vào PR và dòng T30/T31 trong PROGRESS.
+Ghi bằng chứng (sha256 trên cả hai máy) vào PR và các dòng T30, T31, T34 trong PROGRESS.

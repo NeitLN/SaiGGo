@@ -1,5 +1,7 @@
 # T10 — Hàm địa lý
 
+**Trạng thái: ✅ đã merge 26/10 ([#58](https://github.com/NeitLN/SaiGGo/pull/58)).**
+
 Tuần mục tiêu: 2 (26–27/10) · Giao cho: Tiến (thay Duy Anh; đã chuyển 26/10) · Nhánh: `t10-geo` · Issue: [#6](https://github.com/NeitLN/SaiGGo/issues/6)
 Review: Bảo · Người tích hợp: Tiến
 Phụ thuộc: — (làm độc lập) · Ước lượng: 2 giờ
@@ -34,8 +36,8 @@ Một module khoảng cách dùng chung cho heuristic A* (T20), snap (T13/T50) v
 - DATA_MODEL mục 4.1 (trung điểm cạnh), mục 5.1 (bán kính)
 
 ## Tiêu chí chấp nhận
-- [ ] `pytest tests/test_geo.py -q` → PASS
-- [ ] Cùng kết quả với `haversine_m` trong `scripts/prepare_data.py` cho 3 cặp điểm bất kỳ
+- [x] `pytest tests/test_geo.py -q` → PASS (13 test)
+- [x] Cùng kết quả với `haversine_m` trong `scripts/prepare_data.py` cho 3 cặp điểm bất kỳ (lệch 0 m trên 1.000 cặp điểm quanh TP.HCM, kiểm 26/10)
 
 ## Ngoài phạm vi
 Snap (T50); vùng ùn tắc (T40).
