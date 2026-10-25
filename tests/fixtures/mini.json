@@ -1,0 +1,220 @@
+{
+ "format": "saigo-graph/1",
+ "dataset_id": "mini",
+ "crs": "EPSG:4326",
+ "_comment": "Đồ thị mẫu 6 node ở docs/DATA_MODEL.md mục 7, đổi tọa độ mét sang độ quanh chợ Bến Thành. Dùng cho test; không phải dữ liệu thật.",
+ "nodes": [
+  {
+   "id": 0,
+   "osmid": null,
+   "name": "S",
+   "lat": 10.7725,
+   "lon": 106.698
+  },
+  {
+   "id": 1,
+   "osmid": null,
+   "name": "A",
+   "lat": 10.7725,
+   "lon": 106.7016577
+  },
+  {
+   "id": 2,
+   "osmid": null,
+   "name": "T",
+   "lat": 10.7725,
+   "lon": 106.7053154
+  },
+  {
+   "id": 3,
+   "osmid": null,
+   "name": "B",
+   "lat": 10.7751949,
+   "lon": 106.7016577
+  },
+  {
+   "id": 4,
+   "osmid": null,
+   "name": "C",
+   "lat": 10.7725,
+   "lon": 106.6952567
+  },
+  {
+   "id": 5,
+   "osmid": null,
+   "name": "D",
+   "lat": 10.7698051,
+   "lon": 106.698
+  }
+ ],
+ "edges": [
+  {
+   "id": 0,
+   "u": 0,
+   "v": 1,
+   "key": 0,
+   "way_ids": [],
+   "highway": "residential",
+   "oneway": true,
+   "length_m": 400.0,
+   "speed_kmh": 36,
+   "geometry": [
+    [
+     106.698,
+     10.7725
+    ],
+    [
+     106.7016577,
+     10.7725
+    ]
+   ]
+  },
+  {
+   "id": 1,
+   "u": 0,
+   "v": 3,
+   "key": 0,
+   "way_ids": [],
+   "highway": "residential",
+   "oneway": false,
+   "length_m": 500.0,
+   "speed_kmh": 36,
+   "geometry": [
+    [
+     106.698,
+     10.7725
+    ],
+    [
+     106.7016577,
+     10.7751949
+    ]
+   ]
+  },
+  {
+   "id": 2,
+   "u": 0,
+   "v": 4,
+   "key": 0,
+   "way_ids": [],
+   "highway": "residential",
+   "oneway": true,
+   "length_m": 300.0,
+   "speed_kmh": 36,
+   "geometry": [
+    [
+     106.698,
+     10.7725
+    ],
+    [
+     106.6952567,
+     10.7725
+    ]
+   ]
+  },
+  {
+   "id": 3,
+   "u": 0,
+   "v": 5,
+   "key": 0,
+   "way_ids": [],
+   "highway": "residential",
+   "oneway": true,
+   "length_m": 300.0,
+   "speed_kmh": 36,
+   "geometry": [
+    [
+     106.698,
+     10.7725
+    ],
+    [
+     106.698,
+     10.7698051
+    ]
+   ]
+  },
+  {
+   "id": 4,
+   "u": 1,
+   "v": 2,
+   "key": 0,
+   "way_ids": [],
+   "highway": "residential",
+   "oneway": true,
+   "length_m": 400.0,
+   "speed_kmh": 36,
+   "geometry": [
+    [
+     106.7016577,
+     10.7725
+    ],
+    [
+     106.7053154,
+     10.7725
+    ]
+   ]
+  },
+  {
+   "id": 5,
+   "u": 2,
+   "v": 3,
+   "key": 0,
+   "way_ids": [],
+   "highway": "residential",
+   "oneway": false,
+   "length_m": 500.0,
+   "speed_kmh": 36,
+   "geometry": [
+    [
+     106.7053154,
+     10.7725
+    ],
+    [
+     106.7016577,
+     10.7751949
+    ]
+   ]
+  },
+  {
+   "id": 6,
+   "u": 3,
+   "v": 0,
+   "key": 0,
+   "way_ids": [],
+   "highway": "residential",
+   "oneway": false,
+   "length_m": 500.0,
+   "speed_kmh": 36,
+   "geometry": [
+    [
+     106.7016577,
+     10.7751949
+    ],
+    [
+     106.698,
+     10.7725
+    ]
+   ]
+  },
+  {
+   "id": 7,
+   "u": 3,
+   "v": 2,
+   "key": 0,
+   "way_ids": [],
+   "highway": "residential",
+   "oneway": false,
+   "length_m": 500.0,
+   "speed_kmh": 36,
+   "geometry": [
+    [
+     106.7016577,
+     10.7751949
+    ],
+    [
+     106.7053154,
+     10.7725
+    ]
+   ]
+  }
+ ]
+}
