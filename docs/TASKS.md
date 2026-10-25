@@ -1,6 +1,6 @@
 # SaiGo — Danh sách task
 
-Mỗi task vừa sức một buổi (khoảng 2–4 giờ). Nếu một task kéo dài quá hai buổi, tách nhỏ và ghi lý do vào [PROGRESS.md](PROGRESS.md). Người phụ trách là **[Đề xuất]**: Tiến có thể vào làm cùng ở mọi task.
+Mỗi task vừa sức một buổi (khoảng 2–4 giờ). Nếu một task kéo dài quá hai buổi, tách nhỏ và ghi lý do vào [PROGRESS.md](PROGRESS.md). Người phụ trách là **[Đề xuất]**: Tiến có thể vào làm cùng ở mọi task. Ngày 26/10, T01, T10, T11, T20 chuyển từ Duy Anh sang Tiến vì Duy Anh vắng tuần 2.
 
 Ký hiệu: 👤 phụ trách · ⏱ ước lượng · ⛓ phụ thuộc · 📁 file · 📦 đầu ra · ✅ hoàn thành khi · ▶ kiểm tra · 🧠 kiến thức cần hiểu để giải thích.
 
@@ -38,7 +38,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - 🧠 Vai trò venv; vì sao frontend gọi `/api` qua proxy của Vite (`vite.config.ts`).
 
 ### T01 — Chốt định dạng đồ thị, tạo fixture mẫu và bộ nạp Graph
-- 👤 Duy Anh (Tiến review) · ⏱ 3 h · ⛓ T00
+- 👤 Tiến (Bảo review) · ⏱ 3 h · ⛓ T00
 - **Mục tiêu:** có một đồ thị nhỏ tính tay được và một hàm nạp dùng chung cho mọi phần sau.
 - **Việc cần làm:**
   1. Viết `tests/fixtures/mini.json` theo đúng `saigo-graph/1`, dựa trên ví dụ ở [DATA_MODEL.md](DATA_MODEL.md) mục 7. Đổi mét sang lat/lon quanh tâm (10.7725, 106.6980); mỗi node có thêm trường tùy chọn `"name": "S"`.
@@ -112,7 +112,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 ## M1 — Dijkstra trên đồ thị mẫu
 
 ### T10 — Hàm địa lý
-- 👤 Duy Anh · ⏱ 1–2 h · ⛓ T00
+- 👤 Tiến (Bảo review) · ⏱ 1–2 h · ⛓ T00
 - **Mục tiêu:** có hàm khoảng cách dùng chung cho heuristic, snap và ùn tắc.
 - **Việc cần làm:** `haversine_m(lat1, lon1, lat2, lon2)` với R = 6 371 009 m; `polyline_midpoint(coords)` (điểm ở 50% chiều dài); test với một cặp điểm có khoảng cách đã biết, test 2 điểm trùng nhau = 0 và test thứ tự `[lon, lat]` của GeoJSON.
 - 📁 `backend/app/graph/geo.py`, `tests/test_geo.py`
@@ -122,7 +122,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - 🧠 Công thức haversine; vì sao GeoJSON là `[lon, lat]` còn Leaflet là `[lat, lon]`.
 
 ### T11 — Dijkstra và SearchResult
-- 👤 Duy Anh · ⏱ 3–4 h · ⛓ T01, T03
+- 👤 Tiến (Bảo review) · ⏱ 3–4 h · ⛓ T01, T03
 - **Mục tiêu:** cài Dijkstra đúng quy tắc ở DATA_MODEL mục 6.
 - **Việc cần làm:**
   1. `SearchResult` + hàm dựng tuyến từ `pred_edge` trong `algorithms/result.py`.
@@ -136,7 +136,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - 🧠 Vì sao Dijkstra đúng khi trọng số không âm; lazy deletion; độ phức tạp `O((V+E) log V)`; vì sao lưu predecessor là **cạnh**.
 
 ### T12 — CLI tìm đường
-- 👤 Tiến · ⏱ 2 h · ⛓ T11
+- 👤 Tiến (Bảo review) · ⏱ 2 h · ⛓ T11
 - **Mục tiêu:** chạy thuật toán từ dòng lệnh để kiểm tra và giải thích, chưa cần web.
 - **Việc cần làm:** `python -m app.cli route --graph <file> --from S --to T --algo dijkstra|astar|both` (nhận tên node hoặc `--from-latlon lat,lon`); in tuyến (tên/ID), chi phí (s), quãng đường (m), số node mở rộng, thời gian chạy (ms).
 - 📁 `backend/app/cli.py`
@@ -152,7 +152,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 Đường mỏng nhất chạy xuyên mọi tầng của hành trình chính, xong trước **29/10**: bấm 2 điểm trên bản đồ → `/api/route` → Dijkstra trên `mini.json` → vẽ tuyến. Mục đích là để lỗi nối ghép (contract API, thứ tự lat/lon, chạy trên máy khác) lộ ra sớm, thay vì đến M6. Contract: [ARCHITECTURE.md](ARCHITECTURE.md) mục 4.1. T51 và T52 sau này mở rộng trên chính code này, không viết lại.
 
 ### T13 — Skeleton phía API: `/api/route` tối giản trên `mini.json`
-- 👤 Tiến (Duy Anh review) · ⏱ 3 h · ⛓ T11
+- 👤 Tiến (Minh review) · ⏱ 3 h · ⛓ T11
 - **Mục tiêu:** API thật, mỏng nhất, trả tuyến Dijkstra theo đúng contract v1.
 - **Việc cần làm:**
   1. Nạp đồ thị khi khởi động từ `SAIGO_GRAPH` (mặc định `tests/fixtures/mini.json`); `/api/health` báo `dataset_loaded: true`.
@@ -191,7 +191,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 ## M2 — A* và đối chứng
 
 ### T20 — A* với heuristic địa lý
-- 👤 Duy Anh · ⏱ 3 h · ⛓ T10, T11
+- 👤 Tiến (Minh review) · ⏱ 3 h · ⛓ T10, T11
 - **Mục tiêu:** A* cho cùng chi phí với Dijkstra nhưng mở rộng ít node hơn trên fixture.
 - **Việc cần làm:**
   1. `astar(graph, snap, source, target, heuristic, trace_limit=0)`: ưu tiên `g + h`, cho phép mở lại, đếm `reopened`.

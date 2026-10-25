@@ -81,21 +81,96 @@ Nếu chưa đạt: dừng M8b, dồn người vào phần còn thiếu, và gi�
 | Q7 | Môi trường đo: phiên bản Python và thư viện được khóa; quy trình đo ([EXPERIMENT_PLAN](EXPERIMENT_PLAN.md) mục 3) | T60, T62, T63 | 01/11 | Chạy lại một bộ nhỏ trên máy thứ hai ra cùng chi phí | **Mở**: chưa khóa phiên bản |
 | Q8 | Có tích hợp tour vào API/UI hay không (cổng G1) | T72, T73, T74 | 05/11 | Điều kiện ở mục 3 | Chưa tới hạn |
 
-## 6. Kế hoạch tuần 2 (26/10–01/11) — **[Đề xuất, nhóm duyệt ở buổi họp]**
+## 6. Kế hoạch tuần 2 (26/10–01/11) — **[Đề xuất, nhóm duyệt ở buổi họp 26/10]**
 
-Mục tiêu tuần: **walking skeleton chạy trên 2 máy (29/10)** và **Dijkstra/A* khớp NetworkX trên dữ liệu thật (31/10)**. Người tích hợp: **Tiến**. Chỉ người tích hợp sửa STATUS.md/ROADMAP.md; người làm ghi bằng chứng trong PR của mình.
+Chương trình họp: [team/meetings/2026-10-26-agenda.md](team/meetings/2026-10-26-agenda.md) · Đề xuất đổi phạm vi: [proposals/2026-10-26-pham-vi.md](proposals/2026-10-26-pham-vi.md) · Phiếu giao việc từng task: [tasks/](tasks/).
 
-Mức chặn của phụ thuộc:
-- **bắt đầu**: phải có contract/tiền đề trước khi viết code;
-- **tích hợp**: code trước được với fixture/contract, chờ bên kia xong mới ghép;
+**Điều kiện của tuần:** Duy Anh **không tham gia** tuần 2. **Đã chốt 26/10 (Tiến):** T01, T10, T11, T20 của Duy Anh chuyển sang Tiến để kịp tiến độ. Mọi phép tính dưới đây coi sức làm của Duy Anh là 0 cho tới khi có ngày cụ thể. Sức làm: Tiến ~15 giờ (kiêm người tích hợp), Minh ~11 giờ, Bảo ~11 giờ. Review, tích hợp và họp đều được tính vào số giờ này.
+
+### 6.1. Mục tiêu tuần (mỗi mục kiểm được bằng lệnh hoặc thao tác)
+
+1. **Walking skeleton (MW) chạy trên 2 máy trước hết 29/10:** bấm 2 điểm → `/api/route` → Dijkstra trên `mini.json` → vẽ tuyến; Bảo làm lại được trên máy mình từ code đã merge.
+2. **M1 + M2 trên đồ thị mẫu:** Dijkstra và A* khớp đáp án tính tay của T03; CLI chạy được cả hai thuật toán.
+3. **Dữ liệu đóng băng dùng chung (thay cho M3 cũ):** `outer.graphml` lên Release, hai máy kiểm cùng sha256; đồ thị vùng demo của T31 được `load_graph` (T01) đọc được.
+4. **Buổi họp chốt** 3 quyết định phạm vi và các quyết định Q1–Q5, Q7 (xem chương trình họp).
+
+Không thuộc tuần 2, đã dời sang tuần 3: vẽ mạng đường thật (T32), snap có ngưỡng (T50), đối chứng NetworkX trên dữ liệu thật (T22, T33), ùn tắc và đóng đường (T40–T42).
+
+### 6.2. Phân công và ngân sách giờ
+
+| Người | Task (giờ, ngày mục tiêu) | Review cho người khác, họp, tích hợp | Dự phòng | Tổng |
+|---|---|---|---|---:|
+| **Tiến** | [T01](tasks/T01-graph-format.md) định dạng + fixture + `load_graph` 3 (26–27, *trễ*) · [T10](tasks/T10-geo.md) hàm địa lý 2 (26–27, *trễ*) · [T11](tasks/T11-dijkstra.md) Dijkstra 4 (27–28) · [T13](tasks/T13-api-skeleton.md) API skeleton 3 (28–29) · [T20](tasks/T20-astar.md) A* 3 (30–31) | 5: họp; review #54, T14, T12, T34; merge, sync, STATUS | 0 | **20** ⚠️ |
+| **Minh** | [T34](tasks/T34-release-data.md) Release + merge #46→#47→#53 2 (26) · [T14](tasks/T14-map-skeleton.md) bản đồ skeleton 3 (27–28) | 2: họp; review T13, T20 | 1 | 8 (trống 3) |
+| **Bảo** | [T15](tasks/T15-second-machine.md) chạy MW trên máy thứ hai 2 (29) · [T12](tasks/T12-cli.md) CLI có cả A* 2 (30–31) | 2: họp; review T01, T10, T11 | 3: chỉ dùng cho [T21](tasks/T21-oracle.md) (31/10–01/11) **khi MW đã đạt và T20 đã có** | 9 (trống 2) |
+| Duy Anh | — | — | — | 0 |
+
+**⚠️ Tiến đang được giao 20 giờ, vượt sức làm 15 giờ.** Đề xuất giảm tải, nhóm chốt ở buổi họp:
+1. Chuyển **T13** (API skeleton, 3 giờ) sang **Minh**, người đang trống đúng 3 giờ. Minh khi đó làm trọn lát dọc của skeleton (API + bản đồ), Tiến review.
+2. Chuyển **T12** (CLI) sang Bảo, như đã ghi ở bảng trên.
+
+Làm cả hai thì Tiến còn khoảng 17 giờ; muốn xuống 15 giờ thì T20 có thể dời sang 02/11 (đầu tuần 3).
+
+### 6.3. Phụ thuộc và mức chặn
+
+Mức chặn:
+- **bắt đầu**: phải có tiền đề trước khi viết code;
+- **tích hợp**: code trước được theo interface/contract, chờ bên kia merge mới ghép;
 - **chấp nhận**: chỉ được tính xong sau khi kiểm chung.
 
-| Người | Task theo thứ tự (ID, ngày mục tiêu) | Phụ thuộc và mức chặn | Review |
-|---|---|---|---|
-| Duy Anh | T01 (26, *trễ từ 24/10*) → T10 (26) → T11 (27) → T20 (28) → T21, T22 (29–30) → T33 cùng Tiến (31) | T11 ← T01 *bắt đầu*, ← T03 *chấp nhận* · T20 ← T11 *bắt đầu* · T33 ← T22, T31 *bắt đầu* | Tiến |
-| Minh | Merge #46, #47 + đưa `outer.graphml` lên Release (26) → T31 cùng Tiến (26–27) → T14 (27–28) → T32 (29–30) → T50 (31–01/11) | T31 ← T30 *bắt đầu*, ← T01 *tích hợp* (viết theo đặc tả DATA_MODEL mục 2, ghép khi `load_graph` có) · T14 ← contract v1 *bắt đầu*, ← T13 *tích hợp* · T32 ← T31 *tích hợp* (vẽ `mini.json` trước) | Tiến; T31 do Duy Anh review |
-| Bảo | T03 (26, *trễ từ 24/10*) → review PR tài liệu → T15 (29) → T42 (30–31) | T15 ← T13, T14 *bắt đầu* · T42 ← T40 *bắt đầu*, ← T33 *chấp nhận* | Duy Anh (T03), Tiến |
-| Tiến | Merge #45 → #46 → #47 (26) → T00 (26) → T12 (27) → T13 (27–28) → T40 (29–30) → T41 (30–31) · tích hợp và kiểm chung mỗi lần merge | T13 ← T11 *tích hợp* · T40 ← T10 *bắt đầu*, ← T11 *tích hợp* | Duy Anh; T33 do Minh review |
+| Task | Phụ thuộc (mức chặn) |
+|---|---|
+| T01 | Interface `Graph`/`GraphMeta` được duyệt ở buổi họp (bắt đầu) |
+| T10 | — |
+| T11 | T01 (tích hợp: code theo interface đã duyệt, ghép khi T01 merge) · T03/#54 (chấp nhận) |
+| T13 | T11 (tích hợp) · T10 (tích hợp: tạm dùng hàm nội bộ, đổi sang `geo.haversine_m` khi T10 merge) |
+| T14 | Contract `/api/route` v1 (bắt đầu, đã chốt) · T13 (tích hợp) |
+| T15 | T13 và T14 đã merge (bắt đầu) |
+| T20 | T11 và T10 (bắt đầu) |
+| T12 | T11 (bắt đầu) · T20 (chấp nhận: phải gọi được cả A* mới tính là xong) |
+| T21 | T20 (bắt đầu) |
+| T34 | — |
 
-Dời việc so với `schedule.csv`: T01, T03 trễ 2 ngày (chưa bắt đầu); T70/T71 (tour, Duy Anh) dời sang tuần 3 vì tuần 2 của Duy Anh đã kín.
-Sau khi nhóm duyệt: cập nhật ⛓ trong TASKS.md và `schedule.csv`, chạy `create_backlog.py --sync` và `setup_project.py --sync`.
+### 6.4. Ai sở hữu file nào trong tuần 2
+
+Hai task song song không sửa cùng một file. Khi cần sửa file của người khác, ghi vào PR: "cần đổi X ở file Y, nhờ <chủ file>".
+
+| File / tài nguyên | Chủ sở hữu tuần 2 | Ghi chú |
+|---|---|---|
+| `backend/app/graph/model.py`, `tests/fixtures/mini.json` | Tiến (T01) | Minh và Bảo chỉ đọc |
+| `backend/app/graph/geo.py` | Tiến (T10) | |
+| `backend/app/algorithms/*`, `backend/app/graph/scenario.py` | Tiến (T11, T20) | `Snapshot` chỉ có **một** định nghĩa, trong `graph/scenario.py` (T11 tạo cùng `baseline_snapshot()`); T40 (tuần 3) thêm `Scenario` và `build_snapshot` vào cùng file, không tạo kiểu mới |
+| `backend/app/main.py`, `api/*`, `services/routing.py` | Tiến (T13) | Snap tạm là hàm `nearest_node_naive()` trong `services/routing.py`; T50 (tuần 3) thay đúng hàm này |
+| `backend/app/cli.py` | Bảo (T12) | Sang tuần 3, T22 rồi T40 lần lượt sửa |
+| `frontend/src/*` | Minh (T14) | Thứ tự tiếp theo: T14 → T52 → T54 |
+| Release `data-raw-20261024`, `data/processed/*manifest.json` | Minh (T34) | Không ai tải lại OSM để thay thế |
+| `docs/STATUS.md`, `ROADMAP.md`, `TASKS.md`, `tracking/schedule.csv` | Tiến (người tích hợp) | Người làm ghi bằng chứng trong PR; chỉ sửa dòng PROGRESS của task mình |
+
+### 6.5. Các mốc kiểm trong tuần
+
+| Ngày | Phải có | Ai kiểm | Nếu không đạt |
+|---|---|---|---|
+| **26/10** (họp) | 3 quyết định phạm vi được chốt; interface `Graph`/`Snapshot`/`SearchResult` được duyệt; Release có file, Tiến tải về ra đúng sha256 `24a28327…`; hàng chờ PR (#46, #47, #53, #52, #55) được merge; #54 được review | Tiến | Ghi vào biên bản, dời việc phụ thuộc |
+| **27/10** tối | T01 merge; `load_graph` đọc được `mini.json` và đồ thị vùng demo của T31 | Bảo (review), Tiến | Tiến và Minh gỡ ngay sáng 28/10; T11 vẫn code theo interface |
+| **28/10** tối | Đường mỏng API → UI chạy được trên máy Tiến (dù test chưa đủ) | Tiến, Minh | Thu gọn T14: chỉ vẽ tuyến, chưa hiện bảng |
+| **29/10** tối | T13 + T14 merge; Bảo làm lại thao tác ✅ của T14 trên máy mình (T15) | Bảo | Ghi lỗi thành issue *Lỗi*; MW chưa đạt thì T21 không bắt đầu |
+| **01/11** (họp tuần) | T20 có bằng chứng (`expanded = 2` trên `mini.json`); T12 chạy được cả hai thuật toán; xem lại ngân sách tuần 3; xác nhận Duy Anh có quay lại không, từ ngày nào, bao nhiêu giờ | Cả nhóm | Kích hoạt phương án cắt đã duyệt ([đề xuất phạm vi](proposals/2026-10-26-pham-vi.md) mục 4) |
+
+**Quy tắc merge tuần 2:** PR có approve **còn hiệu lực** và CI xanh thì tác giả merge ngay trong ngày. Với PR xếp chồng: sau khi PR bên dưới merge, bấm *Update branch*; nếu approve bị hủy thì nhờ approve lại ngay, không để qua ngày.
+
+### 6.6. Dời việc so với `schedule.csv`
+
+| Task | Tuần gốc | Đề xuất | Lý do |
+|---|---|---|---|
+| T01, T10 | 1 (Duy Anh) | 2 (Tiến, **đã chuyển 26/10**) | Duy Anh không tham gia tuần 2; giữ hạn gốc trên GitHub để thấy là trễ |
+| T11, T20 | 2 (Duy Anh) | 2 (Tiến, **đã chuyển 26/10**) | Như trên |
+| T21 | 2 (Duy Anh) | 2 nếu Bảo còn dự phòng, không thì 3 | Không để T21 chiếm phần dự phòng sửa lỗi |
+| T22, T33 | 2 | 3 (02–03/11) | Phụ thuộc T20 và dữ liệu đóng băng |
+| T32, T50 | 2 | 3 | Không đủ sức của Minh; T13 đã nạp đồ thị khi khởi động |
+| T40, T41, T42 | 2 | 3 | Phụ thuộc T11; Tiến đã kín |
+| T70–T74 (tour) | 2–3 | **Đề xuất cắt khỏi phạm vi cam kết** | Xem đề xuất phạm vi |
+
+Sau khi nhóm duyệt, Tiến:
+1. sửa ⛓, người phụ trách và ngày trong `TASKS.md` và `tracking/schedule.csv`;
+2. thêm T34;
+3. chạy `create_backlog.py --sync` và `setup_project.py --sync`.
