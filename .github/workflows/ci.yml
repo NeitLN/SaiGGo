@@ -51,3 +51,23 @@ jobs:
       - name: npm audit (mức high trở lên)
         working-directory: frontend
         run: npm audit --audit-level=high
+
+  # Mọi commit chỉ được mang tên thành viên nhóm (CONTRIBUTING.md mục 6, .github/allowed-identities.txt).
+  # Job này nằm trong danh sách check bắt buộc của branch `main`.
+  identity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Kiểm commit của PR
+        if: github.event_name == 'pull_request'
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: python scripts/check_attribution.py "origin/${{ github.base_ref }}" "${{ github.event.pull_request.head.sha }}"
+      - name: Kiểm commit vừa push lên main
+        if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
+        run: python scripts/check_attribution.py "${{ github.event.before }}" "${{ github.sha }}"
