@@ -18,7 +18,7 @@ Không cung cấp ETA giao thông trực tiếp hay điều hướng thương m�
 - Benchmark offline có thể tái lập
 
 Đặc tả đầy đủ: [docs/TOPIC.md](docs/TOPIC.md).
-Kế hoạch triển khai: [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) · tiến độ: [docs/PROGRESS.md](docs/PROGRESS.md).
+Kế hoạch triển khai: [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) · **trạng thái hiện tại (đọc đầu tiên):** [docs/STATUS.md](docs/STATUS.md) · bằng chứng: [docs/PROGRESS.md](docs/PROGRESS.md).
 
 ## Theo dõi công việc nhóm
 
@@ -48,7 +48,7 @@ Kế hoạch triển khai: [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) · ti�
 
 ## Chạy local (Windows)
 
-Yêu cầu: Git, Python 3.11+, Node.js 20+. Thành viên mới: đọc [docs/team/ONBOARDING.md](docs/team/ONBOARDING.md).
+Yêu cầu: Git, **Python 3.11.9** ([bộ cài Windows](https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe); CI và file khóa phiên bản dùng 3.11), Node.js 20+. Thành viên mới: đọc [docs/team/ONBOARDING.md](docs/team/ONBOARDING.md).
 
 ```powershell
 # Dựng môi trường một lần: tạo .venv, cài thư viện, chạy test, build frontend

@@ -19,6 +19,9 @@ foreach ($cmd in "git", "python", "node", "npm") {
 }
 $py = (python -c "import sys; print('%d.%d' % sys.version_info[:2])")
 if ([version]$py -lt [version]"3.11") { Fail "cần Python 3.11 trở lên, máy đang có $py" }
+if ($py -ne "3.11") {
+    Write-Host "CHÚ Ý: nhóm và CI dùng Python 3.11; máy đang có $py nên vài thư viện có thể khác phiên bản đã khóa. Số liệu benchmark phải chạy trên 3.11." -ForegroundColor Yellow
+}
 $node = (node -p "process.versions.node.split('.')[0]")
 if ([int]$node -lt 20) { Fail "cần Node.js 20 trở lên, máy đang có $node" }
 Write-Host "Python $py, Node $node, $(git --version)"
@@ -38,12 +41,15 @@ if ((Get-Location).Path -match '[^\x00-\x7F]') {
 Step "Môi trường Python (.venv)"
 if (-not (Test-Path .venv\Scripts\python.exe)) { python -m venv .venv }
 $vpy = ".venv\Scripts\python.exe"
-& $vpy -m pip install --quiet --upgrade pip
+& $vpy -m pip install --quiet --upgrade pip setuptools
 # Chỉ cài thư viện phụ thuộc trong pyproject.toml, không cài chính package:
 # pytest (pythonpath = backend) và uvicorn (--app-dir backend) tự tìm code, và cách này không lỗi với đường dẫn có dấu.
+# Phiên bản theo requirements-lock.txt (constraints) để mọi máy và CI dùng cùng thư viện.
 $groups = if ($Data) { "dev,bench,data" } else { "dev,bench" }
 $deps = & $vpy -c "import sys, tomllib; p = tomllib.load(open('pyproject.toml', 'rb'))['project']; print('\n'.join(p['dependencies'] + [d for g in sys.argv[1].split(',') for d in p['optional-dependencies'][g]]))" $groups
-& $vpy -m pip install --quiet @($deps)
+$lock = if ($py -eq "3.11") { @("-c", "requirements-lock.txt") } else { @() }
+Write-Host "Đang tải và cài thư viện Python. Lần đầu có thể mất 5–15 phút và không in gì trong lúc chạy; đừng tắt cửa sổ."
+& $vpy -m pip install --quiet @($deps) @lock
 if ($LASTEXITCODE -ne 0) { Fail "pip install thất bại" }
 
 Step "Chạy test backend"
