@@ -42,6 +42,7 @@ def check_text(text: str, allowed: set[str], where: str) -> list[str]:
 
 
 def main() -> int:
+    sys.stdout.reconfigure(encoding="utf-8")  # console Windows mặc định cp1252, không in được tiếng Việt
     base = sys.argv[1]
     head = sys.argv[2] if len(sys.argv) > 2 else "HEAD"
     allowed = allowed_emails()
