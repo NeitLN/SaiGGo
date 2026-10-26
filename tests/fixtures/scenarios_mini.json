@@ -1,0 +1,21 @@
+{
+  "format": "saigo-scenarios/1",
+  "_comment": "Kịch bản thử cho tests/fixtures/mini.json: vùng tâm node A trong mini.json (r = 220 m, alpha = 2) cho tuyến S→B→T, 100 s. Không dùng cho demo trên dữ liệu thật.",
+  "scenarios": [
+    {
+      "id": "baseline",
+      "label": "Cơ sở — không ùn tắc, không đóng đường",
+      "rules": []
+    },
+    {
+      "id": "un-tac-tam-a",
+      "label": "Kịch bản thử: ùn tắc quanh node A của mini.json (mô phỏng)",
+      "rules": [
+        {
+          "zone": {"type": "circle", "lat": 10.7725, "lon": 106.7016577, "radius_m": 220},
+          "alpha": 2.0
+        }
+      ]
+    }
+  ]
+}
