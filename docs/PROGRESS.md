@@ -47,7 +47,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | T40 Snapshot ùn tắc | [#16](https://github.com/NeitLN/SaiGGo/issues/16) | Duy Anh | 🟨 | PR chờ review. `tests/test_scenario.py` 22 passed: vùng tâm A r = 220 m, α = 2 → S→B→T 100 s; α = 2 mọi cạnh → tuyến không đổi, 160 s; α < 1 bị từ chối; đồ thị gốc không đổi; chồng vùng lấy `max`; lọc `highway`; file kịch bản lỗi bị từ chối. **Chưa làm:** CLI `--scenario/--block` (chờ T12) |
 | T41 Đóng đường | [#17](https://github.com/NeitLN/SaiGGo/issues/17) | Duy Anh | 🟨 | PR chờ review. `tests/test_closures.py` 20 passed: `reverse_twins` (cùng `way_ids`, hình học đảo ngược); đóng A→T → S→B→T; đóng A→T + B→T → `no_path`; đóng đoạn hai chiều S↔B; đóng một trong hai cạnh song song thì cạnh còn lại vẫn đi được; tuyến của cả Dijkstra và A* không chứa cạnh đóng. **Chưa làm:** đếm cạnh có/không có cạnh đối trên dữ liệu thật (chờ T34) |
 | T42 Kịch bản demo | [#18](https://github.com/NeitLN/SaiGGo/issues/18) | Bảo | ⬜ | |
-| T50 Snap | [#19](https://github.com/NeitLN/SaiGGo/issues/19) | Minh | ⬜ | |
+| T50 Snap | [#19](https://github.com/NeitLN/SaiGGo/issues/19) | Duy Anh (nhận từ Minh 26/10) | 🟨 | PR chờ review. `graph/snap.py`: `nearest_node(graph, meta, lat, lon, max_m=150)` chỉ xét node trong SCC, hòa thì chọn id nhỏ hơn, xa hơn ngưỡng thì `SnapError` (lớp con `ValueError`, có khoảng cách và ngưỡng); `tests/test_snap.py` 9 passed. **Chưa làm:** API dùng hàm này thay cho `nearest_node_naive` (T51) |
 | T51 API route | [#20](https://github.com/NeitLN/SaiGGo/issues/20) | Tiến | ⬜ | |
 | T52 UI tìm đường | [#21](https://github.com/NeitLN/SaiGGo/issues/21) | Minh | ⬜ | |
 | T53 UI node mở rộng + kịch bản | [#22](https://github.com/NeitLN/SaiGGo/issues/22) | Minh | ⬜ | |
