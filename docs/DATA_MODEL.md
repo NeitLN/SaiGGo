@@ -216,7 +216,7 @@ def astar(graph: Graph, snap: Snapshot, source: int, target: int,
           heuristic: Callable[[int], float], *, trace_limit: int = 0) -> SearchResult: ...
 ```
 
-`heuristic` được tạo cho từng đích: `make_geo_heuristic(graph, target)`. Truyền `lambda n: 0.0` vào `astar` thì kết quả phải giống hệt Dijkstra (dùng làm test).
+`heuristic` được tạo cho từng đích: `make_geo_heuristic(graph, target)`; hệ số `c` mặc định tự tính bằng `geo_scale(graph)` theo mục 5.1. Truyền `lambda n: 0.0` vào `astar` thì kết quả phải giống hệt Dijkstra (dùng làm test).
 
 ### 6.2. `SearchResult`
 
@@ -233,7 +233,7 @@ def astar(graph: Graph, snap: Snapshot, source: int, target: int,
 | `relaxations` | int | Số lần cập nhật `g[v]` thành giá trị tốt hơn |
 | `pushes`, `max_frontier` | int | Số lần push vào heap; kích thước heap lớn nhất |
 | `trace` | list[int] | K node mở rộng đầu tiên (K = `trace_limit`); rỗng khi benchmark |
-| `trace_truncated` | bool | `True` nếu số node mở rộng > K |
+| `trace_truncated` | bool | `True` nếu K > 0 và số node mở rộng > K. K = 0 nghĩa là tắt trace (benchmark), luôn `False` |
 
 Thời gian chạy **không** nằm trong `SearchResult`: nơi gọi hàm (benchmark hoặc API) tự đo bằng `time.perf_counter_ns()` quanh lời gọi, để mọi thuật toán được đo cùng một cách.
 

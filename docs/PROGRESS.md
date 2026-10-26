@@ -36,7 +36,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | T10 Hàm địa lý | [#6](https://github.com/NeitLN/SaiGGo/issues/6) | Tiến (chuyển từ Duy Anh 26/10) | 🟨 | PR chờ review. `tests/test_geo.py` 13 passed; `haversine_m` khớp `osmnx.distance.great_circle` (sai số < 0,5 m) và trùng hàm của T31 tới 1e-9 m |
 | T11 Dijkstra | [#7](https://github.com/NeitLN/SaiGGo/issues/7) | Tiến (chuyển từ Duy Anh 26/10) | 🟨 | PR chờ review (xếp chồng trên T01). `tests/test_dijkstra.py` 13 passed; khớp 6/6 tình huống tính tay của Bảo (#54) về chi phí, tuyến, `expanded`, và khớp chi phí với NetworkX |
 | T12 CLI | [#8](https://github.com/NeitLN/SaiGGo/issues/8) | Tiến | ⬜ | |
-| T20 A* | [#9](https://github.com/NeitLN/SaiGGo/issues/9) | Duy Anh | ⬜ | |
+| T20 A* | [#9](https://github.com/NeitLN/SaiGGo/issues/9) | Tiến (chuyển từ Duy Anh 26/10) | 🟨 | PR chờ review. `tests/test_astar.py` 24 passed: khớp 6/6 tình huống tính tay của Bảo (#54) về chi phí, tuyến, `expanded`; cùng chi phí với Dijkstra trên cả 36 cặp node; `h = 0` cho kết quả giống hệt Dijkstra; `reopened = 0` với heuristic địa lý; hệ số `c` tự tính giữ A* đúng khi có cạnh ngắn hơn khoảng cách thẳng. **Chưa kiểm chứng:** trên dữ liệu thật (T22, T33) |
 | T21 Đối chứng ngẫu nhiên | [#10](https://github.com/NeitLN/SaiGGo/issues/10) | Duy Anh | ⬜ | |
 | T22 Kiểm tra heuristic | [#11](https://github.com/NeitLN/SaiGGo/issues/11) | Duy Anh | ⬜ | |
 | T30 Tải dữ liệu | [#12](https://github.com/NeitLN/SaiGGo/issues/12) | Minh | ⬜ | |

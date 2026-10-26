@@ -2,7 +2,7 @@
  "format": "saigo-graph/1",
  "dataset_id": "mini",
  "crs": "EPSG:4326",
- "_comment": "Đồ thị mẫu 6 node ở docs/DATA_MODEL.md mục 7, đổi tọa độ mét sang độ quanh chợ Bến Thành. Dùng cho test; không phải dữ liệu thật.",
+ "_comment": "Đồ thị mẫu 6 node ở docs/DATA_MODEL.md mục 7, đổi tọa độ (x, y) mét sang độ quanh chợ Bến Thành: lat = 10.7725 + y/111320, lon = 106.6980 + x/(111320·cos(10.7725°)), với 111 320 m ≈ một độ vĩ. Dùng cho test; không phải dữ liệu thật.",
  "nodes": [
   {
    "id": 0,
