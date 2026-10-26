@@ -44,7 +44,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | T32 Vẽ mạng đường | [#14](https://github.com/NeitLN/SaiGGo/issues/14) | Minh | ⬜ | |
 | T33 Dữ liệu thật + đối chứng | [#15](https://github.com/NeitLN/SaiGGo/issues/15) | Duy Anh + Tiến | ⬜ | |
 | T40 Snapshot ùn tắc | [#16](https://github.com/NeitLN/SaiGGo/issues/16) | Duy Anh | 🟨 | PR chờ review. `tests/test_scenario.py` 22 passed: vùng tâm A r = 220 m, α = 2 → S→B→T 100 s; α = 2 mọi cạnh → tuyến không đổi, 160 s; α < 1 bị từ chối; đồ thị gốc không đổi; chồng vùng lấy `max`; lọc `highway`; file kịch bản lỗi bị từ chối. **Chưa làm:** CLI `--scenario/--block` (chờ T12) |
-| T41 Đóng đường | [#17](https://github.com/NeitLN/SaiGGo/issues/17) | Tiến | ⬜ | |
+| T41 Đóng đường | [#17](https://github.com/NeitLN/SaiGGo/issues/17) | Duy Anh | 🟨 | PR chờ review. `tests/test_closures.py` 20 passed: `reverse_twins` (cùng `way_ids`, hình học đảo ngược); đóng A→T → S→B→T; đóng A→T + B→T → `no_path`; đóng đoạn hai chiều S↔B; đóng một trong hai cạnh song song thì cạnh còn lại vẫn đi được; tuyến của cả Dijkstra và A* không chứa cạnh đóng. **Chưa làm:** đếm cạnh có/không có cạnh đối trên dữ liệu thật (chờ T34) |
 | T42 Kịch bản demo | [#18](https://github.com/NeitLN/SaiGGo/issues/18) | Bảo | ⬜ | |
 | T50 Snap | [#19](https://github.com/NeitLN/SaiGGo/issues/19) | Minh | ⬜ | |
 | T51 API route | [#20](https://github.com/NeitLN/SaiGGo/issues/20) | Tiến | ⬜ | |
