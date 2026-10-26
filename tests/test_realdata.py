@@ -84,6 +84,6 @@ def test_in_scc_is_largest_strongly_connected_component(manifest, graph):
 
 def test_load_graph_reads_file(manifest):
     model = pytest.importorskip("app.graph.model", reason="chưa có load_graph (T01)")
-    g = model.load_graph(ROOT / manifest["file"])
+    g, _ = model.load_graph(ROOT / manifest["file"])
     assert len(g.node_lat) == manifest["node_count"]
     assert len(g.edge_u) == manifest["edge_count"]
