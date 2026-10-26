@@ -47,7 +47,13 @@ Ba ý chính:
 | Lưu trữ | File JSON/CSV | Không cần database; dữ liệu chỉ đọc | SQLite: thừa |
 | Chạy trên Windows | Lệnh trong README (2 terminal) | PDF không yêu cầu `.exe` (D8) | PyInstaller: rủi ro với thư viện geospatial |
 
-**Môi trường [Đề xuất]:** `pip install -e ".[dev]"` cho app/test; `pip install -e ".[data]"` cho OSMnx. Nếu OSMnx cài lỗi trên Windows, tạo môi trường conda-forge riêng chỉ để chạy `prepare_data.py` (D9). Khóa phiên bản (`pip freeze > requirements.lock`) sau task T00/T02.
+**Môi trường [Đã chốt 25/10]:**
+
+- Máy thành viên dùng `scripts\setup_dev.ps1` (thêm `-Data` cho OSMnx). Script chỉ cài thư viện phụ thuộc, không dùng `pip install -e`, vì lệnh này lỗi trên Windows khi đường dẫn có dấu. CI (Linux) dùng `pip install -e ".[dev]" -c requirements-lock.txt`.
+- **Python 3.11** là phiên bản chuẩn của nhóm và CI. Số liệu benchmark chỉ chạy trên 3.11.
+- **Khóa phiên bản:** mọi thư viện được khóa trong `requirements-lock.txt`, dùng làm *constraints*. Thêm hoặc đổi thư viện trong `pyproject.toml` thì sinh lại file này trong cùng PR: tạo venv sạch Python 3.11, cài các nhóm `dev`, `bench`, `data`, rồi `pip freeze`. Giữ file ở dạng ASCII, vì pip trên Windows đọc file requirements bằng cp1252.
+- **Lỗ hổng:** job `audit` trong CI chạy `pip-audit -r requirements-lock.txt` và `npm audit --audit-level=high`. Job này không bắt buộc để merge; job đỏ thì người tích hợp xử lý.
+- Nếu OSMnx cài lỗi trên Windows: dùng môi trường conda-forge riêng, chỉ để chạy `prepare_data.py` (D9).
 
 ## 3. Cấu trúc module (dự kiến)
 
@@ -146,6 +152,23 @@ Ví dụ request/response của `/api/route`:
 Các số trong ví dụ chỉ để minh họa cấu trúc, **không phải kết quả**. `costs_match` là `|cost_dijkstra − cost_astar| ≤ 1e-6 · max(1, cost_dijkstra)`.
 
 Lỗi: tọa độ ngoài vùng hoặc snap > 150 m → 422 với thông báo tiếng Việt; `blocked_edge_ids` không tồn tại → 422.
+
+### 4.1. Contract v1 cho walking skeleton [Đã chốt 25/10 — Q6]
+
+Walking skeleton (T13, T14) chỉ dùng **tập con** sau của contract ở trên. Mọi bản sau chỉ được **thêm** trường; không đổi tên hay xóa các trường dưới đây, để UI viết trước không phải làm lại.
+
+| Phía | Trường | Kiểu | Ghi chú |
+|---|---|---|---|
+| Request | `source`, `target` | `{"lat": float, "lon": float}` | Tên trường rõ ràng, không dùng mảng |
+| Request | `algorithms` | `["dijkstra"]` (v1); sau T20 thêm `"astar"` | Mặc định `["dijkstra"]` |
+| Response | `dataset_id` | string | Đồ thị đang nạp (`mini` ở skeleton) |
+| Response | `snapped.source` / `snapped.target` | `{"node_id", "lat", "lon", "snap_distance_m"}` | Skeleton snap về node gần nhất, chưa giới hạn 150 m (T50 thêm sau) |
+| Response | `results.<thuật toán>.status` | `"ok"` \| `"no_path"` | |
+| Response | `results.<thuật toán>.cost_s`, `distance_m` | float \| null | Giây, mét |
+| Response | `results.<thuật toán>.geometry` | GeoJSON `LineString`, tọa độ `[lon, lat]` | UI đổi sang `[lat, lon]` khi vẽ bằng Leaflet |
+| Response | `results.<thuật toán>.expanded`, `runtime_ms` | int, float | |
+
+Đồ thị nạp lúc khởi động: biến môi trường `SAIGO_GRAPH` (mặc định `tests/fixtures/mini.json`).
 
 ## 5. Luồng một request `/api/route`
 

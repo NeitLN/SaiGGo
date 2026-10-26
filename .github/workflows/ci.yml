@@ -13,7 +13,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -e ".[dev]"
+      # Cài đúng phiên bản đã khóa để mọi máy và CI chạy cùng thư viện.
+      - run: pip install -e ".[dev]" -c requirements-lock.txt
       # Test không tải dữ liệu OSM qua mạng.
       - run: pytest -q
 
@@ -31,3 +32,42 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
       - run: npm run build
+
+  # Kiểm lỗ hổng đã biết của thư viện. Không nằm trong danh sách check bắt buộc của branch `main`,
+  # để một lỗ hổng mới của bên thứ ba không chặn PR của cả nhóm; job đỏ thì người tích hợp xử lý.
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: pip install pip-audit
+      - name: pip-audit (requirements-lock.txt)
+        run: pip-audit -r requirements-lock.txt
+      - name: npm audit (mức high trở lên)
+        working-directory: frontend
+        run: npm audit --audit-level=high
+
+  # Mọi commit chỉ được mang tên thành viên nhóm (CONTRIBUTING.md mục 6, .github/allowed-identities.txt).
+  # Job này nằm trong danh sách check bắt buộc của branch `main`.
+  identity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Kiểm commit của PR
+        if: github.event_name == 'pull_request'
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: python scripts/check_attribution.py "origin/${{ github.base_ref }}" "${{ github.event.pull_request.head.sha }}"
+      - name: Kiểm commit vừa push lên main
+        if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
+        run: python scripts/check_attribution.py "${{ github.event.before }}" "${{ github.sha }}"

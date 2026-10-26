@@ -1,0 +1,27 @@
+# Danh tính được phép xuất hiện trong commit (tác giả, người commit, Co-authored-by).
+# Mỗi dòng một email, không phân biệt hoa thường. Dòng bắt đầu bằng # là chú thích.
+# Thành viên dùng email khác thì thêm vào đây trong cùng PR (người review kiểm đúng người).
+
+# Võ Việt Tiến (@NeitLN)
+tien.vo539@gmail.com
+189878110+NeitLN@users.noreply.github.com
+NeitLN@users.noreply.github.com
+
+# Bùi Duy Anh (@anh7032)
+249580487+anh7032@users.noreply.github.com
+anh7032@users.noreply.github.com
+buiduyanh1901@gmail.com
+
+# Võ Hoàng Minh (@Jayson135724)
+vohoangminh515@gmail.com
+250682185+Jayson135724@users.noreply.github.com
+Jayson135724@users.noreply.github.com
+
+# Đỗ Quốc Bảo (@dobaovlu)
+baodo03062006@gmail.com
+188600692+dobaovlu@users.noreply.github.com
+dobaovlu@users.noreply.github.com
+
+# Hệ thống: merge trên giao diện GitHub, và workflow Tracking ghi vào branch `tracking`
+noreply@github.com
+41898282+github-actions[bot]@users.noreply.github.com
