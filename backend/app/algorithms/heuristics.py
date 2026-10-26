@@ -7,12 +7,31 @@ ngắn hơn khoảng cách thẳng (mục 5.1–5.2).
 
 from __future__ import annotations
 
-from typing import Callable
+from dataclasses import dataclass
+from typing import Callable, NamedTuple
 
 from app.graph.geo import haversine_m
 from app.graph.model import Graph
 
 Heuristic = Callable[[int], float]
+
+
+class HeuristicViolation(NamedTuple):
+    """Một cạnh vi phạm điều kiện độ dài (length_m < haversine_m - tol_m)."""
+    edge_id: int
+    length_m: float       # mét
+    haversine_m: float    # mét
+    ratio: float          # length_m / haversine_m
+
+
+@dataclass(frozen=True)
+class HeuristicReport:
+    """Báo cáo kiểm tra điều kiện heuristic trên đồ thị."""
+    v_max_mps: float      # m/s, tốc độ lớn nhất trong đồ thị
+    c: float              # hệ số co giãn địa lý theo geo_scale(graph)
+    n_violations: int     # số cạnh có length_m < haversine_m - tol_m
+    worst: list[HeuristicViolation]   # tối đa 5 cạnh vi phạm có ratio nhỏ nhất
+
 
 _scale_cache: dict[int, tuple[Graph, float]] = {}   # id(graph) → (graph, c); Graph không hash được
 
@@ -51,3 +70,33 @@ def make_geo_heuristic(graph: Graph, target: int, c: float | None = None) -> Heu
 def zero_heuristic(_: int) -> float:
     """h = 0: A* thành Dijkstra (dùng để test)."""
     return 0.0
+
+
+def heuristic_report(graph: Graph, tol_m: float = 1e-3) -> HeuristicReport:
+    """Báo cáo kiểm tra điều kiện heuristic trên đồ thị (docs/DATA_MODEL.md mục 5.1).
+
+    Tính c = geo_scale(graph) chính xác không phụ thuộc ngưỡng để đảm bảo tính đúng của A*.
+    Đếm vi phạm khi `length_m < haversine_m - tol_m` (mặc định tol_m = 1 mm = 1e-3 m để bỏ qua
+    sai số làm tròn dấu phẩy động 7 chữ số thập phân khi lưu file, khớp với manifest dữ liệu thật).
+    Danh sách worst chứa tối đa 5 cạnh vi phạm có tỷ lệ length_m / haversine_m nhỏ nhất.
+    """
+    c = geo_scale(graph)
+    v_max_mps = graph.v_max_mps
+
+    violations: list[HeuristicViolation] = []
+    lat, lon = graph.node_lat, graph.node_lon
+    for e, (u, v, length) in enumerate(zip(graph.edge_u, graph.edge_v, graph.edge_length_m)):
+        hav = haversine_m(lat[u], lon[u], lat[v], lon[v])
+        if hav > 0 and length < hav - tol_m:
+            violations.append(HeuristicViolation(e, length, hav, length / hav))
+
+    n_violations = len(violations)
+    violations.sort(key=lambda item: (item.ratio, item.edge_id))
+    worst = violations[:5]
+
+    return HeuristicReport(
+        v_max_mps=v_max_mps,
+        c=c,
+        n_violations=n_violations,
+        worst=worst,
+    )
