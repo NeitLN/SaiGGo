@@ -1,0 +1,11 @@
+{
+  "format": "saigo-scenarios/1",
+  "_comment": "Kịch bản ùn tắc mô phỏng (docs/DATA_MODEL.md mục 4.1). Hiện chỉ có baseline; kịch bản demo trên dữ liệu thật (peak-center, ...) là việc của T42. Kịch bản thử trên fixture nằm ở tests/fixtures/scenarios_mini.json.",
+  "scenarios": [
+    {
+      "id": "baseline",
+      "label": "Cơ sở — không ùn tắc, không đóng đường",
+      "rules": []
+    }
+  ]
+}

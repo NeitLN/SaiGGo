@@ -59,3 +59,4 @@ Cách xem burndown: [docs/tracking/README.md](docs/tracking/README.md).
 - Không hard-code tuyến demo hay số benchmark; mọi số trong tài liệu phải có `run_id`.
 - Không dùng hàm shortest path của thư viện trong sản phẩm; NetworkX chỉ dùng trong test.
 - Chạy `pytest -q` trước khi mở PR.
+- **Commit chỉ mang tên thành viên nhóm.** Tác giả, người commit và mọi dòng `Co-authored-by` phải là một trong 4 thành viên (email trong `.github/allowed-identities.txt`). Kiểm `git config user.name` và `user.email` trước khi commit. Nếu công cụ nào tự thêm dòng `Co-authored-by` hoặc dòng quảng cáo vào commit hay mô tả PR, hãy tắt tính năng đó trong cài đặt của công cụ. Job CI `identity` sẽ báo đỏ và chặn merge nếu có danh tính lạ.

@@ -188,7 +188,7 @@ def load_tasks() -> tuple[list[dict], list[str]]:
         }
         if i["state"] == "closed" and not t["events"]:  # phòng khi timeline chưa trả về sự kiện
             t["events"] = [{"date": vn_date(i["closed_at"]), "kind": "closed", "closer": "manual",
-                            "cut": i.get("state_reason") == "not_planned"}]
+                            "cut": i.get("state_reason") in ("not_planned", "duplicate")}]
         last = state_at(t, date.max)
         t["closed"] = last["date"] if last else None
         t["cut"] = bool(last and last["cut"])
