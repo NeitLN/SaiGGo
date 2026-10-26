@@ -37,7 +37,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | T11 Dijkstra | [#7](https://github.com/NeitLN/SaiGGo/issues/7) | Tiến (chuyển từ Duy Anh 26/10) | 🟨 | PR chờ review (xếp chồng trên T01). `tests/test_dijkstra.py` 13 passed; khớp 6/6 tình huống tính tay của Bảo (#54) về chi phí, tuyến, `expanded`, và khớp chi phí với NetworkX |
 | T12 CLI | [#8](https://github.com/NeitLN/SaiGGo/issues/8) | Tiến | ⬜ | |
 | T20 A* | [#9](https://github.com/NeitLN/SaiGGo/issues/9) | Tiến (chuyển từ Duy Anh 26/10) | 🟨 | PR chờ review. `tests/test_astar.py` 24 passed: khớp 6/6 tình huống tính tay của Bảo (#54) về chi phí, tuyến, `expanded`; cùng chi phí với Dijkstra trên cả 36 cặp node; `h = 0` cho kết quả giống hệt Dijkstra; `reopened = 0` với heuristic địa lý; hệ số `c` tự tính giữ A* đúng khi có cạnh ngắn hơn khoảng cách thẳng. **Chưa kiểm chứng:** trên dữ liệu thật (T22, T33) |
-| T21 Đối chứng ngẫu nhiên | [#10](https://github.com/NeitLN/SaiGGo/issues/10) | Duy Anh | ⬜ | |
+| T21 Đối chứng ngẫu nhiên | [#10](https://github.com/NeitLN/SaiGGo/issues/10) | Duy Anh | 🟨 | PR chờ review. `tests/test_oracle_networkx.py` 5 passed: 20 đồ thị ngẫu nhiên (seed 0–19) × 50 cặp = 1.000 truy vấn, chi phí Dijkstra và A* khớp `nx.dijkstra_path_length` (sai số `1e-9 · max(1, cost)`), `no_path` ⇔ `NetworkXNoPath`, tuyến nối tiếp đúng chiều, `reopened = 0`; thêm 150 truy vấn có cạnh bị đóng. **Chưa kiểm chứng:** trên dữ liệu thật (T33) |
 | T22 Kiểm tra heuristic | [#11](https://github.com/NeitLN/SaiGGo/issues/11) | Duy Anh | ⬜ | |
 | T30 Tải dữ liệu | [#12](https://github.com/NeitLN/SaiGGo/issues/12) | Minh | ⬜ | |
 | T31 Chuyển đổi + báo cáo | [#13](https://github.com/NeitLN/SaiGGo/issues/13) | Minh + Tiến | ⬜ | |
