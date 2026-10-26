@@ -1,12 +1,12 @@
 ## 📉 Burndown SaiGo
 
-_Tự động cập nhật 13:29 26/10/2026 (giờ VN) bởi workflow `tracking.yml` từ trạng thái issue/PR thật. Số những ngày đã qua được chốt cuối ngày và không bị sửa lại; số hôm nay là tạm tính. Cách tính ở đầu file `scripts/tracking/burndown.py`._
+_Tự động cập nhật 13:42 26/10/2026 (giờ VN) bởi workflow `tracking.yml` từ trạng thái issue/PR thật. Số những ngày đã qua được chốt cuối ngày và không bị sửa lại; số hôm nay là tạm tính. Cách tính ở đầu file `scripts/tracking/burndown.py`._
 
-![Burndown](https://raw.githubusercontent.com/NeitLN/SaiGGo/tracking/burndown.png?v=40280058352)
+![Burndown](https://raw.githubusercontent.com/NeitLN/SaiGGo/tracking/burndown.png?v=40281373167)
 
 - **Phạm vi hiện tại:** 139 giờ ước lượng, 46 task
-- **Đã đóng:** 54 giờ — có bằng chứng (PR/commit) 54 giờ · **Còn lại:** 85 giờ, 28 task mở
-- **Đường lý tưởng hôm nay:** 105.4 giờ → nhanh hơn kế hoạch 20.4 giờ
+- **Đã đóng:** 56 giờ — có bằng chứng (PR/commit) 56 giờ · **Còn lại:** 83 giờ, 27 task mở
+- **Đường lý tưởng hôm nay:** 105.4 giờ → nhanh hơn kế hoạch 22.4 giờ
 - Mốc: cổng G1 05/11 · final ready 12/11 · thuyết trình 19/11 · nộp 22/11
 
 ### Theo tuần
@@ -14,7 +14,7 @@ _Tự động cập nhật 13:29 26/10/2026 (giờ VN) bởi workflow `tracking.
 | Tuần | Giờ đến hạn | Giờ hoàn thành | Task xong | Còn lại cuối tuần | PR merge | Lượt review |
 |---|---:|---:|---:|---:|---:|---:|
 | Tuần 1 · 19–25/10 | 27 | 10 | 3 | 129 | 2 | 3 |
-| Tuần 2 · 26/10–01/11 | 47 | 44 | 15 | 85 | 20 | 23 |
+| Tuần 2 · 26/10–01/11 | 47 | 46 | 16 | 83 | 22 | 25 |
 | Tuần 3 · 02–08/11 | 48 | 0 | 0 | — | 0 | 0 |
 | Tuần 4 · 09–15/11 | 17 | 0 | 0 | — | 0 | 0 |
 
@@ -23,8 +23,8 @@ _Tự động cập nhật 13:29 26/10/2026 (giờ VN) bởi workflow `tracking.
 | Thành viên | Giờ được giao | Giờ hoàn thành có bằng chứng | Task xong | Đóng tay | Task mở | PR đã merge | PR đã review (có nội dung) |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | Bảo (@dobaovlu) | 19.2 | 5.0 | 2 | 0 | 7 | 1 | 8 |
-| Duy Anh (@anh7032) | 16.8 | 12.0 | 4 | 0 | 3 | 10 | 4 |
-| Minh (@Jayson135724) | 32.8 | 0.0 | 0 | 0 | 14 | 0 | 13 |
+| Duy Anh (@anh7032) | 16.8 | 12.0 | 4 | 0 | 3 | 12 | 4 |
+| Minh (@Jayson135724) | 32.8 | 2.0 | 1 | 0 | 13 | 0 | 15 |
 | Tiến (@NeitLN) | 70.2 | 37.0 | 12 | 0 | 14 | 11 | 1 |
 
 ### Đóng trong 7 ngày qua
@@ -34,6 +34,7 @@ _Tự động cập nhật 13:29 26/10/2026 (giờ VN) bởi workflow `tracking.
 - 26/10 · #33 T71 · Held–Karp làm đối chứng (3 h, qua PR)
 - 26/10 · #32 T70 · Tour trên ma trận: chi phí, NN, 2-opt có hướng (4 h, qua PR)
 - 26/10 · #29 T64 · Vẽ biểu đồ (3 h, qua PR)
+- 26/10 · #19 T50 · Snap điểm về node (2 h, qua PR)
 - 26/10 · #17 T41 · Đóng đường một chiều và hai chiều (3 h, qua PR)
 - 26/10 · #16 T40 · Snapshot và luật ùn tắc theo vùng (4 h, qua PR)
 - 26/10 · #11 T22 · Kiểm tra điều kiện heuristic trên dữ liệu (2 h, qua PR)
