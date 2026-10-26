@@ -188,8 +188,8 @@ Hai task song song không sửa cùng một file. Khi cần sửa file của ng�
 | T70–T74 (tour) | 2–3 | Sáng 26/10 cắt; chiều 26/10 giữ lại: T70, T71 đã xong, T72–T74 05–08/11 | Duy Anh quay lại |
 
 **PR đồng bộ (Tiến, 26/10).** Mục 1–4 đã làm trong PR đồng bộ; mục 4 (GitHub) và 5 làm ngay khi PR đó merge. Cập nhật nguồn dữ liệu trước, chạy `--sync` sau cùng:
-1. ROADMAP mục 1–5 (mốc, G1 thành điểm kiểm bằng chứng, bỏ M8, Q8); TASKS phần ngoài tuần 2 (M3, T32, T50–T55, T61–T64, G1, T70–T74, T80–T83, người làm T22/T33).
-2. PROJECT_BRIEF, EXPERIMENT_PLAN (E3 chỉ fixed trips, 3 kích thước; E5 thành mở rộng), DEMO, PROGRESS (bảng trạng thái và checklist UI; giữ nguyên nhật ký).
+1. ROADMAP mục 1–5 (mốc, G1 thành điểm kiểm bằng chứng, M8, Q8); TASKS phần ngoài tuần 2 (M3, T32, T50–T55, T61–T64, G1, T70–T74, T80–T83, người làm T22/T33).
+2. PROJECT_BRIEF, EXPERIMENT_PLAN (E3 chỉ fixed trips, 3 kích thước; E5 giữ lại), DEMO, PROGRESS (bảng trạng thái và checklist UI; giữ nguyên nhật ký).
 3. Mô tả milestone trong `scripts/tracking/create_backlog.py` và `tracking/schedule.csv`; thêm T34.
 4. Đóng T32 với lý do *not planned*; rồi chạy `create_backlog.py --sync` và `setup_project.py --sync`.
 5. Không gửi thư riêng cho giảng viên (quyết định chiều 26/10); lý do đổi phạm vi ghi trong PROJECT_BRIEF mục 4 và essay.

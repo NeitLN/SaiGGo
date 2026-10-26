@@ -15,10 +15,10 @@ Cập nhật 26/10 (chiều) theo [ROADMAP](ROADMAP.md) mục 2: Duy Anh quay l�
 | M0 Nền móng | 24/10 (trễ) | 🟨 | T00, T01, T03 xong; T02 chờ merge (#46) |
 | M1 Dijkstra trên đồ thị mẫu | 31/10 | 🟨 | T10, T11 xong; còn CLI (T12, Bảo) |
 | MW Walking skeleton | 29/10 | ⬜ | T13, T14 (Minh), T15 (Bảo) |
-| M2 A* + đối chứng | 03/11 | ⚠️ | T20, T21, T22 đã merge; chưa chạy trên dữ liệu thật (chờ T34) |
+| M2 A* + đối chứng | 03/11 | 🟨 | T20, T21 xong; T22 còn lệnh CLI; chưa chạy trên dữ liệu thật (chờ T34) |
 | M3 Dữ liệu thô đóng băng, dùng chung | 28/10 | 🟨 | #46 → #47 → #53 chờ approve lại; Release chưa có (T34). T32 đã cắt |
 | M4 Tìm đường trên dữ liệu thật | 03/11 | ⬜ | Chờ T34 |
-| M5 Ùn tắc & đóng đường | 04/11 | 🟨 | T40, T41 đã merge; còn T42 |
+| M5 Ùn tắc & đóng đường | 04/11 | 🟨 | T40, T41 đã merge (còn CLI và kiểm trên dữ liệu thật); còn T42 |
 | M6 Bản đồ tương tác (rút gọn) | 07/11 | ⬜ | Không có lớp chấm node; đóng đường một chế độ trên bản đồ |
 | M7 Benchmark & tăng quy mô | 08/11 | 🟨 | Khung T60 và T64 đã merge; chưa có số đo thật. 3 kích thước, chỉ fixed trips |
 | G1 Điểm kiểm bằng chứng | 05/11 | ⬜ | Không còn là cổng quyết định tour |
@@ -45,14 +45,14 @@ Cập nhật 26/10 (chiều) theo [ROADMAP](ROADMAP.md) mục 2: Duy Anh quay l�
 | T15 Chạy MW trên máy thứ hai | [#51](https://github.com/NeitLN/SaiGGo/issues/51) | Bảo | ⬜ | 29/10 |
 | T20 A* | [#9](https://github.com/NeitLN/SaiGGo/issues/9) | Tiến (chuyển từ Duy Anh 26/10) | ✅ | Đã merge 26/10 (#62). `tests/test_astar.py` 24 passed: khớp 6/6 tình huống tính tay của Bảo (#54); cùng chi phí với Dijkstra trên cả 36 cặp node; `h = 0` giống hệt Dijkstra; `reopened = 0`; `c` tự tính giữ A* đúng khi có cạnh ngắn hơn khoảng cách thẳng. **Chưa kiểm chứng:** trên dữ liệu thật (T33) |
 | T21 Đối chứng ngẫu nhiên | [#10](https://github.com/NeitLN/SaiGGo/issues/10) | Duy Anh | ✅ | Đã merge 26/10 (#64). `tests/test_oracle_networkx.py` 5 passed: 20 đồ thị ngẫu nhiên (seed 0–19) × 50 cặp = 1.000 truy vấn, chi phí Dijkstra và A* khớp `nx.dijkstra_path_length` (sai số `1e-9 · max(1, cost)`), `no_path` ⇔ `NetworkXNoPath`, tuyến nối tiếp đúng chiều, `reopened = 0`; thêm 150 truy vấn có cạnh bị đóng. **Chưa kiểm chứng:** trên dữ liệu thật (T33) |
-| T22 Kiểm tra heuristic | [#11](https://github.com/NeitLN/SaiGGo/issues/11) | Duy Anh | ⚠️ | Đã merge 26/10 (#68): `heuristic_report` (c, `v_max`, cạnh vi phạm) dùng `geo_scale` của T20. **Chưa kiểm chứng:** trên đồ thị thật (chờ T34) |
+| T22 Kiểm tra heuristic | [#11](https://github.com/NeitLN/SaiGGo/issues/11) | Duy Anh | 🟨 | Đã merge 26/10 (#68): `heuristic_report` (c, `v_max`, cạnh vi phạm) dùng `geo_scale` của T20. Còn lệnh CLI `check-heuristic` (chờ `cli.py` của T12) và chạy trên đồ thị thật (chờ T34) |
 | T30 Tải dữ liệu | [#12](https://github.com/NeitLN/SaiGGo/issues/12) | Minh | ⬜ | |
 | T31 Chuyển đổi + báo cáo | [#13](https://github.com/NeitLN/SaiGGo/issues/13) | Minh + Tiến | ⬜ | |
 | T32 Vẽ mạng đường | [#14](https://github.com/NeitLN/SaiGGo/issues/14) | Minh | ❌ | Đã cắt 26/10 (D12) |
 | T34 Release dữ liệu thô | tạo khi sync | Minh | ⬜ | 26/10; Duy Anh đã sửa sẵn `test_load_graph_reads_file` trong #53 |
 | T33 Dữ liệu thật + đối chứng | [#15](https://github.com/NeitLN/SaiGGo/issues/15) | Duy Anh + Tiến | ⬜ | |
-| T40 Snapshot ùn tắc | [#16](https://github.com/NeitLN/SaiGGo/issues/16) | Duy Anh | ✅ | Đã merge 26/10 (#65). `tests/test_scenario.py` 22 passed: vùng tâm A r = 220 m, α = 2 → S→B→T 100 s; α = 2 mọi cạnh → tuyến không đổi, 160 s; α < 1 bị từ chối; đồ thị gốc không đổi; chồng vùng lấy `max`; lọc `highway`; file kịch bản lỗi bị từ chối. **Chưa làm:** CLI `--scenario/--block` (chờ T12) |
-| T41 Đóng đường | [#17](https://github.com/NeitLN/SaiGGo/issues/17) | Duy Anh | ✅ | Đã merge 26/10 (#67). `tests/test_closures.py` 20 passed: `reverse_twins` (cùng `way_ids`, hình học đảo ngược); đóng A→T → S→B→T; đóng A→T + B→T → `no_path`; đóng đoạn hai chiều S↔B; đóng một trong hai cạnh song song thì cạnh còn lại vẫn đi được; tuyến của cả Dijkstra và A* không chứa cạnh đóng. **Chưa làm:** đếm cạnh có/không có cạnh đối trên dữ liệu thật (chờ T34) |
+| T40 Snapshot ùn tắc | [#16](https://github.com/NeitLN/SaiGGo/issues/16) | Duy Anh | 🟨 | Đã merge 26/10 (#65); còn CLI `--scenario`, `--block` (chờ `cli.py` của T12). `tests/test_scenario.py` 22 passed: vùng tâm A r = 220 m, α = 2 → S→B→T 100 s; α = 2 mọi cạnh → tuyến không đổi, 160 s; α < 1 bị từ chối; đồ thị gốc không đổi; chồng vùng lấy `max`; lọc `highway`; file kịch bản lỗi bị từ chối. **Chưa làm:** CLI `--scenario/--block` (chờ T12) |
+| T41 Đóng đường | [#17](https://github.com/NeitLN/SaiGGo/issues/17) | Duy Anh | ⚠️ | Đã merge 26/10 (#67). **Chưa kiểm chứng:** số cạnh có/không có cạnh đối trên đồ thị thật (chờ T34). `tests/test_closures.py` 20 passed: `reverse_twins` (cùng `way_ids`, hình học đảo ngược); đóng A→T → S→B→T; đóng A→T + B→T → `no_path`; đóng đoạn hai chiều S↔B; đóng một trong hai cạnh song song thì cạnh còn lại vẫn đi được; tuyến của cả Dijkstra và A* không chứa cạnh đóng. **Chưa làm:** đếm cạnh có/không có cạnh đối trên dữ liệu thật (chờ T34) |
 | T42 Kịch bản demo | [#18](https://github.com/NeitLN/SaiGGo/issues/18) | Bảo | ⬜ | |
 | T50 Snap | [#19](https://github.com/NeitLN/SaiGGo/issues/19) | Minh | ⬜ | |
 | T51 API route | [#20](https://github.com/NeitLN/SaiGGo/issues/20) | Tiến | ⬜ | |
@@ -64,10 +64,10 @@ Cập nhật 26/10 (chiều) theo [ROADMAP](ROADMAP.md) mục 2: Duy Anh quay l�
 | T61 Cắt lồng nhau | [#26](https://github.com/NeitLN/SaiGGo/issues/26) | Minh | ⬜ | |
 | T62 Tăng quy mô | [#27](https://github.com/NeitLN/SaiGGo/issues/27) | Tiến | ⬜ | |
 | T63 Ùn tắc / đóng đường | [#28](https://github.com/NeitLN/SaiGGo/issues/28) | Tiến | ⬜ | |
-| T64 Biểu đồ | [#29](https://github.com/NeitLN/SaiGGo/issues/29) | Duy Anh | ✅ | Đã merge 26/10 (#72). `scripts/plot_results.py <run_dir> [...] [--out <dir>]` vẽ 5 hình theo EXPERIMENT_PLAN mục 10 (bỏ E5 theo phạm vi 26/10): E2 boxplot và scatter log–log `expanded`, E3 median `expanded`/thời gian và median `r` theo `\|V\|` (gộp nhiều lần chạy), E4 boxplot `r` theo kịch bản; `r` tính từng cặp; chú thích ghi `run_id`, số cặp, `dataset_id`. `tests/test_plot_results.py` 19 passed trên dữ liệu thử. **Chưa có:** hình từ số đo thật (chờ T60/T62/T63); CI không cài matplotlib nên test vẽ tự bỏ qua trên CI |
+| T64 Biểu đồ | [#29](https://github.com/NeitLN/SaiGGo/issues/29) | Duy Anh | 🟨 | Đã merge 26/10 (#72): biểu đồ E2–E4. `scripts/plot_results.py <run_dir> [...] [--out <dir>]` vẽ 5 hình theo EXPERIMENT_PLAN mục 10 (chưa có E5 vì lúc đó tour đang bị cắt; phần E5 làm cùng T74): E2 boxplot và scatter log–log `expanded`, E3 median `expanded`/thời gian và median `r` theo `\|V\|` (gộp nhiều lần chạy), E4 boxplot `r` theo kịch bản; `r` tính từng cặp; chú thích ghi `run_id`, số cặp, `dataset_id`. `tests/test_plot_results.py` 19 passed trên dữ liệu thử. **Chưa có:** hình từ số đo thật (chờ T60/T62/T63); CI không cài matplotlib nên test vẽ tự bỏ qua trên CI |
 | G1 Điểm kiểm bằng chứng | [#30](https://github.com/NeitLN/SaiGGo/issues/30) | Tiến | ⬜ | 05/11 |
 | T65 Ghi kết quả | [#31](https://github.com/NeitLN/SaiGGo/issues/31) | Cả nhóm | ⬜ | |
-| T70 Tour trên ma trận | [#32](https://github.com/NeitLN/SaiGGo/issues/32) | Duy Anh | ✅ | Đã merge 26/10 (#69). `tests/test_tour.py` 37 passed: 1 điểm; ma trận bất đối xứng; ma trận bẫy mà công thức delta đối xứng dự đoán rẻ hơn 18 nhưng chi phí tính lại là 112 so với 40, nên 2-opt không nhận; 2-opt không tăng chi phí và giữ đủ điểm trên 10 ma trận ngẫu nhiên; so với duyệt mọi hoán vị (n = 5). Ngoài phạm vi cam kết (quyết định 26/10), chỉ ở mức thuật toán |
+| T70 Tour trên ma trận | [#32](https://github.com/NeitLN/SaiGGo/issues/32) | Duy Anh | ✅ | Đã merge 26/10 (#69). `tests/test_tour.py` 37 passed: 1 điểm; ma trận bất đối xứng; ma trận bẫy mà công thức delta đối xứng dự đoán rẻ hơn 18 nhưng chi phí tính lại là 112 so với 40, nên 2-opt không nhận; 2-opt không tăng chi phí và giữ đủ điểm trên 10 ma trận ngẫu nhiên; so với duyệt mọi hoán vị (n = 5). Thuộc phạm vi (giữ lại chiều 26/10); thuật toán trên ma trận đã xong, tích hợp và benchmark ở T72–T74 |
 | T71 Held–Karp | [#33](https://github.com/NeitLN/SaiGGo/issues/33) | Duy Anh | ✅ | Đã merge 26/10 (#70). `tests/test_tour.py` 60 passed: `held_karp` khớp duyệt mọi hoán vị với n = 2..7; tìm được tour tối ưu mà NN bỏ lỡ; không tệ hơn `choose_tour`; ma trận toàn `math.inf` vẫn trả đủ điểm; chặn n > 10. Thời gian đo trên máy cá nhân (Python 3.14, không phải môi trường benchmark): n = 10 khoảng vài ms |
 | T72 Ma trận + API tour | [#34](https://github.com/NeitLN/SaiGGo/issues/34) | Tiến | ⬜ | Trở lại phạm vi chiều 26/10; 05–06/11 |
 | T73 UI tour | [#35](https://github.com/NeitLN/SaiGGo/issues/35) | Minh | ⬜ | |

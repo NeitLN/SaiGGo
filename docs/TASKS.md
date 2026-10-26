@@ -223,6 +223,7 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 
 ### T22 — Kiểm tra điều kiện heuristic trên dữ liệu
 - 👤 Duy Anh · ⏱ 2 h · ⛓ T20, T12
+- **26/10:** Duy Anh làm `heuristic_report` (#68). **Còn:** lệnh `check-heuristic` — Duy Anh thêm sau khi T12 có `cli.py`; chạy trên đồ thị thật khi có T34.
 - **Mục tiêu:** báo cáo `c`, `v_max` trên dữ liệu thật và phát hiện dữ liệu làm heuristic sai.
 - **Việc cần làm:** `geo_scale(graph)` (tính `c` theo DATA_MODEL mục 5.1) đã có từ T20 trong `algorithms/heuristics.py`, kèm test cạnh ngắn hơn khoảng cách thẳng. T22 thêm lệnh `python -m app.cli check-heuristic --graph <file>` in `v_max`, `c`, số cạnh có `length < haversine`, 5 cạnh tệ nhất.
 - 📁 `backend/app/algorithms/heuristics.py`, `backend/app/cli.py`, `tests/test_heuristics.py`
@@ -309,7 +310,7 @@ Từ 26/10 không vẽ toàn mạng đường (T32 đã cắt); mục tiêu củ
 
 ### T40 — Snapshot và luật ùn tắc theo vùng
 - 👤 Duy Anh (Minh review) · ⏱ 3–4 h · ⛓ T10, T11
-- **26/10:** Duy Anh làm thay Tiến (#65).
+- **26/10:** Duy Anh làm thay Tiến (#65). **Còn:** CLI `--scenario`, `--block` — Duy Anh thêm sau khi T12 có `cli.py`.
 - **Mục tiêu:** chi phí thay đổi theo kịch bản mà đồ thị gốc không đổi.
 - **Việc cần làm:** thêm `Scenario` và `build_snapshot(graph, scenario, blocked)` theo DATA_MODEL mục 4 vào `graph/scenario.py`, dùng lại `Snapshot` và `make_snapshot` của T11 (không tạo kiểu mới); đọc `data/config/scenarios.json`; CLI thêm `--scenario` và `--block`.
 - **Test bắt buộc** (trên fixture): vùng tâm A, r = 220 m, α = 2 → tuyến S→B→T, 100 s; α = 2 cho mọi cạnh → tuyến không đổi, 160 s; α < 1 bị từ chối; đồ thị gốc không đổi sau khi tạo snapshot.
@@ -390,7 +391,7 @@ Từ 26/10 không vẽ toàn mạng đường (T32 đã cắt); mục tiêu củ
 
 ### T55 — Case demo và kiểm thử thủ công
 - 👤 Bảo · ⏱ 2–3 h · ⛓ T54
-- **Việc cần làm:** `data/demo/cases.json` (cặp điểm, kịch bản, cạnh đóng) cho các bước 1–2, 4–8 ở PROJECT_BRIEF mục 7 (bước 3 và 9 đã cắt); UI nạp case từ file (Minh hỗ trợ nếu cần); chạy toàn bộ checklist UI, chụp màn hình, ghi lỗi vào PROGRESS.md.
+- **Việc cần làm:** `data/demo/cases.json` (cặp điểm, kịch bản, cạnh đóng) cho các bước 1–2, 4–9 ở PROJECT_BRIEF mục 7 (bước 3 đã cắt; case "Kho + 5 điểm" cho bước 9 kiểm sau T73, UI-9); UI nạp case từ file (Minh hỗ trợ nếu cần); chạy toàn bộ checklist UI, chụp màn hình, ghi lỗi vào PROGRESS.md.
 - 📁 `data/demo/cases.json`, `docs/PROGRESS.md`, `docs/img/` (ảnh)
 - 📦 Bộ case demo + biên bản kiểm thử.
 - ✅ Mọi case chạy được và cho kết quả như mô tả; lỗi (nếu có) được ghi rõ.
@@ -495,7 +496,7 @@ Sáng 26/10 cắt, chiều 26/10 giữ lại (D10): T70, T71 đã xong; T72–T7
 
 ### T74 — Benchmark tour
 - 👤 Tiến (Bảo chạy) · ⏱ 2–3 h · ⛓ T71, T72
-- **Việc cần làm:** EXPERIMENT_PLAN mục 8.
+- **Việc cần làm:** EXPERIMENT_PLAN mục 8; thêm biểu đồ E5 (mục 10, hình 6) vào `plot_results.py`.
 - 📁 `scripts/run_benchmarks.py` · 📦 CSV E5 · ✅ Bảng improvement và gap có số đo · ▶ `python scripts/run_benchmarks.py --suite tour --seed 42`
 - 🧠 Improvement % và gap %.
 
