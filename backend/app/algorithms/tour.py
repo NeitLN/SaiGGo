@@ -3,17 +3,20 @@
 Kho là chỉ số 0 và cố định ở đầu/cuối tour; `order = [0, …]` liệt kê kho một lần, hàm tự cộng
 chặng quay về kho. Ma trận **bất đối xứng**: `D[i][j]` là chi phí có hướng, không dùng công thức
 delta của 2-opt đối xứng vì đảo một đoạn còn đảo chiều các chặng bên trong (mục 10.5).
-Đây là heuristic: kết quả là "lộ trình được cải thiện", không phải tối ưu toàn cục.
+NN và 2-opt là heuristic: kết quả là "lộ trình được cải thiện", không phải tối ưu toàn cục;
+`held_karp` là đối chứng chính xác cho n ≤ 10 (O(2^n · n²)), chỉ dùng khi đo gap.
 """
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from typing import Sequence
 
 Matrix = Sequence[Sequence[float]]
 
 COST_EPS = 1e-9   # giây; chênh lệch nhỏ hơn mức này coi như bằng nhau (sai số số thực)
+HELD_KARP_MAX_POINTS = 10   # 2^n · n²; quá mức này thì dùng heuristic
 
 
 @dataclass(frozen=True)
@@ -128,3 +131,64 @@ def choose_tour(D: Matrix, order: Sequence[int]) -> TourPlan:
         if costs[name] < costs[method]:        # hòa thì giữ ứng viên đứng trước
             method, best = name, seq
     return TourPlan(best, costs[method], method, costs)
+
+
+def held_karp(D: Matrix) -> list[int]:
+    """Tour tối ưu toàn cục bằng quy hoạch động Held–Karp cho n ≤ `HELD_KARP_MAX_POINTS`.
+
+    `dp[S][j]` = chi phí nhỏ nhất đi từ kho (0), thăm đúng tập điểm giao `S` (bit của 1..n−1),
+    kết thúc ở `j`; khởi tạo `dp[{j}][j] = D[0][j]`, truy hồi
+    `dp[S][j] = min(dp[S\\{j}][i] + D[i][j])`, kết thúc bằng chặng `j → 0`.
+    Dùng làm đối chứng cho NN + 2-opt trên bộ nhỏ, không dùng trong vòng lặp UI.
+    Trả `order = [0, …]` khép kín như các hàm khác; ma trận có `math.inf` vẫn trả một hoán vị
+    (chi phí khi đó là `math.inf`).
+    """
+    n = _check_matrix(D)
+    if n > HELD_KARP_MAX_POINTS:
+        raise ValueError(f"held_karp chỉ dùng cho tối đa {HELD_KARP_MAX_POINTS} điểm "
+                         f"(2^n · n²), nhận {n}; dùng choose_tour cho dữ liệu lớn")
+    if n == 1:
+        return [0]
+
+    k = n - 1                                  # số điểm giao, đánh số 1..n−1
+    size = 1 << k
+    dp = [[math.inf] * k for _ in range(size)]
+    parent = [[-1] * k for _ in range(size)]
+    for j in range(k):
+        dp[1 << j][j] = D[0][j + 1]
+
+    for mask in range(1, size):
+        for j in range(k):
+            if not (mask >> j) & 1:
+                continue
+            prev = mask ^ (1 << j)
+            if prev == 0:
+                continue                       # tập chỉ có j: đã khởi tạo
+            best, best_i = math.inf, -1
+            for i in range(k):
+                if not (prev >> i) & 1:
+                    continue
+                if best_i == -1:
+                    best_i = i                 # dự phòng khi mọi chặng đều math.inf: vẫn truy vết được
+                cand = dp[prev][i] + D[i + 1][j + 1]
+                if cand < best:                # hòa thì giữ i nhỏ hơn (tất định)
+                    best, best_i = cand, i
+            dp[mask][j] = best
+            parent[mask][j] = best_i
+
+    full = size - 1
+    best_cost, last = math.inf, 0              # last = 0 để ma trận toàn math.inf vẫn truy vết được
+    for j in range(k):
+        cand = dp[full][j] + D[j + 1][0]
+        if cand < best_cost:
+            best_cost, last = cand, j
+
+    stops: list[int] = []
+    mask, j = full, last
+    while j != -1:
+        stops.append(j + 1)
+        prev = parent[mask][j]
+        mask ^= 1 << j
+        j = prev
+    stops.reverse()
+    return [0] + stops
