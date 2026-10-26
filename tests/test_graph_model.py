@@ -95,6 +95,13 @@ def test_graph_is_immutable(mini):
         graph.v_max_mps = 99
 
 
+def _swap_first_two_edges(d):
+    # Đổi chỗ (0,1) và (0,3) nhưng vẫn đánh id theo vị trí: id hợp lệ, thứ tự (u, v, key) thì sai.
+    d["edges"][0], d["edges"][1] = d["edges"][1], d["edges"][0]
+    for j, e in enumerate(d["edges"]):
+        e["id"] = j
+
+
 def _broken(tmp_path, mutate):
     data = json.loads(MINI.read_text(encoding="utf-8"))
     mutate(data)
@@ -112,6 +119,8 @@ def _broken(tmp_path, mutate):
     (lambda d: d["edges"][1].update(id=7), "id"),
     (lambda d: d["nodes"][2].update(id=5), "id"),
     (lambda d: d.update(edges=[]), "cạnh"),
+    (lambda d: _swap_first_two_edges(d), r"\(u, v, key\)"),
+    (lambda d: d["edges"][1].update(v=d["edges"][0]["v"]), r"\(u, v, key\)"),   # trùng (0, 1, 0)
 ])
 def test_invalid_graph_rejected(tmp_path, mutate, message):
     with pytest.raises(ValueError, match=message):

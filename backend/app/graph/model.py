@@ -62,12 +62,19 @@ def load_graph(path: str | Path) -> tuple[Graph, GraphMeta]:
 
     out_edges: list[list[int]] = [[] for _ in range(n)]
     speed_mps, base_time = [], []
+    prev = None
     for j, e in enumerate(edges):
         if e["id"] != j:
             raise ValueError(f"edges[{j}].id phải bằng {j}, file có {e['id']}")
         for end in ("u", "v"):
             if not (isinstance(e[end], int) and 0 <= e[end] < n):
                 raise ValueError(f"edges[{j}].{end} = {e[end]!r} không phải node hợp lệ")
+        # ID cạnh ổn định nhờ sắp theo (u, v, key) trước khi đánh số; không tự sắp lại vì sẽ đổi ID.
+        cur = (e["u"], e["v"], e.get("key", 0))
+        if prev is not None and cur <= prev:
+            raise ValueError(f"edges[{j}] = {cur} phải đứng sau edges[{j - 1}] = {prev} "
+                             "theo (u, v, key), không trùng")
+        prev = cur
         if not (_finite(e["length_m"]) and e["length_m"] >= 0):
             raise ValueError(f"edges[{j}].length_m = {e['length_m']!r} phải hữu hạn và không âm")
         if not (_finite(e["speed_kmh"]) and e["speed_kmh"] > 0):
