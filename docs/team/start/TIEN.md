@@ -1,6 +1,6 @@
 # Phiếu bắt đầu — Võ Việt Tiến (@NeitLN)
 
-> **Từ 26/10 phân công đã đổi** (Duy Anh vắng tuần 2; cắt tour và T32). Danh sách task dưới đây là của tuần 1; việc hiện tại xem [phiếu giao việc](../../tasks/README.md) và [ROADMAP](../../ROADMAP.md) mục 6.
+> **Từ 26/10 phân công đã đổi** (cắt T32; Duy Anh vắng sáng 26/10 rồi quay lại chiều 26/10). Danh sách task dưới đây là của tuần 1; việc hiện tại xem [phiếu giao việc](../../tasks/README.md), [ROADMAP](../../ROADMAP.md) mục 6 và tab Issues.
 
 **Vai trò:** điều phối; snapshot/kịch bản, API, benchmark, tích hợp tour; review phần lớn PR của nhóm.
 

@@ -68,7 +68,8 @@ MILESTONES = {
            "CSV đo thật + biểu đồ: 1.000 cặp, 3 kích thước (chỉ fixed trips), ùn tắc/đóng đường; "
            "điểm kiểm bằng chứng 05/11 (G1); MVP tích hợp 08/11. Chứng minh: python scripts/run_benchmarks.py --suite all"),
     "M8": ("M8 — Tour (mở rộng E1)", "2026-11-08",
-           "Đã cắt khỏi phạm vi cam kết ngày 26/10 (T70–T74 đóng not planned). Chỉ làm lại nếu sau 08/11 còn thời gian."),
+           "NN, 2-opt có hướng, Held–Karp (T70, T71 xong 26/10); ma trận chi phí từ đồ thị + /api/tour, UI tour, benchmark tour "
+           "(T72–T74) trước MVP 08/11. Chứng minh: pytest tests/test_tour.py; bước 9 của demo"),
     "M9": ("M9 — Hoàn thiện", "2026-11-12",
            "09–12/11 không thêm tính năng: chạy lại trên máy thứ hai, sửa lỗi, video demo; essay bắt đầu từ tuần 3. "
            "Final ready 12/11."),
@@ -78,7 +79,7 @@ LABELS = {
     "task": ("5319e7", "Hạng mục trong backlog, được tính vào burndown"),
     "P0": ("b60205", "Bắt buộc cho bản tối thiểu"),
     "P1": ("d93f0b", "Nên có; cắt được khi trễ"),
-    "P2": ("fbca04", "Mở rộng, ngoài phạm vi cam kết"),
+    "P2": ("fbca04", "Làm sau phần lõi; cắt được khi trễ"),
     "area:algorithms": ("1d76db", "Dijkstra, A*, heuristic"),
     "area:graph": ("0e8a16", "Mô hình đồ thị, snapshot, snap, đóng đường"),
     "area:data": ("006b75", "Dữ liệu OSM, cấu hình, kịch bản"),
@@ -194,7 +195,7 @@ def load_schedule() -> dict[str, dict]:
         return {row["id"]: row for row in csv.DictReader(f)}
 
 
-AWAY = {"Duy Anh"}   # vắng từ 26/10 (ROADMAP mục 6): không tự giao review; bỏ tên khi quay lại
+AWAY: set[str] = set()   # người đang vắng: không tự giao review (Duy Anh vắng sáng 26/10, quay lại chiều 26/10)
 
 
 def default_reviewer(task: dict, area: str) -> list[str]:

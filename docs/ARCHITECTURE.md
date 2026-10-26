@@ -73,11 +73,13 @@ backend/app/
     dijkstra.py      dijkstra()                                              (T11)
     astar.py         astar()                                                 (T20)
     heuristics.py    make_geo_heuristic(), geo_scale(), zero_heuristic       (T20, T22)
+    tour.py          tour_cost, nearest_neighbor, two_opt, held_karp         (T70, T71)
   services/
     routing.py       route_request() → chạy Dijkstra/A*, đo thời gian, gói kết quả (T13, T51)
+    tour.py          cost matrix + tour                                       (T72)
   api/
     schemas.py       Pydantic request/response
-    routes.py        /health, /dataset, /route
+    routes.py        /health, /dataset, /route, /tour
   cli.py             python -m app.cli route|check-heuristic ...             (T12)
   main.py            nạp Graph khi khởi động (lifespan), gắn router
 
@@ -90,7 +92,8 @@ scripts/
 tests/
   fixtures/mini.json ví dụ 6 node ở DATA_MODEL mục 7
   test_graph_model.py, test_geo.py, test_dijkstra.py, test_astar.py,
-  test_oracle_networkx.py, test_scenario.py, test_snap.py, test_api_route.py
+  test_oracle_networkx.py, test_scenario.py, test_snap.py, test_api_route.py,
+  test_tour.py
 
 frontend/src/
   main.ts            khởi tạo bản đồ, gắn panel
@@ -112,8 +115,9 @@ results/             <run_id>/queries.csv, measurements.csv, env.json
 | GET | `/api/health` | Server sống, đã nạp dataset chưa | Có sẵn; cập nhật ở T51 |
 | GET | `/api/dataset` | `dataset_id`, vùng, số node/cạnh, danh sách kịch bản | T51 |
 | POST | `/api/route` | Tìm đường giữa hai điểm | T13 (skeleton), T51 |
+| POST | `/api/tour` | Tour nhiều điểm | T72 |
 
-Đã bỏ ngày 26/10 ([PROJECT_BRIEF](PROJECT_BRIEF.md) D10, D12): `/api/network` (vẽ toàn mạng đường, T32) và `/api/tour` (tour, T72). Thư mục và test của tour cũng bỏ khỏi cây ở mục 3.
+Đã bỏ ngày 26/10 ([PROJECT_BRIEF](PROJECT_BRIEF.md) D12): `/api/network` (vẽ toàn mạng đường, T32).
 
 Ví dụ request/response của `/api/route`:
 
@@ -179,7 +183,7 @@ Walking skeleton (T13, T14) chỉ dùng **tập con** sau của contract ở tr�
 
 ## 6. Giao diện
 
-Giữ bố cục 3 cột ở [DEMO.md](DEMO.md) mục 1 (bảng điều khiển / bản đồ / kết quả), chỉ có chế độ tìm đường hai điểm; tour đã cắt ngày 26/10 (D10).
+Giữ bố cục 3 cột ở [DEMO.md](DEMO.md) mục 1 (bảng điều khiển / bản đồ / kết quả), chế độ chính là tìm đường hai điểm; chế độ tour (kho + 5 điểm) thêm ở T73.
 
 | Lớp bản đồ | Nội dung |
 |---|---|

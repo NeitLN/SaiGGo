@@ -5,7 +5,7 @@ Lập kế hoạch lộ trình giao hàng trên mạng đường TP.HCM bằng t
 
 Đồ án môn Introduction to AI (261_72ITSE30303_01) — Nhóm 4: Võ Việt Tiến, Bùi Duy Anh, Đỗ Quốc Bảo, Võ Hoàng Minh.
 
-> **Trạng thái (26/10):** đã có bộ nạp đồ thị, hàm địa lý và Dijkstra, kiểm trên đồ thị mẫu. Chưa có dữ liệu thật đã nạp, API tìm đường hay kết quả thực nghiệm. Chi tiết: [docs/STATUS.md](docs/STATUS.md).
+> **Trạng thái (26/10):** đã có bộ nạp đồ thị, Dijkstra, A*, đối chứng NetworkX, snapshot ùn tắc, đóng đường, thuật toán tour và khung benchmark, kiểm trên đồ thị mẫu và đồ thị ngẫu nhiên. Chưa có dữ liệu thật đã nạp, API tìm đường hay kết quả thực nghiệm. Chi tiết: [docs/STATUS.md](docs/STATUS.md).
 
 SaiGo dùng **mạng đường thực** từ OpenStreetMap, nhưng **thời gian di chuyển và giao thông là mô phỏng**.
 Không cung cấp ETA giao thông trực tiếp hay điều hướng thương mại.
@@ -13,11 +13,10 @@ Không cung cấp ETA giao thông trực tiếp hay điều hướng thương m�
 ## Phạm vi
 
 - Tìm đường: Dijkstra và A* (tự cài đặt)
+- Thứ tự giao: thứ tự nhập → Nearest Neighbor → 2-opt trên ma trận chi phí có hướng; Held–Karp làm đối chứng
 - Thí nghiệm tăng quy mô bản đồ: A* so với Dijkstra trên 3 kích thước đồ thị
 - Kịch bản giao thông mô phỏng và chặn đường, lập lại lộ trình
 - Benchmark offline có thể tái lập
-
-Tối ưu thứ tự giao nhiều điểm (Nearest Neighbor, 2-opt, Held–Karp) trong proposal đã chuyển thành hướng mở rộng ngày 26/10, chỉ làm nếu còn thời gian sau 08/11 ([PROJECT_BRIEF](docs/PROJECT_BRIEF.md) mục 4, D10).
 
 Đặc tả đầy đủ: [docs/TOPIC.md](docs/TOPIC.md).
 Kế hoạch triển khai: [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) · **trạng thái hiện tại (đọc đầu tiên):** [docs/STATUS.md](docs/STATUS.md) · bằng chứng: [docs/PROGRESS.md](docs/PROGRESS.md).
@@ -38,8 +37,8 @@ Kế hoạch triển khai: [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md) · **t
 | Đường dẫn | Nội dung |
 |---|---|
 | `backend/app/api/` | Endpoint FastAPI và schema |
-| `backend/app/services/` | Điều phối route/snapshot |
-| `backend/app/algorithms/` | Dijkstra, A*, heuristic |
+| `backend/app/services/` | Điều phối route/tour/snapshot |
+| `backend/app/algorithms/` | Dijkstra, A*, heuristic, NN, 2-opt, Held–Karp |
 | `backend/app/graph/` | Adapter, geometry, snap, manifest |
 | `frontend/` | TypeScript + Vite + Leaflet |
 | `scripts/` | Chuẩn bị dữ liệu, benchmark, vẽ biểu đồ |

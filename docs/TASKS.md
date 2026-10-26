@@ -2,7 +2,7 @@
 
 Mỗi task vừa sức một buổi (khoảng 2–4 giờ). Nếu một task kéo dài quá hai buổi, tách nhỏ và ghi lý do vào [PROGRESS.md](PROGRESS.md). Người phụ trách là **[Đề xuất]**: Tiến có thể vào làm cùng ở mọi task. Ngày 26/10, T01, T10, T11, T20 chuyển từ Duy Anh sang Tiến vì Duy Anh vắng tuần 2.
 
-> **26/10: nhóm đã duyệt kế hoạch tuần 2** ([ROADMAP](ROADMAP.md) mục 6): T12 → Bảo, T13 → Minh, T21 → Bảo (dự phòng). Toàn bộ file đã đồng bộ với [đề xuất phạm vi đã duyệt](proposals/2026-10-26-pham-vi.md): cắt T32 và tour T70–T74, RQ1b 3 kích thước chỉ fixed trips, T53/T54 rút gọn, G1 thành điểm kiểm bằng chứng 05/11, thêm T34.
+> **26/10: nhóm đã duyệt kế hoạch tuần 2** ([ROADMAP](ROADMAP.md) mục 6): T12 → Bảo, T13 → Minh, T21 → Bảo (dự phòng). Toàn bộ file đã đồng bộ với [đề xuất phạm vi đã duyệt](proposals/2026-10-26-pham-vi.md): cắt T32, RQ1b 3 kích thước chỉ fixed trips, T53/T54 rút gọn, G1 thành điểm kiểm bằng chứng 05/11, thêm T34. **Chiều 26/10:** Duy Anh quay lại và làm T21, T22, T40, T41, T60 (khung), T64, T70, T71; tour (T72–T74) trở lại phạm vi cam kết (D10 ở PROJECT_BRIEF mục 4).
 
 Ký hiệu: 👤 phụ trách · ⏱ ước lượng · ⛓ phụ thuộc · 📁 file · 📦 đầu ra · ✅ hoàn thành khi · ▶ kiểm tra · 🧠 kiến thức cần hiểu để giải thích.
 
@@ -208,8 +208,8 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 - 🧠 `f = g + h`; admissible và consistent; chứng minh phác thảo ở DATA_MODEL mục 5.2; vì sao `h = 0` biến A* thành Dijkstra.
 
 ### T21 — Đối chứng NetworkX trên đồ thị ngẫu nhiên
-- 👤 Bảo (Tiến review) · ⏱ 3 h · ⛓ T20, T15 (bắt đầu khi A* đã merge và MW đã đạt)
-- **Chuyển 26/10:** từ Duy Anh sang Bảo, dùng 3 giờ dự phòng tuần 2; chỉ bắt đầu khi MW đạt và T20 đã merge, không thì dời tuần 3.
+- 👤 Duy Anh (Minh review) · ⏱ 3 h · ⛓ T20
+- **26/10:** sáng chuyển sang Bảo làm dự phòng; chiều Duy Anh quay lại và làm xong (#64).
 - **Mục tiêu:** bằng chứng thực nghiệm rằng code đúng trên nhiều đồ thị, không chỉ fixture.
 - **Việc cần làm:**
   1. Bộ sinh đồ thị ngẫu nhiên có seed: node có tọa độ, cạnh có hướng, `length ≥ haversine` (nhân một hệ số ≥ 1), có cạnh song song và cặp không tới được.
@@ -223,7 +223,6 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 
 ### T22 — Kiểm tra điều kiện heuristic trên dữ liệu
 - 👤 Duy Anh · ⏱ 2 h · ⛓ T20, T12
-- **Người làm:** phân bổ lại ở buổi họp 01/11 (Duy Anh tính là 0 giờ cho tới khi báo ngày quay lại).
 - **Mục tiêu:** báo cáo `c`, `v_max` trên dữ liệu thật và phát hiện dữ liệu làm heuristic sai.
 - **Việc cần làm:** `geo_scale(graph)` (tính `c` theo DATA_MODEL mục 5.1) đã có từ T20 trong `algorithms/heuristics.py`, kèm test cạnh ngắn hơn khoảng cách thẳng. T22 thêm lệnh `python -m app.cli check-heuristic --graph <file>` in `v_max`, `c`, số cạnh có `length < haversine`, 5 cạnh tệ nhất.
 - 📁 `backend/app/algorithms/heuristics.py`, `backend/app/cli.py`, `tests/test_heuristics.py`
@@ -278,7 +277,7 @@ Từ 26/10 không vẽ toàn mạng đường (T32 đã cắt); mục tiêu củ
 
 ### T32 — Vẽ mạng đường thật trên bản đồ *(đã cắt 26/10)*
 - 👤 Minh · ⏱ 3 h · ⛓ T31
-- **Đã cắt 26/10** (D12): dùng nền tile OSM, chỉ vẽ tuyến và các cạnh của tuyến; issue đóng *not planned*. Phần nạp đồ thị khi khởi động đã làm ở T13.
+- **Đã cắt 26/10** (D12): dùng nền tile OSM, chỉ vẽ tuyến và các cạnh của tuyến; issue đóng *not planned*. Phần nạp đồ thị khi khởi động do T13 làm.
 - **Mục tiêu:** nhìn thấy đồ thị trên Leaflet, đo được tốc độ vẽ.
 - **Việc cần làm:**
   1. Backend nạp Graph khi khởi động (đường dẫn qua biến môi trường `SAIGO_GRAPH`); `/api/health` báo `dataset_loaded: true`; `/api/network` trả GeoJSON có `edge_id`.
@@ -296,7 +295,6 @@ Từ 26/10 không vẽ toàn mạng đường (T32 đã cắt); mục tiêu củ
 
 ### T33 — Dijkstra/A* trên đồ thị thật + đối chứng 200 cặp
 - 👤 Duy Anh + Tiến · ⏱ 3 h · ⛓ T22, T31
-- **Người làm:** phân bổ lại ở buổi họp 01/11 (Duy Anh tính là 0 giờ).
 - **Mục tiêu:** xác nhận thuật toán đúng trên dữ liệu thật trước khi làm tiếp.
 - **Việc cần làm:** chạy `check-heuristic` trên đồ thị thật (điều tra nếu `c < 0,999`); CLI `route --from-latlon ... --to-latlon ...`; test `realdata`: 200 cặp ngẫu nhiên (seed) trong SCC, so với NetworkX; đăng ký marker `realdata` trong `pyproject.toml`.
 - 📁 `tests/test_realdata.py`, `pyproject.toml`
@@ -310,7 +308,8 @@ Từ 26/10 không vẽ toàn mạng đường (T32 đã cắt); mục tiêu củ
 ## M5 — Ùn tắc và đóng đường
 
 ### T40 — Snapshot và luật ùn tắc theo vùng
-- 👤 Tiến · ⏱ 3–4 h · ⛓ T10, T11
+- 👤 Duy Anh (Minh review) · ⏱ 3–4 h · ⛓ T10, T11
+- **26/10:** Duy Anh làm thay Tiến (#65).
 - **Mục tiêu:** chi phí thay đổi theo kịch bản mà đồ thị gốc không đổi.
 - **Việc cần làm:** thêm `Scenario` và `build_snapshot(graph, scenario, blocked)` theo DATA_MODEL mục 4 vào `graph/scenario.py`, dùng lại `Snapshot` và `make_snapshot` của T11 (không tạo kiểu mới); đọc `data/config/scenarios.json`; CLI thêm `--scenario` và `--block`.
 - **Test bắt buộc** (trên fixture): vùng tâm A, r = 220 m, α = 2 → tuyến S→B→T, 100 s; α = 2 cho mọi cạnh → tuyến không đổi, 160 s; α < 1 bị từ chối; đồ thị gốc không đổi sau khi tạo snapshot.
@@ -321,7 +320,8 @@ Từ 26/10 không vẽ toàn mạng đường (T32 đã cắt); mục tiêu củ
 - 🧠 Vì sao nhân đều không đổi tuyến; vì sao lấy `max` thay vì tích; vì sao `α ≥ 1` giữ heuristic đúng.
 
 ### T41 — Đóng đoạn đường (cả cạnh đối nếu có)
-- 👤 Tiến · ⏱ 2–3 h · ⛓ T40, T31
+- 👤 Duy Anh (Minh review) · ⏱ 2–3 h · ⛓ T40, T31
+- **26/10:** Duy Anh làm thay Tiến (#67); code có cả đóng một chiều và hai chiều, bản đồ chỉ dùng chế độ đóng cả hai chiều.
 - **Mục tiêu:** đóng đúng cạnh, kể cả cạnh song song và cạnh đối. Từ 26/10 sản phẩm chỉ có **một chế độ**: đóng một đoạn là đóng cả cạnh đối nếu có (D12).
 - **Việc cần làm:** `reverse_twins(graph_meta)` (DATA_MODEL mục 4.2); kiểm tra `blocked_edge_ids` hợp lệ; test: đóng A→T → S→B→T; đóng A→T + B→T → `no_path`; đóng một trong hai cạnh song song thì cạnh còn lại vẫn đi được; tuyến mới không chứa cạnh đóng.
 - 📁 `backend/app/graph/closures.py`, `tests/test_closures.py`
@@ -402,7 +402,8 @@ Từ 26/10 không vẽ toàn mạng đường (T32 đã cắt); mục tiêu củ
 ## M7 — Benchmark và tăng quy mô
 
 ### T60 — Bộ chạy benchmark và 1.000 truy vấn vùng demo
-- 👤 Tiến · ⏱ 4 h · ⛓ T33
+- 👤 Duy Anh (Tiến review) · ⏱ 4 h · ⛓ T33
+- **26/10:** Duy Anh làm phần khung (#71); còn chạy 1.000 cặp trên dữ liệu thật.
 - **Việc cần làm:** theo [EXPERIMENT_PLAN.md](EXPERIMENT_PLAN.md) mục 2–3: sinh cặp có seed và phân tầng; lưu `queries.csv` trước khi đo; warm-up; lặp R lần, đổi thứ tự thuật toán; ghi `measurements.csv` và `env.json`; tắt trace.
 - 📁 `scripts/run_benchmarks.py`, `results/<run_id>/`
 - 📦 CSV đo thật cho E2.
@@ -434,7 +435,8 @@ Từ 26/10 không vẽ toàn mạng đường (T32 đã cắt); mục tiêu củ
 - 🧠 Vì sao cận dưới lỏng hơn khi có ùn tắc.
 
 ### T64 — Vẽ biểu đồ
-- 👤 Bảo (Tiến hỗ trợ) · ⏱ 2 h · ⛓ T60 (định dạng CSV)
+- 👤 Duy Anh (Minh review) · ⏱ 2 h · ⛓ T60 (định dạng CSV)
+- **26/10:** Duy Anh làm thay Bảo (#72).
 - **Việc cần làm:** `scripts/plot_results.py <run_dir>` vẽ các hình ở EXPERIMENT_PLAN mục 10; thử trước bằng CSV nhỏ sinh từ fixture (ghi rõ là dữ liệu thử, không đưa vào báo cáo).
 - 📁 `scripts/plot_results.py`, `results/<run_id>/fig_*.png`
 - 📦 Biểu đồ · ✅ Trục có đơn vị; chú thích ghi số cặp và dataset · ▶ `python scripts/plot_results.py results/<run_id>`
@@ -442,7 +444,7 @@ Từ 26/10 không vẽ toàn mạng đường (T32 đã cắt); mục tiêu củ
 
 ### G1 — Điểm kiểm bằng chứng 05/11
 - 👤 Tiến (cả nhóm họp) · ⏱ 1 h · ⛓ T33, T41, T60
-- **Đổi 26/10** (D13): tour đã cắt nên G1 không còn quyết định tích hợp tour; thay bằng điểm kiểm bằng chứng.
+- **Đổi 26/10** (D13): G1 không còn quyết định tích hợp tour (tour đã nằm trong phạm vi cam kết); thay bằng điểm kiểm bằng chứng.
 - **Mục tiêu:** ngày 05/11 biết chắc MVP tích hợp có kịp 08/11 không.
 - **Việc cần làm:** kiểm từng điều kiện ở [ROADMAP.md](ROADMAP.md) mục 3 (bằng chứng đúng đắn, CSV benchmark đầu tiên, đóng đường chạy trên bản đồ, giờ còn lại của từng người); không kịp thì kích hoạt cắt theo [đề xuất phạm vi](proposals/2026-10-26-pham-vi.md) mục 4; ghi quyết định vào issue và PROGRESS.md.
 - 📁 `docs/PROGRESS.md`
@@ -460,27 +462,26 @@ Từ 26/10 không vẽ toàn mạng đường (T32 đã cắt); mục tiêu củ
 
 ---
 
-## M8 — Tour (mở rộng E1) — *đã cắt 26/10*
+## M8 — Tour (E1)
+
+Sáng 26/10 cắt, chiều 26/10 giữ lại (D10): T70, T71 đã xong; T72–T74 làm trong tuần 3 và phải xong trước MVP 08/11.
 
 ### T70 — Tour trên ma trận: chi phí, NN, 2-opt có hướng
-- 👤 Duy Anh · ⏱ 3–4 h · ⛓ T00 (không cần dữ liệu thật) · bắt đầu sau T22
-- **Đã cắt 26/10** (D10 ở PROJECT_BRIEF mục 4): tour ra khỏi phạm vi cam kết; issue đóng *not planned*. Chỉ làm lại nếu sau 08/11 còn thời gian và nhóm chốt lại.
+- 👤 Duy Anh · ⏱ 3–4 h · ⛓ T00 (không cần dữ liệu thật) · bắt đầu sau T22 · ✅ đã merge 26/10 (#69)
 - **Việc cần làm:** `tour_cost(D, order)` (kho cố định đầu/cuối); `nearest_neighbor(D)` với tie-break theo chỉ số; `two_opt(D, order)` tính lại **toàn bộ** chi phí cho mỗi ứng viên; chọn tour rẻ nhất trong {thứ tự nhập, NN, NN+2-opt}. Test: 1 điểm; ma trận bất đối xứng; một ma trận nhỏ tự dựng làm ví dụ phản chứng: công thức delta đối xứng dự đoán tour rẻ hơn nhưng chi phí tính lại toàn bộ lại đắt hơn (script proposal có ví dụ 17 → 13 → 20 ở backup slide B1, nhưng repo không có ma trận gốc nên phải dựng lại và kiểm tra); 2-opt không làm tăng chi phí; giữ đủ điểm.
 - 📁 `backend/app/algorithms/tour.py`, `tests/test_tour.py`
 - 📦 Thuật toán tour · ✅ Test xanh · ▶ `pytest tests/test_tour.py -q`
 - 🧠 TSP bất đối xứng; vì sao 2-opt chỉ cho cực trị địa phương; vì sao đảo đoạn làm đảo chiều các chặng bên trong.
 
 ### T71 — Held–Karp làm đối chứng
-- 👤 Duy Anh · ⏱ 2–3 h · ⛓ T70
-- **Đã cắt 26/10** (D10 ở PROJECT_BRIEF mục 4): tour ra khỏi phạm vi cam kết; issue đóng *not planned*. Chỉ làm lại nếu sau 08/11 còn thời gian và nhóm chốt lại.
+- 👤 Duy Anh · ⏱ 2–3 h · ⛓ T70 · ✅ đã merge 26/10 (#70)
 - **Việc cần làm:** `held_karp(D)` cho n ≤ 10; test so với duyệt mọi hoán vị khi n ≤ 7; đo thời gian n = 4, 6, 8, 10.
 - 📁 `backend/app/algorithms/tour.py`, `tests/test_tour.py`
 - 📦 Lời giải tối ưu cho case nhỏ · ✅ Khớp duyệt toàn bộ · ▶ `pytest tests/test_tour.py -q`
 - 🧠 Công thức `DP[S, j]`; độ phức tạp `O(2^n · n²)`.
 
 ### T72 — Ma trận chi phí từ đồ thị và `/api/tour`
-- 👤 Tiến · ⏱ 3–4 h · ⛓ T70, T51, G1
-- **Đã cắt 26/10** (D10 ở PROJECT_BRIEF mục 4): tour ra khỏi phạm vi cam kết; issue đóng *not planned*. Chỉ làm lại nếu sau 08/11 còn thời gian và nhóm chốt lại.
+- 👤 Tiến · ⏱ 3–4 h · ⛓ T70, T51
 - **Việc cần làm:** Dijkstra một nguồn tới nhiều đích (dừng khi đã pop đủ các đích) để xây từng hàng; kiểm tra mọi cặp hữu hạn, nếu không thì trả `infeasible_under_model` + danh sách điểm lỗi; ghép tuyến các chặng; endpoint `/api/tour`.
 - 📁 `backend/app/services/tour.py`, `backend/app/api/*.py`, `tests/test_api_tour.py`
 - 📦 API tour · ✅ Chi phí tour bằng tổng chi phí các chặng đã dựng · ▶ `pytest tests/test_api_tour.py -q`
@@ -488,14 +489,12 @@ Từ 26/10 không vẽ toàn mạng đường (T32 đã cắt); mục tiêu củ
 
 ### T73 — UI tour tối giản
 - 👤 Minh · ⏱ 3 h · ⛓ T72
-- **Đã cắt 26/10** (D10 ở PROJECT_BRIEF mục 4): tour ra khỏi phạm vi cam kết; issue đóng *not planned*. Chỉ làm lại nếu sau 08/11 còn thời gian và nhóm chốt lại.
 - **Việc cần làm:** preset kho + 5 điểm từ `cases.json`; 3 thẻ Thứ tự nhập / NN / NN + 2-opt; marker đánh số theo thẻ được chọn.
 - 📁 `frontend/src/*.ts` · 📦 Demo tour · ✅ Bước 9 của kịch bản demo chạy được · ▶ Thủ công
 - 🧠 Hai tầng của bài toán giao hàng.
 
 ### T74 — Benchmark tour
 - 👤 Tiến (Bảo chạy) · ⏱ 2–3 h · ⛓ T71, T72
-- **Đã cắt 26/10** (D10 ở PROJECT_BRIEF mục 4): tour ra khỏi phạm vi cam kết; issue đóng *not planned*. Chỉ làm lại nếu sau 08/11 còn thời gian và nhóm chốt lại.
 - **Việc cần làm:** EXPERIMENT_PLAN mục 8.
 - 📁 `scripts/run_benchmarks.py` · 📦 CSV E5 · ✅ Bảng improvement và gap có số đo · ▶ `python scripts/run_benchmarks.py --suite tour --seed 42`
 - 🧠 Improvement % và gap %.
@@ -505,7 +504,7 @@ Từ 26/10 không vẽ toàn mạng đường (T32 đã cắt); mục tiêu củ
 ## M9 — Hoàn thiện
 
 ### T80 — Đóng băng tính năng và chạy trên máy thứ hai
-- 👤 Bảo · ⏱ 2–3 h · ⛓ T54, T55, G1
+- 👤 Bảo · ⏱ 2–3 h · ⛓ T54, T55, T73, G1
 - **Việc cần làm:** từ 09/11 không thêm tính năng (D13); clone repo sạch trên máy khác, làm đúng theo README (tải dataset từ Release, kiểm tra hash), chạy demo; ghi mọi bước bị vướng.
 - 📦 Biên bản chạy máy thứ hai · ✅ Chạy được mà không cần ai sửa tay; hoặc README đã được sửa · ▶ Thủ công
 - 🧠 Tái lập là gì.

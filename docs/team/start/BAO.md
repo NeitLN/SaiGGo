@@ -1,6 +1,6 @@
 # Phiếu bắt đầu — Đỗ Quốc Bảo (@dobaovlu)
 
-> **Từ 26/10 phân công đã đổi** (Duy Anh vắng tuần 2; cắt tour và T32). Danh sách task dưới đây là của tuần 1; việc hiện tại xem [phiếu giao việc](../../tasks/README.md) và [ROADMAP](../../ROADMAP.md) mục 6.
+> **Từ 26/10 phân công đã đổi** (cắt T32; Duy Anh vắng sáng 26/10 rồi quay lại chiều 26/10). Danh sách task dưới đây là của tuần 1; việc hiện tại xem [phiếu giao việc](../../tasks/README.md), [ROADMAP](../../ROADMAP.md) mục 6 và tab Issues.
 
 **Vai trò:** ca kiểm thử tính tay, kịch bản và case demo, kiểm thử thủ công, chạy trên máy thứ hai, biểu đồ, tài liệu.
 Làm xong [ONBOARDING.md](../ONBOARDING.md) mục 1–5 trước. Mục 2 (đặt tên git là của bạn) đặc biệt quan trọng.

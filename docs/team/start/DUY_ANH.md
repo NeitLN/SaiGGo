@@ -1,6 +1,6 @@
 # Phiếu bắt đầu — Bùi Duy Anh (@anh7032)
 
-> **Từ 26/10 phân công đã đổi** (Duy Anh vắng tuần 2; cắt tour và T32). Danh sách task dưới đây là của tuần 1; việc hiện tại xem [phiếu giao việc](../../tasks/README.md) và [ROADMAP](../../ROADMAP.md) mục 6.
+> **Từ 26/10 phân công đã đổi** (cắt T32; Duy Anh vắng sáng 26/10 rồi quay lại chiều 26/10). Danh sách task dưới đây là của tuần 1; việc hiện tại xem [phiếu giao việc](../../tasks/README.md), [ROADMAP](../../ROADMAP.md) mục 6 và tab Issues.
 
 **Vai trò:** Dijkstra, A*, heuristic, test đối chứng; sau đó thuật toán tour (NN, 2-opt, Held–Karp).
 Làm xong [ONBOARDING.md](../ONBOARDING.md) mục 1–5 trước.

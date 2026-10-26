@@ -1,6 +1,6 @@
 # SaiGo — Kế hoạch thực nghiệm
 
-Kết quả đo được ghi ở [EXPERIMENTS.md](EXPERIMENTS.md). Tài liệu này chỉ mô tả **cách đo**. Cập nhật 26/10 theo [đề xuất đổi phạm vi](proposals/2026-10-26-pham-vi.md) đã duyệt: E3 còn 3 kích thước, chỉ fixed trips; E5 ngoài phạm vi cam kết. Mọi ô số liệu ở đây là **[Chưa đo]**; không điền số khi chưa chạy, không ước lượng thay cho số đo.
+Kết quả đo được ghi ở [EXPERIMENTS.md](EXPERIMENTS.md). Tài liệu này chỉ mô tả **cách đo**. Cập nhật 26/10 theo [đề xuất đổi phạm vi](proposals/2026-10-26-pham-vi.md) đã duyệt: E3 còn 3 kích thước, chỉ fixed trips. E5 (tour) giữ lại theo quyết định chiều 26/10. Mọi ô số liệu ở đây là **[Chưa đo]**; không điền số khi chưa chạy, không ước lượng thay cho số đo.
 
 ## 1. Các thực nghiệm
 
@@ -10,7 +10,7 @@ Kết quả đo được ghi ở [EXPERIMENTS.md](EXPERIMENTS.md). Tài liệu n
 | E2 | A* vs Dijkstra trên vùng demo (RQ1) | Vùng demo | Có |
 | E3 | Lợi thế của A* khi đồ thị lớn dần (RQ1b) | 3 vùng cắt lồng nhau, chỉ fixed trips | Có |
 | E4 | Ảnh hưởng của ùn tắc và đóng đường (RQ3) | Vùng demo | Có |
-| E5 | Chất lượng tour (RQ2) | Vùng demo | **Không** — ngoài phạm vi cam kết từ 26/10; chỉ làm nếu sau 08/11 còn thời gian |
+| E5 | Chất lượng tour (RQ2) | Vùng demo | Có (T74) |
 
 ## 2. Truy vấn
 
@@ -128,7 +128,7 @@ Kết luận chỉ nói về fixed trips: bản đồ lớn hơn khi chuyến đ
 - Chỉ số: tỉ lệ còn đường, % tăng chi phí, thời gian lập lại = thời gian tạo snapshot + thời gian tìm (ghi riêng hai phần).
 - **Bộ không còn đường:** 30 cặp, đóng mọi cạnh đi vào đích. Đo thời gian để kết luận `no_path` của hai thuật toán. Dự kiến A* không có lợi thế (ví dụ ở DATA_MODEL mục 7); cần số đo để xác nhận.
 
-## 8. E5 — Tour (ngoài phạm vi cam kết từ 26/10)
+## 8. E5 — Tour
 
 - n ∈ {4, 6, 8, 10} điểm giao, 20 bộ mỗi n (seed); kho và điểm giao lấy từ SCC vùng demo, cách nhau ≥ 150 m; thứ tự nhập = thứ tự sinh ngẫu nhiên.
 - Phương án: thứ tự nhập, NN, NN + 2-opt, Held–Karp (tối ưu).
@@ -158,7 +158,7 @@ Kết luận chỉ nói về fixed trips: bản đồ lớn hơn khi chuyến đ
 3. Median `expanded` và median thời gian theo `|V|`, fixed trips (E3).
 4. Median `r` theo `|V|` (E3).
 5. Boxplot `r` theo kịch bản (E4).
-6. ~~*(E5)* Improvement và gap theo n~~ (đã cắt 26/10).
+6. *(E5)* Improvement và gap theo n.
 
 Mỗi hình ghi `run_id`, số cặp và `dataset_id` trong chú thích.
 

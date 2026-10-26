@@ -1,6 +1,6 @@
 # Kịch bản demo
 
-Cập nhật 26/10 theo [đề xuất đổi phạm vi](proposals/2026-10-26-pham-vi.md) đã duyệt: tour đã cắt (D10), bản đồ rút gọn (D12). Kịch bản ngắn nằm ở [PROJECT_BRIEF](PROJECT_BRIEF.md) mục 7; file này mô tả giao diện và checklist. Bản trước (xoay quanh tour, theo [TOPIC.md](TOPIC.md) mục 13 và 19) không còn dùng.
+Cập nhật 26/10 theo [đề xuất đổi phạm vi](proposals/2026-10-26-pham-vi.md) đã duyệt: bản đồ rút gọn (D12); tour giữ lại chiều 26/10 (D10) nhưng là chế độ phụ, chỉ ở bước 9. Kịch bản ngắn nằm ở [PROJECT_BRIEF](PROJECT_BRIEF.md) mục 7; file này mô tả giao diện và checklist. Bản trước (xoay quanh tour, theo [TOPIC.md](TOPIC.md) mục 13 và 19) không còn dùng.
 
 Mọi số hiển thị đều lấy từ response của backend; không có số viết tay.
 
@@ -11,7 +11,8 @@ Mọi số hiển thị đều lấy từ response của backend; không có s�
 │ Bảng điều    │                                  │ Kết quả        │
 │ khiển        │   Bản đồ Leaflet (nền tile OSM)  │ đo được        │
 │              │                                  │                │
-│ Case demo    │  điểm đi, điểm đến, tuyến,       │ Dijkstra / A*  │
+│ Chế độ       │  điểm đi, điểm đến, tuyến,       │ Dijkstra / A*  │
+│ Case demo    │  kho + điểm giao (chế độ tour),  │ Thẻ tour       │
 │ Kịch bản     │  vùng ùn tắc, đoạn bị đóng       │                │
 │ [Tìm đường]  │                                  │ Nhật ký        │
 │ [Mở lại hết] │                                  │ snapshot       │
@@ -20,7 +21,8 @@ Mọi số hiển thị đều lấy từ response của backend; không có s�
 
 ### 1.1. Cột trái — bảng điều khiển
 
-- Case demo chọn sẵn: "Hai điểm qua trung tâm", "Không còn đường".
+- Chế độ: **Tìm đường hai điểm** (mặc định) / **Tour**.
+- Case demo chọn sẵn: "Hai điểm qua trung tâm", "Không còn đường", "Kho + 5 điểm giao".
 - Kịch bản: Bình thường / Cao điểm mô phỏng — trung tâm (`peak-center`).
 - Nút **Tìm đường** (chạy cả Dijkstra và A*), nút **Mở lại các đoạn đã đóng**.
 
@@ -39,23 +41,25 @@ Bấm vào một đoạn **trên tuyến** để đóng (đóng cả cạnh đ�
 
 **Khối Dijkstra / A\*** (trả lời RQ1): thời gian di chuyển ước tính, quãng đường, số node mở rộng, thời gian tính toán, và dòng "Chi phí trùng khớp: có/không".
 
+**Thẻ so sánh tour** (chế độ tour, RQ2): Thứ tự nhập / Nearest Neighbor / NN + 2-opt; mỗi thẻ có thời gian di chuyển ước tính, quãng đường, mức cải thiện so với thứ tự nhập. Marker điểm giao đánh số theo thẻ đang chọn.
+
 **Nhật ký snapshot**: mỗi dòng là một sự kiện thật của backend, ví dụ "Tạo snapshot `peak-center`", "Đóng cạnh (u, v, key)", "Không có đường".
 
 ### 1.4. Nhãn bắt buộc
 
 - Tách **Thời gian di chuyển ước tính theo kịch bản** và **Thời gian tính toán**; không có nhãn "Time" chung.
 - Kịch bản cao điểm ghi "Cao điểm mô phỏng".
-- Ghi tên thuật toán cụ thể (Dijkstra, A*).
+- Ghi tên thuật toán cụ thể (Dijkstra, A*, NN, 2-opt).
 
 ### 1.5. Không đưa vào
 
 - Số liệu không do hệ thống đo (độ tin cậy dự báo, % giảm ùn tắc, …).
 - Giao thông thời gian thực, điều khiển đèn tín hiệu, bản tin giao thông.
-- Tour nhiều điểm, animation trace (đã cắt 26/10).
+- Animation trace, lớp chấm node đã mở rộng (đã cắt 26/10).
 
 ## 2. Kịch bản demo khoảng 4 phút
 
-Giữ đúng số bước của [PROJECT_BRIEF](PROJECT_BRIEF.md) mục 7; bước 3 và 9 đã cắt. Mọi case phải chạy thử trước trên đúng snapshot sẽ dùng và được ghi rõ là case minh họa.
+Giữ đúng số bước của [PROJECT_BRIEF](PROJECT_BRIEF.md) mục 7; bước 3 đã cắt. Mọi case phải chạy thử trước trên đúng snapshot sẽ dùng và được ghi rõ là case minh họa.
 
 | Bước | Thao tác | Giao diện hiển thị | Người xem hiểu |
 |---|---|---|---|
@@ -66,13 +70,14 @@ Giữ đúng số bước của [PROJECT_BRIEF](PROJECT_BRIEF.md) mục 7; bư�
 | 6 | Bấm vào một đoạn trên tuyến → **Đóng đoạn đường** | Đoạn đỏ; tuyến mới; dòng nhật ký mới | Lập lại tuyến, không dùng cạnh bị đóng (RQ3) |
 | 7 | Chọn case "Không còn đường" | Thông báo không có đường; không vẽ đường thẳng | Hệ thống báo đúng giới hạn (RQ3) |
 | 8 | Chuyển sang slide biểu đồ tăng quy mô | `expanded` và thời gian theo `|V|` (3 kích thước, fixed trips) | Số đo thật (RQ1b) |
+| 9 | Chuyển sang chế độ tour, case "Kho + 5 điểm giao"; chọn lần lượt 3 thẻ | Thứ tự giao đổi; chi phí trước/sau | Tầng thứ hai của bài toán (RQ2) |
 
 Nếu khoản cắt 4 của đề xuất phạm vi được nhóm đồng ý (đóng đường qua API/CLI thay vì bản đồ), bước 6 đổi theo; hiện **chưa** kích hoạt.
 
 ## 3. Checklist trước buổi demo
 
-- [ ] Hai case demo đã chạy trên đúng snapshot sẽ dùng và cho kết quả như kịch bản.
-- [ ] Số trong khối Dijkstra/A* khớp với response API, không có số viết tay.
+- [ ] Ba case demo đã chạy trên đúng snapshot sẽ dùng và cho kết quả như kịch bản.
+- [ ] Số trong khối Dijkstra/A* và thẻ tour khớp với response API, không có số viết tay.
 - [ ] Đóng đoạn rồi bấm **Mở lại** trả về đúng tuyến ban đầu.
 - [ ] Ghi nguồn © OpenStreetMap contributors hiển thị trên bản đồ.
 - [ ] Có bản quay màn hình dự phòng nếu máy demo lỗi.
