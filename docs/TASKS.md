@@ -354,6 +354,7 @@ Từ 26/10 không vẽ toàn mạng đường (T32 đã cắt); mục tiêu củ
 
 ### T51 — API `/api/route` và `/api/dataset`
 - 👤 Tiến · ⏱ 3 h · ⛓ T13, T33, T40, T41, T50
+- **Từ review #67, #73:** lúc khởi động tính sẵn `geo_scale(graph)` và `reverse_twins` một lần (không để trong đoạn đo giờ, không tính lại mỗi lần đóng đường); snap không lùi về node ngoài SCC.
 - **Việc cần làm:** mở rộng API skeleton của T13, chỉ thêm trường, không đổi contract v1; schema Pydantic theo ARCHITECTURE mục 4; `services/routing.py` (snap → snapshot → chạy thuật toán → đo thời gian → gắn geometry); `costs_match`; lỗi 422 có thông báo tiếng Việt; test bằng TestClient với fixture.
 - 📁 `backend/app/api/schemas.py`, `routes.py`, `backend/app/services/routing.py`, `tests/test_api_route.py`
 - 📦 API tìm đường.
