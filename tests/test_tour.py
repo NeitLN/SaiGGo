@@ -8,7 +8,7 @@ import random
 
 import pytest
 
-from app.algorithms.tour import choose_tour, nearest_neighbor, tour_cost, two_opt
+from app.algorithms.tour import choose_tour, held_karp, nearest_neighbor, tour_cost, two_opt
 
 
 def is_tour(order: list[int], n: int) -> bool:
@@ -17,7 +17,7 @@ def is_tour(order: list[int], n: int) -> bool:
 
 
 def brute_force_cost(D: list[list[float]]) -> float:
-    """Chi phí tour tối ưu bằng duyệt mọi hoán vị điểm giao (chỉ dùng cho n ≤ 6 trong test)."""
+    """Chi phí tour tối ưu bằng duyệt mọi hoán vị điểm giao (chỉ dùng cho n ≤ 7 trong test)."""
     best = math.inf
     for perm in itertools.permutations(range(1, len(D))):
         best = min(best, tour_cost(D, [0, *perm]))
@@ -212,3 +212,72 @@ def test_bad_order_rejected(order, match):
     D = [[0, 1, 2], [2, 0, 1], [1, 2, 0]]
     with pytest.raises(ValueError, match=match):
         tour_cost(D, order)
+
+
+# --- Held–Karp: đối chứng chính xác cho bộ nhỏ ---
+
+def test_held_karp_single_and_two_points():
+    assert held_karp([[0.0]]) == [0]
+    D = [[0, 5], [7, 0]]
+    order = held_karp(D)
+    assert order == [0, 1]
+    assert tour_cost(D, order) == pytest.approx(12.0)          # cả hai chiều, không phải 5 hay 10
+
+
+def test_held_karp_follows_direction():
+    # Đi xuôi 10+10+10 = 30; đi ngược 1+1+1 = 3: tour tối ưu phải là chiều ngược.
+    D = [[0, 10, 1], [1, 0, 10], [10, 1, 0]]
+    order = held_karp(D)
+    assert order == [0, 2, 1]
+    assert tour_cost(D, order) == pytest.approx(3.0)
+
+
+@pytest.mark.parametrize("n", range(2, 8))
+@pytest.mark.parametrize("seed", [0, 7])
+def test_held_karp_matches_brute_force(n, seed):
+    D = seed_matrix(seed, n=n)
+    order = held_karp(D)
+    assert is_tour(order, n)
+    assert tour_cost(D, order) == pytest.approx(brute_force_cost(D))
+
+
+def test_held_karp_finds_optimum_hidden_from_nearest_neighbor():
+    # Cùng ma trận với T70: NN đi 0→1→2→3→4→0 tốn 104, tối ưu 0→4→3→2→1→0 tốn 7.
+    D = [[50] * 5 for _ in range(5)]
+    for i in range(5):
+        D[i][i] = 0
+    D[0][1], D[1][2], D[2][3], D[3][4], D[4][0] = 1, 1, 1, 1, 100
+    D[0][4], D[4][3], D[3][2], D[2][1], D[1][0] = 2, 1, 1, 1, 2
+    order = held_karp(D)
+    assert order == [0, 4, 3, 2, 1]
+    assert tour_cost(D, order) == pytest.approx(7.0)
+    assert tour_cost(D, nearest_neighbor(D)) == pytest.approx(104.0)
+
+
+@pytest.mark.parametrize("seed", range(5))
+def test_held_karp_not_worse_than_heuristics(seed):
+    D = seed_matrix(seed, n=7)
+    D_before = [row[:] for row in D]
+    plan = choose_tour(D, [0, 1, 2, 3, 4, 5, 6])
+    best = tour_cost(D, held_karp(D))
+    assert best <= plan.cost_s + 1e-9
+    assert D == D_before                                   # không sửa ma trận đầu vào
+
+
+def test_held_karp_all_legs_infinite_still_returns_a_tour():
+    D = [[0 if i == j else math.inf for j in range(3)] for i in range(3)]
+    order = held_karp(D)
+    assert is_tour(order, 3)
+    assert math.isinf(tour_cost(D, order))
+
+
+def test_held_karp_rejects_more_than_ten_points():
+    with pytest.raises(ValueError, match="tối đa 10 điểm"):
+        held_karp(seed_matrix(1, n=11))
+
+
+def test_held_karp_accepts_ten_points():
+    D = seed_matrix(2, n=10)
+    order = held_karp(D)
+    assert is_tour(order, 10)
+    assert tour_cost(D, order) <= tour_cost(D, nearest_neighbor(D)) + 1e-9

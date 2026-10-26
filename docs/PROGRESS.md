@@ -60,7 +60,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | G1 Cổng MVP | [#30](https://github.com/NeitLN/SaiGGo/issues/30) | Tiến | ⬜ | 05/11 |
 | T65 Ghi kết quả | [#31](https://github.com/NeitLN/SaiGGo/issues/31) | Cả nhóm | ⬜ | |
 | T70 Tour trên ma trận | [#32](https://github.com/NeitLN/SaiGGo/issues/32) | Duy Anh | 🟨 | PR chờ review. `tests/test_tour.py` 37 passed: 1 điểm; ma trận bất đối xứng; ma trận bẫy mà công thức delta đối xứng dự đoán rẻ hơn 18 nhưng chi phí tính lại là 112 so với 40, nên 2-opt không nhận; 2-opt không tăng chi phí và giữ đủ điểm trên 10 ma trận ngẫu nhiên; so với duyệt mọi hoán vị (n = 5). Ngoài phạm vi cam kết (quyết định 26/10), chỉ ở mức thuật toán |
-| T71 Held–Karp | [#33](https://github.com/NeitLN/SaiGGo/issues/33) | Duy Anh | ⬜ | |
+| T71 Held–Karp | [#33](https://github.com/NeitLN/SaiGGo/issues/33) | Duy Anh | 🟨 | PR chờ review (xếp trên T70). `tests/test_tour.py` 60 passed: `held_karp` khớp duyệt mọi hoán vị với n = 2..7; tìm được tour tối ưu mà NN bỏ lỡ; không tệ hơn `choose_tour`; ma trận toàn `math.inf` vẫn trả đủ điểm; chặn n > 10. Thời gian đo trên máy cá nhân (Python 3.14, không phải môi trường benchmark): n = 10 khoảng vài ms |
 | T72 Ma trận + API tour | [#34](https://github.com/NeitLN/SaiGGo/issues/34) | Tiến | ⬜ | Chỉ sau G1 |
 | T73 UI tour | [#35](https://github.com/NeitLN/SaiGGo/issues/35) | Minh | ⬜ | |
 | T74 Benchmark tour | [#36](https://github.com/NeitLN/SaiGGo/issues/36) | Tiến | ⬜ | |
