@@ -56,7 +56,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | T61 Cắt lồng nhau | [#26](https://github.com/NeitLN/SaiGGo/issues/26) | Minh | ⬜ | |
 | T62 Tăng quy mô | [#27](https://github.com/NeitLN/SaiGGo/issues/27) | Tiến | ⬜ | |
 | T63 Ùn tắc / đóng đường | [#28](https://github.com/NeitLN/SaiGGo/issues/28) | Tiến | ⬜ | |
-| T64 Biểu đồ | [#29](https://github.com/NeitLN/SaiGGo/issues/29) | Bảo | ⬜ | |
+| T64 Biểu đồ | [#29](https://github.com/NeitLN/SaiGGo/issues/29) | Duy Anh | 🟨 | PR chờ review. `scripts/plot_results.py <run_dir> [...] [--out <dir>]` vẽ 5 hình theo EXPERIMENT_PLAN mục 10 (bỏ E5 theo phạm vi 26/10): E2 boxplot và scatter log–log `expanded`, E3 median `expanded`/thời gian và median `r` theo `\|V\|` (gộp nhiều lần chạy), E4 boxplot `r` theo kịch bản; `r` tính từng cặp; chú thích ghi `run_id`, số cặp, `dataset_id`. `tests/test_plot_results.py` 19 passed trên dữ liệu thử. **Chưa có:** hình từ số đo thật (chờ T60/T62/T63); CI không cài matplotlib nên test vẽ tự bỏ qua trên CI |
 | G1 Cổng MVP | [#30](https://github.com/NeitLN/SaiGGo/issues/30) | Tiến | ⬜ | 05/11 |
 | T65 Ghi kết quả | [#31](https://github.com/NeitLN/SaiGGo/issues/31) | Cả nhóm | ⬜ | |
 | T70 Tour trên ma trận | [#32](https://github.com/NeitLN/SaiGGo/issues/32) | Duy Anh | 🟨 | PR chờ review. `tests/test_tour.py` 37 passed: 1 điểm; ma trận bất đối xứng; ma trận bẫy mà công thức delta đối xứng dự đoán rẻ hơn 18 nhưng chi phí tính lại là 112 so với 40, nên 2-opt không nhận; 2-opt không tăng chi phí và giữ đủ điểm trên 10 ma trận ngẫu nhiên; so với duyệt mọi hoán vị (n = 5). Ngoài phạm vi cam kết (quyết định 26/10), chỉ ở mức thuật toán |
