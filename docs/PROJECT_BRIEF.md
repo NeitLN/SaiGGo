@@ -131,8 +131,8 @@ Không gửi thư riêng cho giảng viên (giảng viên xem repo khi nộp cu�
 | Người | Vai trò chính | Ghi chú |
 |---|---|---|
 | Võ Việt Tiến | Điều phối và tích hợp; Dijkstra, A*, heuristic (nhận từ Duy Anh 26/10); API; benchmark; ma trận chi phí và `/api/tour` | Có thể vào làm cùng ở phần dữ liệu/bản đồ |
-| Bùi Duy Anh | Đối chứng (T21), heuristic (T22), ùn tắc và đóng đường (T40, T41), khung benchmark và biểu đồ (T60, T64), tour (T70, T71) | Vắng sáng 26/10, quay lại chiều 26/10 |
-| Võ Hoàng Minh | Pipeline dữ liệu, bản đồ, giao diện; API skeleton (T13) | Làm trọn lát dọc của walking skeleton |
+| Bùi Duy Anh | API skeleton (T13), đối chứng (T21), heuristic (T22), ùn tắc và đóng đường (T40, T41), khung benchmark và biểu đồ (T60, T64), tour (T70, T71) | Vắng sáng 26/10, quay lại chiều 26/10 |
+| Võ Hoàng Minh | Pipeline dữ liệu, Release dữ liệu thô (T34), bản đồ, giao diện, UI tour | |
 | Đỗ Quốc Bảo | Ca kiểm thử tính tay, CLI (T12), file case demo, kiểm thử thủ công, chạy thử trên máy thứ hai, ảnh chụp, tài liệu, hỗ trợ demo | Thư ký các buổi họp |
 
 Mỗi người phải giải thích được toàn bộ mô hình, không chỉ phần mình làm. Mỗi module được ít nhất một người khác review.

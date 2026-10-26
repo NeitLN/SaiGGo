@@ -100,7 +100,7 @@ Chương trình họp: [team/meetings/2026-10-26-agenda.md](team/meetings/2026-1
 > - Các khoản cắt có yêu cầu đồng ý riêng ([đề xuất](proposals/2026-10-26-pham-vi.md) mục 4, khoản 4 và 5) chưa được coi là đã kích hoạt. Ngân sách tuần 3–4 vẫn thiếu và được rà lại ngày 01/11.
 > - Biên bản/ghi nhận chính thức: sẽ do Bảo (thư ký) đăng trên issue *Biên bản họp*.
 
-> **Cập nhật chiều 26/10:** Duy Anh quay lại và đã merge T21, T22, T40, T41, T60 (khung), T64, T70, T71. Tiến chốt: tour (T72–T74) trở lại phạm vi; không gửi thư riêng cho giảng viên. Bảng 6.2–6.5 dưới đây là kế hoạch sáng 26/10; phần việc đã làm ghi ở [PROGRESS](PROGRESS.md), ngân sách tuần 3 rà lại ở buổi họp 01/11.
+> **Cập nhật chiều 26/10:** Duy Anh quay lại và đã merge T13, T21, T22, T40, T41, T60 (khung), T64, T70, T71. Tiến chốt: tour (T72–T74) trở lại phạm vi; không gửi thư riêng cho giảng viên. Bảng 6.2–6.5 dưới đây là kế hoạch sáng 26/10; phần việc đã làm ghi ở [PROGRESS](PROGRESS.md), ngân sách tuần 3 rà lại ở buổi họp 01/11.
 
 **Điều kiện của tuần (sáng 26/10):** Duy Anh **không tham gia** tuần 2. T01, T10, T11, T20 của Duy Anh đã chuyển sang Tiến (26/10). Mọi phép tính coi sức làm của Duy Anh là 0 cho tới khi có ngày cụ thể. Sức làm: Tiến ~15 giờ (kiêm người tích hợp), Minh ~11 giờ, Bảo ~11 giờ. Review, tích hợp và họp đều được tính vào số giờ này.
 

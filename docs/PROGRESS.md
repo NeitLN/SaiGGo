@@ -14,7 +14,7 @@ Cập nhật 26/10 (chiều) theo [ROADMAP](ROADMAP.md) mục 2: Duy Anh quay l�
 |---|---|---|---|
 | M0 Nền móng | 24/10 (trễ) | 🟨 | T00, T01, T03 xong; T02 chờ merge (#46) |
 | M1 Dijkstra trên đồ thị mẫu | 31/10 | 🟨 | T10, T11 xong; còn CLI (T12, Bảo) |
-| MW Walking skeleton | 29/10 | ⬜ | T13, T14 (Minh), T15 (Bảo) |
+| MW Walking skeleton | 29/10 | 🟨 | T13 xong (#73, Duy Anh); còn T14 (Minh), T15 (Bảo) |
 | M2 A* + đối chứng | 03/11 | 🟨 | T20, T21 xong; T22 còn lệnh CLI; chưa chạy trên dữ liệu thật (chờ T34) |
 | M3 Dữ liệu thô đóng băng, dùng chung | 28/10 | 🟨 | #46 → #47 → #53 chờ approve lại; Release chưa có (T34). T32 đã cắt |
 | M4 Tìm đường trên dữ liệu thật | 03/11 | ⬜ | Chờ T34 |
@@ -40,7 +40,7 @@ Cập nhật 26/10 (chiều) theo [ROADMAP](ROADMAP.md) mục 2: Duy Anh quay l�
 | T10 Hàm địa lý | [#6](https://github.com/NeitLN/SaiGGo/issues/6) | Tiến (chuyển từ Duy Anh 26/10) | ✅ | Đã merge 26/10 (#58). `tests/test_geo.py` 13 passed; `haversine_m` khớp `osmnx.distance.great_circle` (sai số < 0,5 m) và lệch 0 m so với hàm của T31 trên 1.000 cặp điểm |
 | T11 Dijkstra | [#7](https://github.com/NeitLN/SaiGGo/issues/7) | Tiến (chuyển từ Duy Anh 26/10) | ✅ | Đã merge 26/10 (#59). `tests/test_dijkstra.py` khớp 6/6 tình huống tính tay của Bảo (#54) về chi phí, tuyến, `expanded`, và khớp chi phí với NetworkX |
 | T12 CLI | [#8](https://github.com/NeitLN/SaiGGo/issues/8) | Bảo (chuyển từ Tiến 26/10) | ⬜ | 30–31/10 |
-| T13 API skeleton | [#49](https://github.com/NeitLN/SaiGGo/issues/49) | Minh (chuyển từ Tiến 26/10) | ⬜ | 28–29/10 |
+| T13 API skeleton | [#49](https://github.com/NeitLN/SaiGGo/issues/49) | Duy Anh (nhận từ Minh 26/10) | ✅ | Đã merge 26/10 (#73). `POST /api/route` theo contract v1 trên `mini.json` (nạp qua `SAIGO_GRAPH`, sai đường dẫn hoặc file hỏng thì dừng khi khởi động); nhận `dijkstra` và `astar`, có `costs_match`; S→T 80 s (Dijkstra mở 5, A* mở 2), T→S 100 s; `scenario_id` khác `baseline` hoặc `blocked_edge_ids` trả 422 (chưa hỗ trợ ở skeleton, T51). **Chưa làm:** snap có ngưỡng 150 m (T50) |
 | T14 Bản đồ skeleton | [#50](https://github.com/NeitLN/SaiGGo/issues/50) | Minh | ⬜ | 27–28/10 |
 | T15 Chạy MW trên máy thứ hai | [#51](https://github.com/NeitLN/SaiGGo/issues/51) | Bảo | ⬜ | 29/10 |
 | T20 A* | [#9](https://github.com/NeitLN/SaiGGo/issues/9) | Tiến (chuyển từ Duy Anh 26/10) | ✅ | Đã merge 26/10 (#62). `tests/test_astar.py` 24 passed: khớp 6/6 tình huống tính tay của Bảo (#54); cùng chi phí với Dijkstra trên cả 36 cặp node; `h = 0` giống hệt Dijkstra; `reopened = 0`; `c` tự tính giữ A* đúng khi có cạnh ngắn hơn khoảng cách thẳng. **Chưa kiểm chứng:** trên dữ liệu thật (T33) |

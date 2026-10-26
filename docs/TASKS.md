@@ -2,7 +2,7 @@
 
 Mỗi task vừa sức một buổi (khoảng 2–4 giờ). Nếu một task kéo dài quá hai buổi, tách nhỏ và ghi lý do vào [PROGRESS.md](PROGRESS.md). Người phụ trách là **[Đề xuất]**: Tiến có thể vào làm cùng ở mọi task. Ngày 26/10, T01, T10, T11, T20 chuyển từ Duy Anh sang Tiến vì Duy Anh vắng tuần 2.
 
-> **26/10: nhóm đã duyệt kế hoạch tuần 2** ([ROADMAP](ROADMAP.md) mục 6): T12 → Bảo, T13 → Minh, T21 → Bảo (dự phòng). Toàn bộ file đã đồng bộ với [đề xuất phạm vi đã duyệt](proposals/2026-10-26-pham-vi.md): cắt T32, RQ1b 3 kích thước chỉ fixed trips, T53/T54 rút gọn, G1 thành điểm kiểm bằng chứng 05/11, thêm T34. **Chiều 26/10:** Duy Anh quay lại và làm T21, T22, T40, T41, T60 (khung), T64, T70, T71; tour (T72–T74) trở lại phạm vi cam kết (D10 ở PROJECT_BRIEF mục 4).
+> **26/10: nhóm đã duyệt kế hoạch tuần 2** ([ROADMAP](ROADMAP.md) mục 6): T12 → Bảo, T13 → Minh, T21 → Bảo (dự phòng). Toàn bộ file đã đồng bộ với [đề xuất phạm vi đã duyệt](proposals/2026-10-26-pham-vi.md): cắt T32, RQ1b 3 kích thước chỉ fixed trips, T53/T54 rút gọn, G1 thành điểm kiểm bằng chứng 05/11, thêm T34. **Chiều 26/10:** Duy Anh quay lại và làm T13, T21, T22, T40, T41, T60 (khung), T64, T70, T71; tour (T72–T74) trở lại phạm vi cam kết (D10 ở PROJECT_BRIEF mục 4).
 
 Ký hiệu: 👤 phụ trách · ⏱ ước lượng · ⛓ phụ thuộc · 📁 file · 📦 đầu ra · ✅ hoàn thành khi · ▶ kiểm tra · 🧠 kiến thức cần hiểu để giải thích.
 
@@ -155,8 +155,8 @@ Mỗi task ở đây là một GitHub Issue (nhãn `task`). Trạng thái theo d
 Đường mỏng nhất chạy xuyên mọi tầng của hành trình chính, xong trước **29/10**: bấm 2 điểm trên bản đồ → `/api/route` → Dijkstra trên `mini.json` → vẽ tuyến. Mục đích là để lỗi nối ghép (contract API, thứ tự lat/lon, chạy trên máy khác) lộ ra sớm, thay vì đến M6. Contract: [ARCHITECTURE.md](ARCHITECTURE.md) mục 4.1. T51 và T52 sau này mở rộng trên chính code này, không viết lại.
 
 ### T13 — Skeleton phía API: `/api/route` tối giản trên `mini.json`
-- 👤 Minh (Tiến review) · ⏱ 3 h · ⛓ T11, T10 (đã merge)
-- **Chuyển 26/10:** từ Tiến sang Minh; Minh làm trọn lát dọc skeleton (T13 + T14).
+- 👤 Duy Anh (Minh review) · ⏱ 3 h · ⛓ T11, T10 (đã merge) · ✅ đã merge 26/10 (#73)
+- **26/10:** sáng chuyển từ Tiến sang Minh; chiều Duy Anh làm xong (#73), Minh review.
 - **Mục tiêu:** API thật, mỏng nhất, trả tuyến Dijkstra theo đúng contract v1.
 - **Việc cần làm:**
   1. Nạp đồ thị khi khởi động từ `SAIGO_GRAPH` (mặc định `tests/fixtures/mini.json`); `/api/health` báo `dataset_loaded: true`.

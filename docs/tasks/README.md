@@ -10,7 +10,7 @@ Mỗi phiếu tự đủ: người nhận chỉ cần đọc phiếu (và các f
 | [T01 — Định dạng đồ thị, fixture, `load_graph`](T01-graph-format.md) | Tiến | 26–27/10 | [#3](https://github.com/NeitLN/SaiGGo/issues/3) | ✅ #57; còn kiểm dữ liệu thật (chờ T34) |
 | [T10 — Hàm địa lý](T10-geo.md) | Tiến | 26–27/10 | [#6](https://github.com/NeitLN/SaiGGo/issues/6) | ✅ #58 |
 | [T11 — Dijkstra](T11-dijkstra.md) | Tiến | 27–28/10 | [#7](https://github.com/NeitLN/SaiGGo/issues/7) | ✅ #59 |
-| [T13 — API skeleton](T13-api-skeleton.md) | Minh (chuyển từ Tiến 26/10) | 28–29/10 | [#49](https://github.com/NeitLN/SaiGGo/issues/49) | |
+| [T13 — API skeleton](T13-api-skeleton.md) | Duy Anh (sáng giao Minh, chiều Duy Anh làm) | 26/10 | [#49](https://github.com/NeitLN/SaiGGo/issues/49) | ✅ #73 |
 | [T14 — Bản đồ skeleton](T14-map-skeleton.md) | Minh | 27–28/10 | [#50](https://github.com/NeitLN/SaiGGo/issues/50) | |
 | [T15 — Chạy MW trên máy thứ hai](T15-second-machine.md) | Bảo | 29/10 | [#51](https://github.com/NeitLN/SaiGGo/issues/51) | |
 | [T20 — A*](T20-astar.md) | Tiến | 30–31/10 | [#9](https://github.com/NeitLN/SaiGGo/issues/9) | ✅ #62 |
