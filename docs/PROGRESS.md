@@ -52,7 +52,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | T53 UI node mở rộng + kịch bản | [#22](https://github.com/NeitLN/SaiGGo/issues/22) | Minh | ⬜ | |
 | T54 UI đóng đường | [#23](https://github.com/NeitLN/SaiGGo/issues/23) | Minh + Tiến | ⬜ | |
 | T55 Case demo + kiểm thử tay | [#24](https://github.com/NeitLN/SaiGGo/issues/24) | Bảo | ⬜ | |
-| T60 Benchmark vùng demo | [#25](https://github.com/NeitLN/SaiGGo/issues/25) | Tiến | ⬜ | |
+| T60 Benchmark vùng demo | [#25](https://github.com/NeitLN/SaiGGo/issues/25) | Duy Anh | 🟨 | Phần khung, PR chờ review. `scripts/run_benchmarks.py` + `tests/test_run_benchmarks.py`: sinh cặp có seed và phân tầng theo δ (ghi số cặp bị loại, phân bố δ, `L` lấy từ manifest), `queries.csv` ghi trước khi đo, warm-up, R lần lặp đổi thứ tự thuật toán, `gc` tắt khi đo, dừng nếu lệch chi phí; xuất `measurements.csv` (27 cột), `env.json` (có `git_dirty`), `config.json`. Mới chạy trên `mini.json` và đồ thị ngẫu nhiên. **Chưa làm:** 1.000 cặp trên dữ liệu thật (chờ T34), chạy trên Python 3.11 |
 | T61 Cắt lồng nhau | [#26](https://github.com/NeitLN/SaiGGo/issues/26) | Minh | ⬜ | |
 | T62 Tăng quy mô | [#27](https://github.com/NeitLN/SaiGGo/issues/27) | Tiến | ⬜ | |
 | T63 Ùn tắc / đóng đường | [#28](https://github.com/NeitLN/SaiGGo/issues/28) | Tiến | ⬜ | |
