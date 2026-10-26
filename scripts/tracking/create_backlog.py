@@ -44,6 +44,9 @@ MILESTONES = {
     "M1": ("M1 — Dijkstra trên đồ thị mẫu", "2026-10-26",
            "CLI tìm đường trên mini.json khớp bảng tính tay. "
            "Chứng minh: python -m app.cli route --graph tests/fixtures/mini.json --from S --to T --algo dijkstra"),
+    "MW": ("MW — Walking skeleton", "2026-10-29",
+           "Bấm 2 điểm trên bản đồ → /api/route → Dijkstra trên mini.json → vẽ tuyến; chạy được trên máy thứ hai. "
+           "Chứng minh: pytest tests/test_api_route.py; thao tác ✅ của T14 và T15"),
     "M2": ("M2 — A* và đối chứng", "2026-10-28",
            "A* cùng chi phí, ít node hơn; test ngẫu nhiên khớp NetworkX. "
            "Chứng minh: pytest tests/test_astar.py tests/test_oracle_networkx.py"),
@@ -260,21 +263,25 @@ def labels_for(sched: dict) -> list[str]:
 
 
 # Nhãn do script quản lý; các nhãn khác (blocked, bug, …) do người dùng gắn và được giữ nguyên.
-MANAGED_LABELS = {n for n in LABELS if n == "task" or n in ("P0", "P1", "P2") or n.startswith(("area:", "type:"))}
+def is_managed_label(name: str) -> bool:
+    """Nhãn do script quản lý, nhận theo mẫu tên (kể cả nhãn area:/type: cũ đã bỏ khỏi LABELS)."""
+    return name in ("task", "P0", "P1", "P2") or name.startswith(("area:", "type:"))
 
 
 def merge_labels(managed: list[str], current: list[dict]) -> list[str]:
-    return managed + [l["name"] for l in current if l["name"] not in MANAGED_LABELS]
+    return managed + [l["name"] for l in current if not is_managed_label(l["name"])]
 
 
 def keep_checked(new_body: str, old_body: str) -> str:
-    """Giữ các checkbox người dùng đã tick trong nội dung cũ."""
-    checked = {line.strip()[6:] for line in (old_body or "").splitlines()
+    """Giữ các checkbox người dùng đã tick trong nội dung cũ (bỏ qua thụt lề và khoảng trắng cuối dòng)."""
+    checked = {line.strip()[6:].strip() for line in (old_body or "").splitlines()
                if line.strip().lower().startswith("- [x] ")}
     out = []
     for line in new_body.splitlines():
-        if line.startswith("- [ ] ") and line[6:] in checked:
-            line = "- [x] " + line[6:]
+        indent = line[:len(line) - len(line.lstrip())]
+        item = line.strip()
+        if item.startswith("- [ ] ") and item[6:].strip() in checked:
+            line = f"{indent}- [x] {item[6:]}"
         out.append(line)
     return "\n".join(out) + ("\n" if new_body.endswith("\n") else "")
 
