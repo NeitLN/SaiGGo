@@ -43,7 +43,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | T31 Chuyển đổi + báo cáo | [#13](https://github.com/NeitLN/SaiGGo/issues/13) | Minh + Tiến | ⬜ | |
 | T32 Vẽ mạng đường | [#14](https://github.com/NeitLN/SaiGGo/issues/14) | Minh | ⬜ | |
 | T33 Dữ liệu thật + đối chứng | [#15](https://github.com/NeitLN/SaiGGo/issues/15) | Duy Anh + Tiến | ⬜ | |
-| T40 Snapshot ùn tắc | [#16](https://github.com/NeitLN/SaiGGo/issues/16) | Tiến | ⬜ | |
+| T40 Snapshot ùn tắc | [#16](https://github.com/NeitLN/SaiGGo/issues/16) | Duy Anh | 🟨 | PR chờ review. `tests/test_scenario.py` 22 passed: vùng tâm A r = 220 m, α = 2 → S→B→T 100 s; α = 2 mọi cạnh → tuyến không đổi, 160 s; α < 1 bị từ chối; đồ thị gốc không đổi; chồng vùng lấy `max`; lọc `highway`; file kịch bản lỗi bị từ chối. **Chưa làm:** CLI `--scenario/--block` (chờ T12) |
 | T41 Đóng đường | [#17](https://github.com/NeitLN/SaiGGo/issues/17) | Tiến | ⬜ | |
 | T42 Kịch bản demo | [#18](https://github.com/NeitLN/SaiGGo/issues/18) | Bảo | ⬜ | |
 | T50 Snap | [#19](https://github.com/NeitLN/SaiGGo/issues/19) | Minh | ⬜ | |
