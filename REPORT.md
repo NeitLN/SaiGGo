@@ -1,12 +1,12 @@
 ## 📉 Burndown SaiGo
 
-_Tự động cập nhật 04:22 28/10/2026 (giờ VN) bởi workflow `tracking.yml` từ trạng thái issue/PR thật. Số những ngày đã qua được chốt cuối ngày và không bị sửa lại; số hôm nay là tạm tính. Cách tính ở đầu file `scripts/tracking/burndown.py`._
+_Tự động cập nhật 21:40 28/10/2026 (giờ VN) bởi workflow `tracking.yml` từ trạng thái issue/PR thật. Số những ngày đã qua được chốt cuối ngày và không bị sửa lại; số hôm nay là tạm tính. Cách tính ở đầu file `scripts/tracking/burndown.py`._
 
-![Burndown](https://raw.githubusercontent.com/NeitLN/SaiGo/tracking/burndown.png?v=40586249694)
+![Burndown](https://raw.githubusercontent.com/NeitLN/SaiGo/tracking/burndown.png?v=40708316168)
 
-- **Phạm vi hiện tại:** 139 giờ ước lượng, 46 task
-- **Đã đóng:** 56 giờ — có bằng chứng (PR/commit) 56 giờ · **Còn lại:** 83 giờ, 27 task mở
-- **Đường lý tưởng hôm nay:** 93 giờ → nhanh hơn kế hoạch 10.0 giờ
+- **Phạm vi hiện tại:** 136 giờ ước lượng, 45 task (đã cắt 3 giờ)
+- **Đã đóng:** 56 giờ — có bằng chứng (PR/commit) 56 giờ · **Còn lại:** 80 giờ, 26 task mở
+- **Đường lý tưởng hôm nay:** 93 giờ → nhanh hơn kế hoạch 13.0 giờ (trong đó 3 giờ là do cắt phạm vi, không phải do làm xong)
 - Mốc: cổng G1 05/11 · final ready 12/11 · thuyết trình 19/11 · nộp 22/11
 
 ### Theo tuần
@@ -14,7 +14,7 @@ _Tự động cập nhật 04:22 28/10/2026 (giờ VN) bởi workflow `tracking.
 | Tuần | Giờ đến hạn | Giờ hoàn thành | Task xong | Còn lại cuối tuần | PR merge | Lượt review |
 |---|---:|---:|---:|---:|---:|---:|
 | Tuần 1 · 19–25/10 | 27 | 10 | 3 | 129 | 2 | 3 |
-| Tuần 2 · 26/10–01/11 | 47 | 46 | 16 | 83 | 22 | 26 |
+| Tuần 2 · 26/10–01/11 | 44 | 46 | 16 | 80 | 23 | 26 |
 | Tuần 3 · 02–08/11 | 48 | 0 | 0 | — | 0 | 0 |
 | Tuần 4 · 09–15/11 | 17 | 0 | 0 | — | 0 | 0 |
 
@@ -24,11 +24,12 @@ _Tự động cập nhật 04:22 28/10/2026 (giờ VN) bởi workflow `tracking.
 |---|---:|---:|---:|---:|---:|---:|---:|
 | Bảo (@dobaovlu) | 19.2 | 5.0 | 2 | 0 | 7 | 1 | 8 |
 | Duy Anh (@anh7032) | 16.8 | 12.0 | 4 | 0 | 3 | 12 | 5 |
-| Minh (@Jayson135724) | 32.8 | 2.0 | 1 | 0 | 13 | 0 | 15 |
-| Tiến (@NeitLN) | 70.2 | 37.0 | 12 | 0 | 14 | 11 | 1 |
+| Minh (@Jayson135724) | 29.8 | 2.0 | 1 | 0 | 12 | 0 | 15 |
+| Tiến (@NeitLN) | 70.2 | 37.0 | 12 | 0 | 14 | 12 | 1 |
 
 ### Đóng trong 7 ngày qua
 
+- 28/10 · #14 T32 · Vẽ mạng đường thật trên bản đồ (3 h, đã cắt khỏi phạm vi)
 - 26/10 · #49 T13 · Skeleton phía API: `/api/route` tối giản trên `mini.json` (3 h, qua PR)
 - 26/10 · #48 T06 · Bộ nhớ dự án, quyết định đắt nếu đổi, hàng rào kỹ thuật (3 h, qua PR)
 - 26/10 · #33 T71 · Held–Karp làm đối chứng (3 h, qua PR)
