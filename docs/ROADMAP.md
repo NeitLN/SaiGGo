@@ -2,71 +2,78 @@
 
 Lập ngày 23/10/2026. Mốc của giảng viên (tentative, theo Project_Intructions_261.pdf): **12/11 final ready · 19/11 thuyết trình 15 phút · 22/11 nộp ETC**.
 
-> **26/10: nhóm đã duyệt kế hoạch tuần 2 (mục 6) và [đề xuất đổi phạm vi](proposals/2026-10-26-pham-vi.md).** Mục 1–5 dưới đây chưa được sửa theo quyết định đó; PR đồng bộ sẽ làm ngay sau. Trong lúc chờ, nếu hai nơi lệch nhau thì **đề xuất phạm vi đã duyệt được ưu tiên** (cắt tour, bỏ vẽ toàn mạng đường, RQ1b 3 kích thước chỉ fixed trips, điểm kiểm 05/11, MVP 08/11).
+> **26/10: đổi phạm vi đã duyệt** ([đề xuất](proposals/2026-10-26-pham-vi.md); D10–D13 ở [PROJECT_BRIEF](PROJECT_BRIEF.md) mục 4): bỏ vẽ toàn mạng đường (T32), RQ1b 3 kích thước chỉ fixed trips, **điểm kiểm bằng chứng 05/11** thay cổng G1, **MVP tích hợp 08/11**. Tour bị cắt sáng 26/10 rồi **giữ lại chiều 26/10** khi Duy Anh quay lại (D10). Mục 1–5 dưới đây đã sửa theo; bản trước nằm trong lịch sử git.
 
 Nguyên tắc:
 
 - Mỗi mốc kết thúc bằng **một kết quả chạy được** và một lệnh/thao tác để chứng minh.
 - Hai track song song từ ngày đầu, gặp nhau ở M4:
   - **Track A (thuật toán):** đồ thị mẫu tính tay được → Dijkstra → A*.
-  - **Track D (dữ liệu):** cài OSMnx trên Windows → tải dữ liệu thật → hiện lên bản đồ.
+  - **Track D (dữ liệu):** cài OSMnx trên Windows → tải dữ liệu thật một lần → đóng băng, dùng chung.
 - Định dạng đồ thị `saigo-graph/1` ([DATA_MODEL.md](DATA_MODEL.md) mục 2) được chốt ở T01, nên hai track cùng nhắm một định dạng.
-- Ngày trong bảng là **[Đề xuất]**. Mỗi mốc chừa thời gian dự phòng, vì cài đặt và gỡ lỗi thường lâu hơn dự kiến.
+- Ngày trong bảng là kế hoạch đã duyệt 26/10. Mỗi mốc chừa thời gian dự phòng, vì cài đặt và gỡ lỗi thường lâu hơn dự kiến.
 
 ## 1. Tổng quan
 
 ```text
 Ngày     23 24 25 26 27 28 29 30 31 01 02 03 04 05 06 07 08 09 10 11 12
-Track A  M0 M1 M1 M2 M2 M2
+Track A  M0 M1 M1 M1 M2 M2 M2 M2 M2 M2 M2 M2
 Track D  M0 M3 M3 M3 M3 M3
-Skeleton             MW MW MW                      (thêm 25/10: nối mọi tầng trên mini.json trước khi có dữ liệu thật)
-Chung                   M4 M4 M5 M5 M6 M6 M6 M6
-Bench                                  M7 M7 M7 M7 M7
-Tour E1                 M8a(thuật toán trên ma trận)     │ M8b tích hợp
-Hoàn thiện                                                  M9 M9 M9 M9 M9
-Cổng                                             G1(05/11)          Freeze(10/11) Final(12/11)
+Skeleton             MW MW MW
+Chung                                     M4 M4 M5 M5 M5
+Bản đồ                                    M6 M6 M6 M6 M6 M6
+Bench                                        M7 M7 M7 M7 M7 M7
+Tour     M8(T70, T71 xong 26/10)                     M8 M8 M8
+Essay                                     ─────────────────────────────
+Mốc                                                  05/11       08/11    12/11
+                                                     điểm kiểm   MVP      final
+Hoàn thiện                                                          M9 M9 M9 M9
 ```
+
+Tour (M8): thuật toán trên ma trận đã xong 26/10; T72–T74 (ma trận từ đồ thị, API, UI, benchmark) 05–08/11.
 
 ## 2. Các mốc
 
 | Mốc | Thời gian | Kết quả chạy được | Lệnh / cách chứng minh | Task |
 |---|---|---|---|---|
-| **M0** Nền móng | 23–24/10 | Khung chạy trên Windows; fixture `mini.json` nạp được; OSMnx tải được một vùng nhỏ | `pytest -q` xanh; `python scripts/prepare_data.py --smoke` in số node/cạnh | T00–T03 |
-| **M1** Dijkstra trên đồ thị mẫu | 24–26/10 | CLI tìm đường trên `mini.json`, in tuyến, chi phí, số node mở rộng khớp bảng tính tay | `python -m app.cli route --graph tests/fixtures/mini.json --from S --to T --algo dijkstra` → `cost 80.0 s, expanded 5` | T10–T12 |
-| **MW** Walking skeleton *(thêm 25/10)* | 27–29/10 | Bấm 2 điểm trên bản đồ → `/api/route` → Dijkstra trên `mini.json` → vẽ tuyến; chạy được trên máy thứ hai | `pytest tests/test_api_route.py`; thao tác ✅ của T14 trên máy Tiến và máy Bảo | T13–T15 |
-| **M2** A* + đối chứng | 26–28/10 | A* cho cùng chi phí, ít node hơn; test ngẫu nhiên khớp NetworkX | `pytest tests/test_astar.py tests/test_oracle_networkx.py -q` xanh; CLI `--algo astar` → `expanded 2` | T20–T22 |
-| **M3** Dữ liệu thật trên bản đồ *(song song M0–M2)* | 23–28/10 | File JSON vùng demo + manifest; trình duyệt vẽ mạng đường thật | `python scripts/prepare_data.py` sinh `data/processed/*.json`; mở `http://localhost:5173` thấy mạng đường | T30–T32 |
-| **M4** Tìm đường trên dữ liệu thật | 28–29/10 | CLI chạy Dijkstra/A* trên đồ thị thật; 200 cặp khớp NetworkX; báo cáo heuristic (`c`, `v_max`) | `python -m app.cli route --graph data/processed/<id>.json --from-latlon ... --to-latlon ...`; `pytest -m realdata` | T33 |
-| **M5** Ùn tắc & đóng đường | 29–31/10 | Snapshot với vùng ùn tắc và cạnh đóng; CLI cho thấy tuyến đổi, `no_path` khi cần | `pytest tests/test_scenario.py -q`; CLI `--scenario peak-center --block 123` | T40–T42 |
-| **M6** Bản đồ tương tác | 31/10–04/11 | Bấm 2 điểm → 2 tuyến + bảng so sánh + chấm node mở rộng; chọn kịch bản; bấm để đóng đoạn; báo không có đường | Checklist thủ công UI-1…UI-8 trong [PROGRESS.md](PROGRESS.md); `pytest tests/test_api_route.py` | T50–T55 |
-| **M7** Benchmark & tăng quy mô | 02–06/11 | CSV đo thật + biểu đồ: 1.000 cặp vùng demo, 4 kích thước đồ thị, thí nghiệm ùn tắc/đóng đường | `python scripts/run_benchmarks.py --suite all`; `python scripts/plot_results.py results/<run_id>` | T60–T65 |
-| **G1** Cổng MVP | **05/11** | Quyết định có tích hợp tour vào API/UI hay không | Đủ điều kiện ở mục 3 | — |
-| **M8** Tour (E1) | a) 29/10–02/11 · b) 05–08/11 | a) NN, 2-opt có hướng, Held–Karp chạy trên ma trận; b) `/api/tour`, preset kho + 5 điểm, benchmark tour | a) `pytest tests/test_tour.py`; b) `python scripts/run_benchmarks.py --suite tour` | T70–T74 |
-| **M9** Hoàn thiện | 08–12/11 | Đóng băng tính năng 10/11; chạy lại trên máy thứ hai theo README; video demo dự phòng; số liệu vào essay | Checklist ở T80–T83 | T80–T83 |
+| **M0** Nền móng | 23–24/10 (trễ; phần lớn xong 26/10) | Khung chạy trên Windows; fixture `mini.json` nạp được; OSMnx tải được một vùng nhỏ | `pytest -q` xanh; `python scripts/prepare_data.py --smoke` in số node/cạnh | T00–T06 |
+| **M1** Dijkstra trên đồ thị mẫu | 24–31/10 | Dijkstra khớp bảng tính tay; CLI in tuyến, chi phí, số node mở rộng cho cả hai thuật toán | `python -m app.cli route --graph tests/fixtures/mini.json --from S --to T --algo both` → Dijkstra `80 s, expanded 5`; A* `80 s, expanded 2` | T10–T12 |
+| **MW** Walking skeleton | 27–29/10 | Bấm 2 điểm trên bản đồ → `/api/route` → Dijkstra trên `mini.json` → vẽ tuyến; chạy được trên máy thứ hai | `pytest tests/test_api_route.py`; thao tác ✅ của T14 trên máy Minh và máy Bảo | T13–T15 |
+| **M2** A* + đối chứng | 26/10–03/11 | A* cho cùng chi phí, ít node hơn; test ngẫu nhiên khớp NetworkX; báo cáo heuristic trên dữ liệu thật | `pytest tests/test_astar.py tests/test_oracle_networkx.py -q` xanh; `check-heuristic` (T22) | T20–T22 |
+| **M3** Dữ liệu thô đóng băng, dùng chung | 23–28/10 | `outer.graphml` trên Release, hai máy cùng sha256; JSON vùng demo + manifest | `gh release view data-raw-20261024`; `python scripts/prepare_data.py build --area demo`; `pytest -m realdata` | T30, T31, T34 (T32 đã cắt) |
+| **M4** Tìm đường trên dữ liệu thật | 02–03/11 | Dijkstra/A* trên đồ thị thật; 200 cặp khớp NetworkX; `c`, `v_max` ghi vào manifest | `pytest -m realdata`; CLI `--from-latlon ... --to-latlon ...` | T33 |
+| **M5** Ùn tắc & đóng đường | 02–04/11 | Snapshot với vùng ùn tắc và cạnh đóng; tuyến đổi, `no_path` khi cần | `pytest tests/test_scenario.py tests/test_closures.py -q`; CLI `--scenario peak-center --block 123` | T40–T42 |
+| **M6** Bản đồ tương tác (rút gọn) | 02–07/11 | Bấm 2 điểm → tuyến + bảng Dijkstra/A*; chọn kịch bản, vẽ vùng ùn tắc; bấm đoạn trên tuyến để đóng, mở lại; báo không có đường | Checklist UI trong [PROGRESS.md](PROGRESS.md); `pytest tests/test_api_route.py` | T50–T55 |
+| **M7** Benchmark & tăng quy mô | 02–08/11 | CSV đo thật + biểu đồ: 1.000 cặp vùng demo, 3 kích thước đồ thị (fixed trips), thí nghiệm ùn tắc/đóng đường | `python scripts/run_benchmarks.py --suite all`; `python scripts/plot_results.py results/<run_id>` | T60–T65 |
+| **G1** Điểm kiểm bằng chứng | **05/11** | Biết chắc MVP có kịp 08/11 không; nếu không thì cắt theo thứ tự đã duyệt | Điều kiện ở mục 3 | G1 |
+| **MVP** tích hợp | **08/11** | Demo rút gọn chạy trọn ([DEMO.md](DEMO.md)) + bằng chứng thực nghiệm đã chốt | Chạy kịch bản demo; mọi số trong EXPERIMENTS.md có `run_id` | — |
+| **M8** Tour (E1) | 26/10 · 05–08/11 | NN, 2-opt có hướng, Held–Karp trên ma trận (xong 26/10); ma trận chi phí từ đồ thị, `/api/tour`, UI kho + 5 điểm, benchmark tour | `pytest tests/test_tour.py`; `python scripts/run_benchmarks.py --suite tour`; bước 9 của demo | T70–T74 |
+| **M9** Hoàn thiện | 09–12/11 | Không thêm tính năng; chạy lại trên máy thứ hai theo README; video demo dự phòng; số liệu vào essay. Essay bắt đầu từ 02/11 | Checklist ở T80–T83 | T80–T83 |
 
 Sau 12/11: 13–18/11 làm slide và tập dượt; 19/11 thuyết trình; 20–22/11 nộp theo thông báo cuối.
 
-## 3. Cổng G1 (05/11) — điều kiện để tích hợp tour
+## 3. Điểm kiểm bằng chứng 05/11 (G1)
 
-Chỉ tích hợp tour vào API/UI (M8b) khi **tất cả** điều kiện sau đạt:
+Từ 26/10 G1 không còn quyết định tích hợp tour (tour đã nằm trong phạm vi). Ngày 05/11 cả nhóm kiểm:
 
-- [ ] Dijkstra và A* khớp NetworkX trên fixture, trên đồ thị ngẫu nhiên và trên 200 cặp dữ liệu thật.
-- [ ] Đóng đường không bao giờ dùng cạnh bị đóng (có test); `no_path` hiển thị đúng.
-- [ ] Demo M6 chạy trọn checklist trên laptop demo.
-- [ ] Benchmark 1.000 cặp và ít nhất 2 kích thước của thí nghiệm tăng quy mô đã có CSV thật.
+- [ ] **Đúng đắn:** Dijkstra và A* khớp NetworkX trên fixture, trên đồ thị ngẫu nhiên và trên 200 cặp dữ liệu thật.
+- [ ] **CSV benchmark đầu tiên:** ít nhất bộ 1.000 cặp vùng demo (E2) đã có số đo thật.
+- [ ] **Đóng đường chạy trên bản đồ:** không bao giờ dùng cạnh bị đóng (có test); `no_path` hiển thị đúng.
+- [ ] **Giờ còn lại của từng người** tới 08/11 đủ cho phần còn thiếu.
 
-Nếu chưa đạt: dừng M8b, dồn người vào phần còn thiếu, và giữ tour ở mức thuật toán + benchmark CLI (nếu M8a đã xong). Ghi quyết định vào PROGRESS.md.
+Không đạt thì kích hoạt cắt theo [đề xuất phạm vi](proposals/2026-10-26-pham-vi.md) mục 4. Khoản 4 (đóng đường qua API/CLI) và 5 (RQ1b còn 2 kích thước) cần nhóm đồng ý riêng. Ghi quyết định vào PROGRESS.md.
 
 ## 4. Đường găng và rủi ro
 
 | Rủi ro | Phát hiện sớm ở | Phương án |
 |---|---|---|
 | OSMnx không cài được trên Windows | T02 (ngày 23–24/10) | Môi trường conda-forge riêng cho bước dữ liệu; app không cần OSMnx |
-| Đảo lat/lon, sai đơn vị → A* sai | T22, T31 (`c < 0,999`) | Test đặt tên trường; điều tra cạnh vi phạm |
-| Vẽ mạng đường quá chậm | T32 | Thu nhỏ vùng demo; Canvas renderer |
+| Dữ liệu thô không tái lập được (tải lại ra số khác) | T34 | Chỉ dùng bản trên Release, kiểm sha256; không ai tải lại OSM |
+| Đảo lat/lon, sai đơn vị → A* sai | T22, T31 (`c < 0,999`) | `geo_scale` tự giảm `c`; điều tra cạnh vi phạm |
 | Python quá chậm ở đồ thị lớn | T61 (pilot) | Dừng ở kích thước có median Dijkstra ≈ 1 s; chỉ báo cáo các kích thước đã đo |
-| Một người làm chính cả hai track | Lịch M0–M3 | Track A do Duy Anh làm chính, Track D do Minh làm chính; Tiến review và hỗ trợ khi bị chặn |
-| Trễ sau 05/11 | G1 | Thứ tự cắt ở PROJECT_BRIEF mục 3.2 |
+| Thiếu người (Duy Anh vắng sáng 26/10) | Đã hết: Duy Anh quay lại chiều 26/10 | Rà lại ngân sách tuần 3 ở buổi họp 01/11, gồm cả T72–T74 |
+| Làm song song nhiều PR lớn, review vội | Mỗi PR | Người review chạy test và để lại ít nhất một nhận xét cụ thể; PR lớn tách nhỏ |
+| Trễ sau 05/11 | Điểm kiểm G1 | Thứ tự cắt đã duyệt ([đề xuất phạm vi](proposals/2026-10-26-pham-vi.md) mục 4) |
 
 ## 5. Quyết định đắt nếu đổi
 
@@ -74,14 +81,14 @@ Nếu chưa đạt: dừng M8b, dồn người vào phần còn thiếu, và gi�
 
 | # | Quyết định | Việc phải chờ (chốt trước việc này) | Hạn chốt | Nếu thiếu bằng chứng thì kiểm bằng | Trạng thái |
 |---|---|---|---|---|---|
-| Q1 | Định dạng `saigo-graph/1` và cách đánh ID cạnh `(u, v, key)` ([DATA_MODEL](DATA_MODEL.md) mục 2) | T11 (bắt đầu), T31 (bắt đầu), T41, T51 | 24/10 | `mini.json` nạp được bằng `load_graph` (T01) | **Trễ**: chờ T01 |
-| Q2 | Bản dữ liệu thô dùng chung (sha256 `24a28327…`) và nơi lưu cho cả nhóm | T31, T61, mọi benchmark | 26/10 | Hai máy tải từ Release ra cùng sha256 | Đã tải (PR #47); chưa chia sẻ |
-| Q3 | Vùng demo (nửa cạnh 2 km) và các kích thước của thí nghiệm tăng quy mô | T31, T61, T62 | 27/10 (T61 chốt sau pilot) | Pilot T61: đo median Dijkstra ở kích thước lớn nhất | **[Đề xuất]**, chờ họp |
-| Q4 | Bảng tốc độ `speeds.json` (cũng quyết định `v_max`) | T22, T33, T60 | 28/10 | `check-heuristic` trên đồ thị thật (T22) | **[Giả định]**, chờ họp |
-| Q5 | Mô hình ùn tắc (`max α`, trung điểm cạnh) và cách đóng đoạn (cạnh đối) ([DATA_MODEL](DATA_MODEL.md) mục 4) | T40, T41, T63 | 29/10 | Test trên `mini.json`: vùng ùn tắc đổi tuyến, nhân đều không đổi | Đã ghi trong DATA_MODEL; chưa có code |
-| Q6 | Contract `/api/route` (request/response, [ARCHITECTURE](ARCHITECTURE.md) mục 4) | T51 và T52 (T52 code trước được với contract này) | 30/10 | Test API với fixture (T51) | Đã ghi trong ARCHITECTURE; chưa có code |
-| Q7 | Môi trường đo: phiên bản Python và thư viện được khóa; quy trình đo ([EXPERIMENT_PLAN](EXPERIMENT_PLAN.md) mục 3) | T60, T62, T63 | 01/11 | Chạy lại một bộ nhỏ trên máy thứ hai ra cùng chi phí | **Mở**: chưa khóa phiên bản |
-| Q8 | Có tích hợp tour vào API/UI hay không (cổng G1) | T72, T73, T74 | 05/11 | Điều kiện ở mục 3 | Chưa tới hạn |
+| Q1 | Định dạng `saigo-graph/1` và cách đánh ID cạnh `(u, v, key)` ([DATA_MODEL](DATA_MODEL.md) mục 2) | T11 (bắt đầu), T31 (bắt đầu), T41, T51 | 24/10 | `mini.json` nạp được bằng `load_graph` (T01) | **Đã chốt**: T01 merge (#57); kiểm thứ tự `(u, v, key)` khi nạp ở #61 |
+| Q2 | Bản dữ liệu thô dùng chung (sha256 `24a28327…`) và nơi lưu cho cả nhóm | T31, T61, mọi benchmark | 26/10 | Hai máy tải từ Release ra cùng sha256 | **Đã duyệt 26/10** (Release `data-raw-20261024`); chờ T34 tạo Release |
+| Q3 | Vùng demo (nửa cạnh 2 km) và các kích thước của thí nghiệm tăng quy mô | T31, T61, T62 | 27/10 (T61 chốt sau pilot) | Pilot T61: đo median Dijkstra ở kích thước lớn nhất | Vùng demo **đã duyệt 26/10**; 3 kích thước chốt sau pilot T61 |
+| Q4 | Bảng tốc độ `speeds.json` (cũng quyết định `v_max`) | T22, T33, T60 | 28/10 | `check-heuristic` trên đồ thị thật (T22) | **Đã duyệt 26/10**, đóng băng (`v_max` 40 km/h); tốc độ vẫn là giả định mô phỏng. Đổi sau 02/11 thì chạy lại toàn bộ benchmark |
+| Q5 | Mô hình ùn tắc (`max α`, trung điểm cạnh) và cách đóng đoạn (cạnh đối) ([DATA_MODEL](DATA_MODEL.md) mục 4) | T40, T41, T63 | 29/10 | Test trên `mini.json`: vùng ùn tắc đổi tuyến, nhân đều không đổi | **Đã duyệt 26/10**; chưa có code |
+| Q6 | Contract `/api/route` (request/response, [ARCHITECTURE](ARCHITECTURE.md) mục 4) | T13, T51 và T52 (T52 code trước được với contract này) | 30/10 | Test API với fixture (T13, T51) | **Đã chốt 25/10** (v1, chỉ được thêm trường); T13 hiện thực |
+| Q7 | Môi trường đo: phiên bản Python và thư viện được khóa; quy trình đo ([EXPERIMENT_PLAN](EXPERIMENT_PLAN.md) mục 3) | T60, T62, T63 | 01/11 | Chạy lại một bộ nhỏ trên máy thứ hai ra cùng chi phí | **Đã duyệt 26/10**: máy Tiến, Python 3.11.9 + `requirements-lock.txt`; chưa có benchmark tái lập |
+| Q8 | Có tích hợp tour vào API/UI hay không | T72, T73, T74 | 05/11 | — | **Đã quyết 26/10: có** (D10; sáng cắt, chiều giữ lại khi Duy Anh quay lại) |
 
 ## 6. Kế hoạch tuần 2 (26/10–01/11) — **Đã duyệt 26/10**
 
@@ -93,14 +100,16 @@ Chương trình họp: [team/meetings/2026-10-26-agenda.md](team/meetings/2026-1
 > - Các khoản cắt có yêu cầu đồng ý riêng ([đề xuất](proposals/2026-10-26-pham-vi.md) mục 4, khoản 4 và 5) chưa được coi là đã kích hoạt. Ngân sách tuần 3–4 vẫn thiếu và được rà lại ngày 01/11.
 > - Biên bản/ghi nhận chính thức: sẽ do Bảo (thư ký) đăng trên issue *Biên bản họp*.
 
-**Điều kiện của tuần:** Duy Anh **không tham gia** tuần 2. T01, T10, T11, T20 của Duy Anh đã chuyển sang Tiến (26/10). Mọi phép tính coi sức làm của Duy Anh là 0 cho tới khi có ngày cụ thể. Sức làm: Tiến ~15 giờ (kiêm người tích hợp), Minh ~11 giờ, Bảo ~11 giờ. Review, tích hợp và họp đều được tính vào số giờ này.
+> **Cập nhật chiều 26/10:** Duy Anh quay lại và đã merge T13, T21, T22, T40, T41, T60 (khung), T64, T70, T71. Tiến chốt: tour (T72–T74) trở lại phạm vi; không gửi thư riêng cho giảng viên. Bảng 6.2–6.5 dưới đây là kế hoạch sáng 26/10; phần việc đã làm ghi ở [PROGRESS](PROGRESS.md), ngân sách tuần 3 rà lại ở buổi họp 01/11.
+
+**Điều kiện của tuần (sáng 26/10):** Duy Anh **không tham gia** tuần 2. T01, T10, T11, T20 của Duy Anh đã chuyển sang Tiến (26/10). Mọi phép tính coi sức làm của Duy Anh là 0 cho tới khi có ngày cụ thể. Sức làm: Tiến ~15 giờ (kiêm người tích hợp), Minh ~11 giờ, Bảo ~11 giờ. Review, tích hợp và họp đều được tính vào số giờ này.
 
 ### 6.1. Mục tiêu tuần (mỗi mục kiểm được bằng lệnh hoặc thao tác)
 
 1. **Walking skeleton (MW) chạy trên 2 máy trước hết 29/10:** bấm 2 điểm → `/api/route` → Dijkstra trên `mini.json` → vẽ tuyến. Minh làm cả hai phía (T13, T14); Bảo làm lại được trên máy mình từ code đã merge (T15).
 2. **M1 + M2 trên đồ thị mẫu:** Dijkstra **đã đạt** (T11, #59: khớp 6/6 tình huống tính tay của T03). Còn A* (T20) và CLI chạy được cả hai thuật toán (T12).
 3. **Dữ liệu đóng băng dùng chung (thay cho M3 cũ):** `outer.graphml` lên Release, hai máy kiểm cùng sha256; `load_graph` (T01) đọc được đồ thị vùng demo của T31.
-4. **Quyết định phạm vi và Q1–Q5, Q7: đã chốt 26/10.** Còn phải biến thành hành động: PR đồng bộ tài liệu và GitHub (mục 6.6), thư báo giảng viên.
+4. **Quyết định phạm vi và Q1–Q5, Q7: đã chốt 26/10**, tài liệu đã đồng bộ (mục 6.6). Còn: cập nhật GitHub sau khi PR đồng bộ merge.
 
 Không thuộc tuần 2, dời sang tuần 3: snap có ngưỡng (T50), đối chứng NetworkX trên dữ liệu thật (T22, T33), ùn tắc và đóng đường (T40–T42). Vẽ toàn bộ mạng đường (T32) **đã cắt** khỏi phạm vi cam kết.
 
@@ -176,11 +185,11 @@ Hai task song song không sửa cùng một file. Khi cần sửa file của ng�
 | T50 | 2 | 3 | T13 đã nạp đồ thị khi khởi động; snap tạm đủ cho skeleton |
 | T40, T41, T42 | 2 | 3 | Phụ thuộc T11; tuần 2 ưu tiên MW và A* |
 | T32 | 2 | **Cắt** (Quyết định 1) | Dùng nền tile OSM, chỉ vẽ tuyến |
-| T70–T74 (tour) | 2–3 | **Cắt khỏi phạm vi cam kết** (Quyết định 1) | Xem đề xuất phạm vi |
+| T70–T74 (tour) | 2–3 | Sáng 26/10 cắt; chiều 26/10 giữ lại: T70, T71 đã xong, T72–T74 05–08/11 | Duy Anh quay lại |
 
-**PR đồng bộ (Tiến, ngay sau khi PR này merge).** Cập nhật nguồn dữ liệu trước, chạy `--sync` sau cùng:
-1. ROADMAP mục 1–5 (mốc, G1 thành điểm kiểm bằng chứng, bỏ M8, Q8); TASKS phần ngoài tuần 2 (M3, T32, T50–T55, T61–T64, G1, T70–T74, T80–T83, người làm T22/T33).
-2. PROJECT_BRIEF, EXPERIMENT_PLAN (E3 chỉ fixed trips, 3 kích thước; E5 thành mở rộng), DEMO, PROGRESS (bảng trạng thái và checklist UI; giữ nguyên nhật ký).
+**PR đồng bộ (Tiến, 26/10).** Mục 1–4 đã làm trong PR đồng bộ; mục 4 (GitHub) và 5 làm ngay khi PR đó merge. Cập nhật nguồn dữ liệu trước, chạy `--sync` sau cùng:
+1. ROADMAP mục 1–5 (mốc, G1 thành điểm kiểm bằng chứng, M8, Q8); TASKS phần ngoài tuần 2 (M3, T32, T50–T55, T61–T64, G1, T70–T74, T80–T83, người làm T22/T33).
+2. PROJECT_BRIEF, EXPERIMENT_PLAN (E3 chỉ fixed trips, 3 kích thước; E5 giữ lại), DEMO, PROGRESS (bảng trạng thái và checklist UI; giữ nguyên nhật ký).
 3. Mô tả milestone trong `scripts/tracking/create_backlog.py` và `tracking/schedule.csv`; thêm T34.
-4. Đóng T32 và T70–T74 với lý do *not planned*; rồi chạy `create_backlog.py --sync` và `setup_project.py --sync`.
-5. Tiến gửi thư báo giảng viên (mẫu ở đề xuất phạm vi mục 6).
+4. Đóng T32 với lý do *not planned*; rồi chạy `create_backlog.py --sync` và `setup_project.py --sync`.
+5. Không gửi thư riêng cho giảng viên (quyết định chiều 26/10); lý do đổi phạm vi ghi trong PROJECT_BRIEF mục 4 và essay.
