@@ -53,7 +53,7 @@ Ký hiệu: ⬜ chưa làm · 🟨 đang làm · ✅ xong và **đã kiểm ch�
 | T54 UI đóng đường | [#23](https://github.com/NeitLN/SaiGGo/issues/23) | Minh + Tiến | ⬜ | |
 | T55 Case demo + kiểm thử tay | [#24](https://github.com/NeitLN/SaiGGo/issues/24) | Bảo | ⬜ | |
 | T60 Benchmark vùng demo | [#25](https://github.com/NeitLN/SaiGGo/issues/25) | Duy Anh | 🟨 | Phần khung, PR chờ review. `scripts/run_benchmarks.py` + `tests/test_run_benchmarks.py`: sinh cặp có seed và phân tầng theo δ (ghi số cặp bị loại, phân bố δ, `L` lấy từ manifest), `queries.csv` ghi trước khi đo, warm-up, R lần lặp đổi thứ tự thuật toán, `gc` tắt khi đo, dừng nếu lệch chi phí; xuất `measurements.csv` (27 cột), `env.json` (có `git_dirty`), `config.json`. Mới chạy trên `mini.json` và đồ thị ngẫu nhiên. **Chưa làm:** 1.000 cặp trên dữ liệu thật (chờ T34), chạy trên Python 3.11 |
-| T61 Cắt lồng nhau | [#26](https://github.com/NeitLN/SaiGGo/issues/26) | Minh | 🟨 | PR chờ review (làm sớm, hạn 02–03/11). 4 kích thước 1/2/3/4,5 km: \|V\| 565 / 1.889 / 4.411 / 10.143; SCC lồng nhau đã kiểm; pilot 4,5 km median Dijkstra 13–14 ms (ngưỡng 1 s). Chờ chốt 3 kích thước (Q3) |
+| T61 Cắt lồng nhau | [#26](https://github.com/NeitLN/SaiGGo/issues/26) | Minh | 🟨 | PR chờ review (làm sớm, hạn 02–03/11). 4 kích thước 1/2/3/4,5 km: \|V\| 565 / 1.889 / 4.411 / 10.143; SCC lồng nhau đã kiểm; pilot 4,5 km median Dijkstra 13–14 ms (ngưỡng 1 s). Nhóm chốt giữ cả 4 kích thước (Q3, 30/10) |
 | T62 Tăng quy mô | [#27](https://github.com/NeitLN/SaiGGo/issues/27) | Tiến | ⬜ | |
 | T63 Ùn tắc / đóng đường | [#28](https://github.com/NeitLN/SaiGGo/issues/28) | Tiến | ⬜ | |
 | T64 Biểu đồ | [#29](https://github.com/NeitLN/SaiGGo/issues/29) | Bảo | ⬜ | |

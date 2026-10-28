@@ -19,4 +19,4 @@ Cắt bằng `python scripts/make_crops.py` từ `outer.graphml` đã đóng bă
 
 **Pilot (kiểm tính khả thi, không phải benchmark):** 20 truy vấn dài nhất trong 1.000 cặp ngẫu nhiên thuộc SCC của vùng 4,5 km (seed 42, khoảng cách thẳng ≥ 9.054 m), Dijkstra trên kịch bản cơ sở: median 13–14 ms, lớn nhất < 20 ms, median 8.890 node mở rộng. Ngưỡng bỏ kích thước là median > ~1 s, nên cả 4 kích thước ứng viên đều dùng được. Máy đo: laptop Windows 11 của Minh, Python 3.14.4; benchmark chính thức (T62) chạy trên Python 3.11.
 
-**Chờ nhóm chốt (Q3):** chọn 3 trong 4 kích thước. Đề xuất **1 / 2 / 4,5 km**: khoảng \|V\| rộng nhất (565 → 10.143) và gồm vùng demo 2 km. Bỏ 3 km nếu cần đúng 3 kích thước.
+**Đã chốt (Q3, 30/10):** giữ cả **4 kích thước 1 / 2 / 3 / 4,5 km** cho E3. Pilot cho thấy vùng lớn nhất chỉ khoảng 14 ms/truy vấn và script đã cắt sẵn cả 4, nên thêm một điểm trên biểu đồ gần như không tốn thêm thời gian chạy.
