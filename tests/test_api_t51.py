@@ -146,3 +146,11 @@ def test_heuristic_setup_is_outside_timing(client, monkeypatch):
     monkeypatch.setattr("app.services.routing.make_geo_heuristic", slow)
     r = post(client, algorithms=["astar"]).json()
     assert r["results"]["astar"]["runtime_ms"] < 50
+
+
+def test_empty_scenario_id_rejected(client):
+    assert post(client, scenario_id="").status_code == 422      # chỉ null mới là baseline
+
+
+def test_boolean_is_not_an_edge_id(client):
+    assert post(client, blocked_edge_ids=[False]).status_code == 422   # không bị ép thành cạnh 0

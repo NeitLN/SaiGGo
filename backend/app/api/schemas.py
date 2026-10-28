@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 from typing import Literal
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, StrictInt, field_validator
 
 
 class HealthResponse(BaseModel):
@@ -48,7 +48,7 @@ class RouteRequest(BaseModel):
     target: LatLon
     algorithms: list[str] = Field(default_factory=lambda: ["dijkstra"])
     scenario_id: str | None = "baseline"
-    blocked_edge_ids: list[int] = Field(default_factory=list)
+    blocked_edge_ids: list[StrictInt] = Field(default_factory=list)   # StrictInt: không nhận true/false là id 1/0
     trace_limit: int = Field(0, ge=0, le=5000)
 
     @field_validator("algorithms")

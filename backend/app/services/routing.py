@@ -107,7 +107,7 @@ def route(
     twins: list[int | None],
 ) -> RouteResponse:
     """Xử lý yêu cầu tìm đường theo contract v1 (ARCHITECTURE mục 4). Sai dữ liệu → RouteInputError."""
-    scenario_id = req.scenario_id or "baseline"
+    scenario_id = "baseline" if req.scenario_id is None else req.scenario_id   # chuỗi rỗng là id không có → 422
     if scenario_id not in scenarios:
         raise RouteInputError(f"Không có kịch bản {scenario_id!r}; các kịch bản đang có: {', '.join(scenarios)}")
     try:
