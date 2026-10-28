@@ -2,6 +2,8 @@ import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import './style.css'
 import { getHealth, postRoute, type LatLon, type RouteResponse } from './api'
+import { MapLayers } from './layers'
+import { renderEmpty, renderResults } from './panel'
 
 const app = document.querySelector<HTMLDivElement>('#app')!
 app.innerHTML = `
@@ -11,22 +13,32 @@ app.innerHTML = `
     <span id="server-status" class="status">Đang kiểm tra server…</span>
   </header>
   <main class="layout">
-    <aside class="panel">
-      <p id="hint" class="hint">Bấm lên bản đồ để chọn <strong>điểm đi</strong>.</p>
-      <dl id="result" class="result" hidden>
-        <dt>Thời gian di chuyển ước tính (theo kịch bản)</dt><dd id="cost">—</dd>
-        <dt>Quãng đường</dt><dd id="distance">—</dd>
-        <dt>Số node mở rộng</dt><dd id="expanded">—</dd>
-        <dt>Thời gian tính toán</dt><dd id="runtime">—</dd>
-        <dt>Điểm đi / điểm đến đã gắn vào node</dt><dd id="snapped">—</dd>
+    <aside class="panel controls">
+      <h2>Tìm đường hai điểm</h2>
+      <p id="hint" class="hint"></p>
+      <dl class="points">
+        <dt>Điểm đi</dt><dd id="source-text">—</dd>
+        <dt>Điểm đến</dt><dd id="target-text">—</dd>
       </dl>
+      <div class="buttons">
+        <button id="btn-route" class="primary" disabled>Tìm đường</button>
+        <button id="btn-swap" disabled>Đảo chiều</button>
+        <button id="btn-clear">Xóa</button>
+      </div>
+      <p id="busy" class="busy" hidden>Đang tính…</p>
       <p id="message" class="message" hidden></p>
     </aside>
     <div id="map"></div>
+    <aside class="panel results">
+      <h2>Kết quả đo được</h2>
+      <div id="results"></div>
+    </aside>
   </main>
 `
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T
+const btnRoute = $<HTMLButtonElement>('btn-route')
+const btnSwap = $<HTMLButtonElement>('btn-swap')
 
 // Tâm quanh chợ Bến Thành (cùng tâm với data/config/areas.json).
 const map = L.map('map').setView([10.7725, 106.7], 16)
@@ -37,90 +49,113 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: 'Dữ liệu © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
 }).addTo(map)
 
-const marks = L.layerGroup().addTo(map)
-const routeLayer = L.layerGroup().addTo(map)
+const layers = new MapLayers(map)
 
 let source: LatLon | null = null
+let target: LatLon | null = null
+let shown: RouteResponse | null = null
 let pending: AbortController | null = null
 let requestId = 0
+
+function fmt(p: LatLon | null): string {
+  return p ? `${p.lat.toFixed(5)}, ${p.lon.toFixed(5)}` : '—'
+}
 
 function show(el: HTMLElement, text: string | null) {
   el.hidden = text === null
   if (text !== null) el.textContent = text
 }
 
-function pointMarker(p: LatLon, label: string, color: string) {
-  return L.circleMarker([p.lat, p.lon], { radius: 7, color, weight: 2, fillColor: '#fff', fillOpacity: 1 })
-    .bindTooltip(label, { permanent: true, direction: 'top', offset: [0, -6] })
-}
-
-function reset() {
+function cancelPending() {
   pending?.abort()
   pending = null
   requestId++
-  source = null
-  marks.clearLayers()
-  routeLayer.clearLayers()
-  $('result').hidden = true
+  $('busy').hidden = true
+}
+
+function refresh() {
+  $('source-text').textContent = fmt(source)
+  $('target-text').textContent = fmt(target)
+  btnRoute.disabled = !(source && target)
+  btnSwap.disabled = !(source && target)
+  $('hint').innerHTML = !source
+    ? 'Bấm lên bản đồ để chọn <strong>điểm đi</strong>.'
+    : !target
+      ? 'Bấm để chọn <strong>điểm đến</strong>.'
+      : 'Bấm <strong>Tìm đường</strong>. Bấm lên bản đồ lần nữa để chọn lại từ đầu.'
+}
+
+function clearResult() {
+  cancelPending()
+  shown = null
+  layers.clearRoutes()
+  renderEmpty($('results'), 'Chưa có kết quả.')
   show($('message'), null)
 }
 
-function render(res: RouteResponse) {
-  const r = res.results.dijkstra
-  const { source: s, target: t } = res.snapped
-  $('snapped').textContent = `node ${s.node_id} (cách ${s.snap_distance_m.toFixed(0)} m) → node ${t.node_id} (cách ${t.snap_distance_m.toFixed(0)} m)`
-  if (!r) {
-    show($('message'), 'API không trả kết quả cho Dijkstra.')
-    return
-  }
-  $('expanded').textContent = String(r.expanded)
-  $('runtime').textContent = `${r.runtime_ms.toFixed(2)} ms`
-  $('result').hidden = false
-  if (r.status === 'no_path') {
-    // Không vẽ đường thẳng nối hai điểm khi không có đường.
-    $('cost').textContent = '—'
-    $('distance').textContent = '—'
-    show($('message'), 'Không có đường đi giữa hai điểm này.')
-    return
-  }
-  $('cost').textContent = `${r.cost_s!.toFixed(1)} s`
-  $('distance').textContent = `${r.distance_m!.toFixed(0)} m`
-  // GeoJSON là [lon, lat]; Leaflet cần [lat, lon].
-  const latlngs = r.geometry.coordinates.map(([lon, lat]) => L.latLng(lat, lon))
-  L.polyline(latlngs, { color: '#1c7ed6', weight: 5, opacity: 0.85 }).addTo(routeLayer)
-}
-
-async function findRoute(src: LatLon, dst: LatLon) {
-  const id = ++requestId
-  pending?.abort()
+async function findRoute() {
+  if (!source || !target) return
+  cancelPending()
+  const id = requestId
   pending = new AbortController()
-  show($('hint'), 'Đang tìm đường… Bấm lần nữa để chọn lại điểm đi.')
+  $('busy').hidden = false
+  show($('message'), null)
   try {
-    const res = await postRoute({ source: src, target: dst, algorithms: ['dijkstra'] }, pending.signal)
+    const res = await postRoute({ source, target, algorithms: ['dijkstra', 'astar'] }, pending.signal)
     if (id !== requestId) return // đã có request mới hơn
-    render(res)
+    shown = res
+    layers.setSnapped(res)
+    layers.drawRoutes(res)
+    renderResults($('results'), res)
+    // Không vẽ đường thẳng nối hai điểm khi không có đường.
+    if (Object.values(res.results).some((r) => r?.status === 'no_path')) {
+      show($('message'), 'Không có đường đi giữa hai điểm này trong kịch bản hiện tại.')
+    }
   } catch (err) {
     if (id !== requestId || (err as Error).name === 'AbortError') return
-    show($('message'), `Lỗi từ API: ${(err as Error).message}`)
+    shown = null
+    layers.clearRoutes()
+    layers.setPoints(source, target)
+    renderEmpty($('results'), 'Chưa có kết quả.')
+    show($('message'), `Lỗi: ${(err as Error).message}`)
+  } finally {
+    if (id === requestId) $('busy').hidden = true
   }
-  if (id === requestId) $('hint').innerHTML = 'Bấm lên bản đồ để chọn <strong>điểm đi</strong> mới.'
 }
 
-// Lần 1: điểm đi · lần 2: điểm đến và tìm đường · lần 3: bắt đầu lại.
 map.on('click', (e: L.LeafletMouseEvent) => {
   const p = { lat: e.latlng.lat, lon: e.latlng.lng }
-  if (source === null) {
-    reset()
+  if (!source || target) {
+    // Lần đầu, hoặc đã có đủ hai điểm: bắt đầu lại từ điểm đi.
+    clearResult()
     source = p
-    pointMarker(p, 'Đi', '#2f9e44').addTo(marks)
-    $('hint').innerHTML = 'Bấm để chọn <strong>điểm đến</strong>.'
+    target = null
   } else {
-    pointMarker(p, 'Đến', '#e03131').addTo(marks)
-    const src = source
-    source = null
-    void findRoute(src, p)
+    target = p
   }
+  layers.setPoints(source, target)
+  refresh()
 })
+
+btnRoute.addEventListener('click', () => void findRoute())
+
+btnSwap.addEventListener('click', () => {
+  ;[source, target] = [target, source]
+  layers.setPoints(source, target)
+  refresh()
+  if (shown) void findRoute() // đang có kết quả thì tìm lại theo chiều mới
+  else clearResult()
+})
+
+$('btn-clear').addEventListener('click', () => {
+  clearResult()
+  source = target = null
+  layers.clear()
+  refresh()
+})
+
+refresh()
+renderEmpty($('results'), 'Chưa có kết quả.')
 
 const statusEl = $('server-status')
 getHealth()
