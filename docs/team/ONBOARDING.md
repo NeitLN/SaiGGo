@@ -43,7 +43,7 @@ Nên clone vào thư mục **không dấu, không khoảng trắng**, ví dụ `
 
 ```powershell
 mkdir C:\dev -Force; cd C:\dev
-git clone https://github.com/NeitLN/SaiGGo.git
+git clone https://github.com/NeitLN/SaiGo.git
 cd SaiGGo
 powershell -ExecutionPolicy Bypass -File scripts\setup_dev.ps1
 ```
