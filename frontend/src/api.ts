@@ -54,8 +54,44 @@ export interface RouteResponse {
 
 export const ALGORITHM_LABEL: Record<Algorithm, string> = { dijkstra: 'Dijkstra', astar: 'A*' }
 
+// GET /api/dataset (T51). Kịch bản giữ đúng cấu trúc `saigo-scenarios/1` của data/config/scenarios.json
+// và `CongestionZone` của backend/app/graph/scenario.py (DATA_MODEL mục 4.1).
+export interface CongestionZone {
+  type: 'circle'
+  lat: number
+  lon: number
+  radius_m: number
+}
+
+export interface CongestionRule {
+  zone: CongestionZone
+  alpha: number
+  highway?: string[] | null
+}
+
+export interface Scenario {
+  id: string
+  label: string
+  rules: CongestionRule[]
+}
+
+export interface DatasetResponse {
+  dataset_id: string
+  scenarios: Scenario[]
+}
+
+export const BASELINE: Scenario = { id: 'baseline', label: 'Bình thường', rules: [] }
+
 export async function getHealth(): Promise<HealthResponse> {
   const res = await fetch('/api/health')
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+  return res.json()
+}
+
+// null khi API chưa có /api/dataset (404): UI chỉ dùng kịch bản cơ sở.
+export async function getDataset(): Promise<DatasetResponse | null> {
+  const res = await fetch('/api/dataset')
+  if (res.status === 404) return null
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   return res.json()
 }

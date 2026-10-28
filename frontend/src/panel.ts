@@ -24,7 +24,7 @@ const ROWS: [string, (r: AlgorithmResult) => string][] = [
   ['Thời gian tính toán', (r) => `${num(r.runtime_ms, 2)} ms`],
 ]
 
-export function renderResults(el: HTMLElement, res: RouteResponse) {
+export function renderResults(el: HTMLElement, res: RouteResponse, scenarioLabel?: string) {
   const algos = ALGOS.filter((a) => res.results[a])
   const head = algos
     .map((a) => `<th><span class="swatch" style="background:${COLORS[a]}"></span>${ALGORITHM_LABEL[a]}</th>`)
@@ -32,6 +32,7 @@ export function renderResults(el: HTMLElement, res: RouteResponse) {
   const body = ROWS.map(([label, f]) => `<tr><th scope="row">${label}</th>${algos.map((a) => `<td>${f(res.results[a]!)}</td>`).join('')}</tr>`).join('')
   const match = res.costs_match === true ? 'có' : res.costs_match === false ? '<strong class="bad">không</strong>' : '—'
   el.innerHTML = `
+    ${scenarioLabel ? `<p class="scenario-used">Kịch bản: <strong>${scenarioLabel}</strong></p>` : ''}
     <table class="compare">
       <thead><tr><th></th>${head}</tr></thead>
       <tbody>${body}</tbody>

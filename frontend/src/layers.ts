@@ -1,6 +1,6 @@
 // Các lớp vẽ trên bản đồ: điểm đi/đến, tuyến Dijkstra và A* (docs/DEMO.md mục 1.2).
 import L from 'leaflet'
-import type { AlgorithmResult, LatLon, RouteResponse } from './api'
+import type { AlgorithmResult, LatLon, RouteResponse, Scenario } from './api'
 
 export const COLORS = { dijkstra: '#1c7ed6', astar: '#f08c00', source: '#2f9e44', target: '#e03131' }
 
@@ -16,12 +16,30 @@ function sameRoute(a?: AlgorithmResult, b?: AlgorithmResult): boolean {
 }
 
 export class MapLayers {
+  private zones = L.layerGroup()
   private points = L.layerGroup()
   private routes = L.layerGroup()
 
   constructor(map: L.Map) {
+    this.zones.addTo(map)
     this.routes.addTo(map)
     this.points.addTo(map)
+  }
+
+  // Vùng ùn tắc của kịch bản: hình tròn tô nhạt, không bấm được để không chặn thao tác chọn điểm.
+  setZones(scenario: Scenario) {
+    this.zones.clearLayers()
+    for (const rule of scenario.rules) {
+      const z = rule.zone
+      const roads = rule.highway?.length ? ` · ${rule.highway.join(', ')}` : ''
+      L.circle([z.lat, z.lon], {
+        radius: z.radius_m, color: '#e8590c', weight: 1, fillColor: '#ff922b', fillOpacity: 0.18, interactive: false,
+      }).addTo(this.zones)
+      L.tooltip({ permanent: true, direction: 'center', className: 'zone-label', interactive: false })
+        .setLatLng([z.lat, z.lon])
+        .setContent(`Cao điểm mô phỏng · ×${rule.alpha}${roads}`)
+        .addTo(this.zones)
+    }
   }
 
   private marker(p: LatLon, label: string, color: string, tooltip?: string) {
