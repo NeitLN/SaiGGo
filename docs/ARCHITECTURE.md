@@ -155,6 +155,13 @@ Các số trong ví dụ chỉ để minh họa cấu trúc, **không phải k�
 
 Lỗi: tọa độ ngoài vùng hoặc snap > 150 m → 422 với thông báo tiếng Việt; `blocked_edge_ids` không tồn tại → 422.
 
+**Bổ sung ở T51 (chỉ thêm, không đổi trường v1):**
+
+- `results.<thuật toán>.edge_twin_ids`: cùng độ dài với `edge_ids`; phần tử thứ i là id cạnh đối (`v → u`, cùng đoạn đường) của `edge_ids[i]`, hoặc `null` nếu đường một chiều. UI "đóng đoạn" gửi cả hai id trong `blocked_edge_ids`; API không tự thêm cạnh đối (DATA_MODEL mục 4.2).
+- `GET /api/dataset` trả `{"dataset_id", "node_count", "edge_count", "scenarios": [{"id", "label", "rules": [{"zone": {"type", "lat", "lon", "radius_m"}, "alpha", "highway"}]}]}`, cùng cấu trúc file `saigo-scenarios/1`.
+- Kịch bản nạp lúc khởi động từ `SAIGO_SCENARIOS` (mặc định `data/config/scenarios.json`); `scenario_id` không có trong file → 422. `scenario_id: null` nghĩa là `baseline`.
+- `runtime_ms` chỉ đo thời gian tìm kiếm: heuristic A* được dựng trước khi bắt đầu đo; `geo_scale` và bảng cạnh đối tính một lần lúc khởi động.
+
 ### 4.1. Contract v1 cho walking skeleton [Đã chốt 25/10 — Q6]
 
 Walking skeleton (T13, T14) chỉ dùng **tập con** sau của contract ở trên. Mọi bản sau chỉ được **thêm** trường; không đổi tên hay xóa các trường dưới đây, để UI viết trước không phải làm lại.
