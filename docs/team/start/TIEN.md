@@ -40,7 +40,7 @@ Thêm: điều phối [#31](https://github.com/NeitLN/SaiGo/issues/31) (T65) và
 
 1. Chạy backend + frontend (ONBOARDING mục 3), mở http://localhost:5173, xác nhận thấy "Server chạy, chưa nạp dataset".
 2. Ghi phiên bản và kết quả vào PROGRESS.md, mở PR `Closes #2`.
-3. Repo đang ở thư mục có dấu tiếng Việt. App vẫn chạy được nhờ script không dùng `pip install -e`. Nếu sau này OSMnx hoặc công cụ khác lỗi đường dẫn, clone lại vào `C:\dev\SaiGGo`.
+3. Repo đang ở thư mục có dấu tiếng Việt. App vẫn chạy được nhờ script không dùng `pip install -e`. Nếu sau này OSMnx hoặc công cụ khác lỗi đường dẫn, clone lại vào `C:\dev\SaiGo`.
 
 ## Hàng đợi review của bạn
 

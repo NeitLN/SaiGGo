@@ -68,7 +68,7 @@ Mở http://localhost:5173. Frontend gọi backend qua proxy `/api` → `http://
 
 Chạy test: `.venv\Scripts\python.exe -m pytest -q`.
 
-Nên clone vào thư mục không dấu (ví dụ `C:\dev\SaiGGo`): trên Windows, `pip install -e` lỗi khi đường dẫn có chữ tiếng Việt. Script ở trên không dùng `-e` nên vẫn chạy được ở đường dẫn có dấu.
+Nên clone vào thư mục không dấu (ví dụ `C:\dev\SaiGo`): trên Windows, `pip install -e` lỗi khi đường dẫn có chữ tiếng Việt. Script ở trên không dùng `-e` nên vẫn chạy được ở đường dẫn có dấu.
 
 ## Dữ liệu và giấy phép
 

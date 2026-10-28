@@ -102,7 +102,7 @@ Cập nhật 26/10 (chiều) theo [ROADMAP](ROADMAP.md) mục 2: Duy Anh quay l�
 | I3 | Thư mục gốc có file chưa commit: 2 file PDF slide trùng nội dung (`Group4_SaiGo_Proposal_Slides.pdf` = `SaiGo_Proposal_Slides.pdf`, cùng MD5), file `.pptx`, `SaiGo_Proposal_Script.md`, `Project_Intructions_261.pdf`, một video `.mp4` | Dễ commit nhầm file lớn hoặc trùng | Nhóm quyết định giữ ngoài Git hay chuyển vào `docs/proposal/` |
 | I4 | Repo không có ma trận gốc của ví dụ 2-opt ở backup slide B1 | T70 phải dựng lại ví dụ | Đã xử lý ở T70 (#69): test có ma trận bẫy dựng lại |
 | I5 | Video `.mp4` là mockup giao diện có số liệu không do hệ thống đo (ví dụ "độ tin cậy dự báo", "% giảm ùn tắc") | Không được đưa những số này vào app/slide | DEMO.md mục 1.6 đã loại; giữ nguyên quy tắc |
-| I6 | `pip install -e` lỗi trên Windows khi đường dẫn repo có chữ tiếng Việt (setuptools ghi file `.pth` bằng cp1252) | README cũ hướng dẫn sai cho ai clone vào thư mục có dấu | `setup_dev.ps1` chỉ cài thư viện phụ thuộc, không dùng `-e`; khuyên clone vào `C:\dev\SaiGGo` |
+| I6 | `pip install -e` lỗi trên Windows khi đường dẫn repo có chữ tiếng Việt (setuptools ghi file `.pth` bằng cp1252) | README cũ hướng dẫn sai cho ai clone vào thư mục có dấu | `setup_dev.ps1` chỉ cài thư viện phụ thuộc, không dùng `-e`; khuyên clone vào `C:\dev\SaiGo` |
 
 ## 5. Checklist kiểm thử giao diện (dùng ở T52–T55, T73; rút gọn 26/10)
 
