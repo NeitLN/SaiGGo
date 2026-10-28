@@ -46,6 +46,38 @@ body {
 
 #map {
   height: 100%;
+  cursor: crosshair;
+}
+
+.hint {
+  margin-top: 0;
+}
+
+.result {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  margin: 0;
+}
+
+.result dt {
+  margin-top: 10px;
+  font-size: 0.85em;
+  color: #52606d;
+}
+
+.result dd {
+  margin: 0;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.message {
+  margin-top: 16px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: #fff4e6;
+  color: #9c3d00;
 }
 
 @media (max-width: 720px) {
