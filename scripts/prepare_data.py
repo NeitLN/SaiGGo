@@ -158,7 +158,9 @@ def build(area: str) -> None:
     raw_manifest = json.loads((PROCESSED / "raw_manifest.json").read_text(encoding="utf-8"))
     raw = ROOT / raw_manifest["file"]
     if not raw.exists():
-        sys.exit(f"thiếu {raw_manifest['file']}; tải từ GitHub Release (xem docs/tracking hoặc PR T30), không tải lại từ OSM")
+        sys.exit(f"thiếu {raw_manifest['file']}; tải đúng bản đã đóng băng từ Release data-raw-20261024: "
+                 "gh release download data-raw-20261024 -p outer.graphml -D data/raw "
+                 "(xem docs/team/ONBOARDING.md mục 3, \"Tải dữ liệu\"). Không tải lại từ OSM.")
     if sha256(raw) != raw_manifest["sha256"]:
         sys.exit(f"{raw_manifest['file']} không khớp sha256 trong raw_manifest.json; dùng đúng bản đã đóng băng")
 
