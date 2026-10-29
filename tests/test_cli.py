@@ -70,3 +70,10 @@ def test_latlon_too_far_is_error(capsys):
 def test_bad_latlon_format(capsys):
     with pytest.raises(SystemExit):
         run(capsys, "--from-latlon", "10.77", "--to", "T")
+
+
+def test_missing_graph_is_error(capsys, tmp_path):
+    code = main(["route", "--graph", str(tmp_path / "khong-co.json"), "--from", "S", "--to", "T"])
+    err = capsys.readouterr().err
+    assert code == 2
+    assert err.startswith("Lỗi: không nạp được đồ thị")

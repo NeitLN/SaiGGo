@@ -36,7 +36,7 @@ def _endpoint(graph: Graph, meta: GraphMeta, name: str | None,
     if name is not None:
         return node_by_name(meta, name), name
     snap = nearest_node(graph, meta, *latlon)
-    return snap.node_id, f"{latlon[0]},{latlon[1]} → node {snap.node_id} (snap {snap.snap_distance_m} m)"
+    return snap.node_id, f"{latlon[0]},{latlon[1]} → node {snap.node_id} (snap {snap.snap_distance_m:.1f} m)"
 
 
 def _node_label(meta: GraphMeta, node: int) -> str:
@@ -64,7 +64,11 @@ def costs_match(a: SearchResult, b: SearchResult) -> bool:
 
 
 def cmd_route(args: argparse.Namespace) -> int:
-    graph, meta = load_graph(args.graph)
+    try:
+        graph, meta = load_graph(args.graph)
+    except (OSError, ValueError) as exc:
+        print(f"Lỗi: không nạp được đồ thị {args.graph}: {exc}", file=sys.stderr)
+        return 2
     try:
         s, s_desc = _endpoint(graph, meta, args.source, args.from_latlon)
         t, t_desc = _endpoint(graph, meta, args.target, args.to_latlon)
