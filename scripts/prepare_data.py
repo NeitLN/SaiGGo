@@ -20,6 +20,9 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "backend"))
+from app.graph.geo import haversine_m  # noqa: E402  (dùng chung với backend, cùng bán kính 6 371 009 m)
+
 RAW = ROOT / "data" / "raw"
 PROCESSED = ROOT / "data" / "processed"
 CONFIG = ROOT / "data" / "config"
@@ -122,16 +125,6 @@ def download(force: bool) -> None:
 
 # ---------- build: GraphML thô → saigo-graph/1 (DATA_MODEL mục 2.1 và 8.2) ----------
 
-EARTH_R = 6_371_009  # mét, cùng giá trị OSMnx dùng để tính `length` (DATA_MODEL mục 5.1)
-
-
-def haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
-    import math
-    p1, p2 = math.radians(lat1), math.radians(lat2)
-    a = math.sin((p2 - p1) / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(math.radians(lon2 - lon1) / 2) ** 2
-    return 2 * EARTH_R * math.asin(min(1.0, math.sqrt(a)))
-
-
 def as_list(value) -> list:
     if value is None:
         return []
@@ -164,6 +157,8 @@ def build(area: str) -> None:
 
     areas = json.loads((CONFIG / "areas.json").read_text(encoding="utf-8"))
     speeds = json.loads((CONFIG / "speeds.json").read_text(encoding="utf-8"))
+    if area in ("center", "download") or not isinstance(areas.get(area), dict) or "half_side_m" not in areas[area]:
+        sys.exit(f"không có vùng {area!r} trong data/config/areas.json")
     half = areas[area]["half_side_m"]
     lat0, lon0 = areas["center"]["lat"], areas["center"]["lon"]
 
@@ -282,6 +277,9 @@ def main() -> None:
     ap.add_argument("--force", action="store_true", help="download: tải lại dù đã có dữ liệu thô")
     ap.add_argument("--area", default="demo", help="build: tên vùng trong data/config/areas.json (mặc định: demo)")
     a = ap.parse_args()
+    # Windows: stdout bị chuyển hướng dùng cp1252, in tiếng Việt sẽ lỗi sau khi file đã ghi xong.
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
     if a.smoke:
         smoke()
     elif a.command == "download":
