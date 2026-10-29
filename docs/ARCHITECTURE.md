@@ -64,21 +64,22 @@ backend/app/
   graph/
     model.py         Graph, GraphMeta, load_graph(), kiểm tra khi nạp        (T01, T30)
     geo.py           haversine_m(), trung điểm polyline, khoảng cách tới vùng (T10)
-    scenario.py      Scenario, Snapshot, build_snapshot()                    (T40)
+    scenario.py      Snapshot, make_snapshot(), baseline_snapshot()          (T11)
+                     Scenario, build_snapshot()                              (T40)
     closures.py      tìm cạnh đối, nhóm "đóng đoạn"                          (T41)
     snap.py          nearest_node() trong SCC, ngưỡng 150 m                 (T50)
   algorithms/
     result.py        SearchResult, dựng lại tuyến từ predecessor edge         (T11)
     dijkstra.py      dijkstra()                                              (T11)
     astar.py         astar()                                                 (T20)
-    heuristics.py    make_geo_heuristic(), compute_c(), zero_heuristic       (T20, T22)
-    tour.py          tour_cost, nearest_neighbor, two_opt, held_karp         (E1: T70, T71)
+    heuristics.py    make_geo_heuristic(), geo_scale(), zero_heuristic       (T20, T22)
+    tour.py          tour_cost, nearest_neighbor, two_opt, held_karp         (T70, T71)
   services/
-    routing.py       route_request() → chạy Dijkstra/A*, đo thời gian, gói kết quả (T51)
-    tour.py          cost matrix + tour (E1: T72)
+    routing.py       route_request() → chạy Dijkstra/A*, đo thời gian, gói kết quả (T13, T51)
+    tour.py          cost matrix + tour                                       (T72)
   api/
     schemas.py       Pydantic request/response
-    routes.py        /health, /dataset, /network, /route, (/tour)
+    routes.py        /health, /dataset, /route, /tour
   cli.py             python -m app.cli route|check-heuristic ...             (T12)
   main.py            nạp Graph khi khởi động (lifespan), gắn router
 
@@ -92,12 +93,12 @@ tests/
   fixtures/mini.json ví dụ 6 node ở DATA_MODEL mục 7
   test_graph_model.py, test_geo.py, test_dijkstra.py, test_astar.py,
   test_oracle_networkx.py, test_scenario.py, test_snap.py, test_api_route.py,
-  test_tour.py (E1)
+  test_tour.py
 
 frontend/src/
   main.ts            khởi tạo bản đồ, gắn panel
   api.ts             gọi /api, kiểu dữ liệu response
-  layers.ts          vẽ mạng đường, tuyến, node đã mở rộng, vùng ùn tắc, cạnh đóng
+  layers.ts          vẽ tuyến, vùng ùn tắc, cạnh đóng
   panel.ts           bảng điều khiển + bảng kết quả
 
 data/
@@ -113,9 +114,10 @@ results/             <run_id>/queries.csv, measurements.csv, env.json
 |---|---|---|---|
 | GET | `/api/health` | Server sống, đã nạp dataset chưa | Có sẵn; cập nhật ở T51 |
 | GET | `/api/dataset` | `dataset_id`, vùng, số node/cạnh, danh sách kịch bản | T51 |
-| GET | `/api/network` | GeoJSON các cạnh của vùng demo (có `edge_id`) | T32 |
-| POST | `/api/route` | Tìm đường giữa hai điểm | T51 |
-| POST | `/api/tour` | Tour nhiều điểm (E1) | T72 |
+| POST | `/api/route` | Tìm đường giữa hai điểm | T13 (skeleton), T51 |
+| POST | `/api/tour` | Tour nhiều điểm | T72 |
+
+Đã bỏ ngày 26/10 ([PROJECT_BRIEF](PROJECT_BRIEF.md) D12): `/api/network` (vẽ toàn mạng đường, T32).
 
 Ví dụ request/response của `/api/route`:
 
@@ -181,20 +183,18 @@ Walking skeleton (T13, T14) chỉ dùng **tập con** sau của contract ở tr�
 
 ## 6. Giao diện
 
-Giữ bố cục 3 cột ở [DEMO.md](DEMO.md) mục 1 (bảng điều khiển / bản đồ / kết quả), nhưng **bản MVP chạy chế độ tìm đường hai điểm trước**; chế độ tour chỉ thêm ở E2.
+Giữ bố cục 3 cột ở [DEMO.md](DEMO.md) mục 1 (bảng điều khiển / bản đồ / kết quả), chế độ chính là tìm đường hai điểm; chế độ tour (kho + 5 điểm) thêm ở T73.
 
 | Lớp bản đồ | Nội dung |
 |---|---|
-| Nền | Tile OSM khi có mạng (chỉ xem tương tác, có ghi nguồn; không tải hàng loạt). Khi offline: chỉ lớp mạng đường từ `/api/network` |
-| Mạng đường | Polyline mảnh, vẽ bằng Canvas (`preferCanvas: true`) |
+| Nền | Tile OSM (cần mạng; chỉ xem tương tác, có ghi nguồn; không tải hàng loạt). Không vẽ toàn bộ mạng đường (T32 đã cắt 26/10) |
 | Tuyến Dijkstra / A* | Hai màu; nếu trùng nhau thì vẽ một nét có viền |
-| Node đã mở rộng | Chấm nhỏ, mỗi thuật toán một màu; nhãn "K node mở rộng đầu tiên" khi `trace_truncated` |
 | Vùng ùn tắc | Vòng tròn/polygon tô mờ khi chọn kịch bản |
-| Cạnh đóng | Đỏ, nét đứt |
+| Cạnh đóng | Đỏ, nét đứt; chỉ bấm được trên các cạnh của tuyến |
 
 Nhãn bắt buộc: "Thời gian di chuyển ước tính (theo kịch bản)" tách biệt với "Thời gian tính toán"; không dùng một chữ "Time" chung.
 
-**Rủi ro hiển thị:** vùng demo có thể có hàng chục nghìn cạnh. Phải đo thời gian vẽ trên laptop demo ở T32. Nếu chậm thì thu nhỏ vùng demo; đồ thị lớn của thí nghiệm tăng quy mô chỉ chạy offline, không vẽ.
+**Hiển thị:** chỉ vẽ tuyến và các cạnh của tuyến, nên số cạnh vẽ luôn nhỏ; rủi ro vẽ hàng chục nghìn cạnh không còn từ 26/10. Đồ thị lớn của thí nghiệm tăng quy mô chỉ chạy offline, không vẽ.
 
 ## 7. Kiểm thử
 

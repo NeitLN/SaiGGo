@@ -11,7 +11,8 @@ from pathlib import Path
 
 from app.graph.geo import haversine_m
 from app.graph.model import Graph, GraphMeta, load_graph, node_by_name
-from app.graph.scenario import Snapshot, baseline_snapshot, make_snapshot
+from app.graph.scenario import (CongestionRule, CongestionZone, Scenario, Snapshot,
+                                build_snapshot)
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 MINI = FIXTURES / "mini.json"
@@ -36,30 +37,49 @@ def edge_id(graph: Graph, meta: GraphMeta, name: str) -> int:
     return e
 
 
+def covering_zone(meta: GraphMeta) -> CongestionZone:
+    """Vùng tròn phủ toàn bộ hình học của đồ thị, dùng cho mô tả `{"all": alpha}`.
+
+    `CongestionZone` chỉ có hình tròn, nên "mọi cạnh" được biểu diễn bằng một vùng đủ lớn:
+    tâm là trung điểm khung bao mọi điểm của `meta.edge_geometry`, bán kính là khoảng cách xa
+    nhất từ tâm tới một điểm. Hình tròn lồi nên phủ mọi đỉnh hình học là phủ mọi trung điểm
+    polyline, tức `edge_multipliers` nhân alpha cho mọi cạnh.
+    """
+    points = [point for geometry in meta.edge_geometry for point in geometry]   # (lon, lat)
+    lats = [point[1] for point in points]
+    lons = [point[0] for point in points]
+    lat = (min(lats) + max(lats)) / 2
+    lon = (min(lons) + max(lons)) / 2
+    return CongestionZone(lat, lon, max(haversine_m(lat, lon, p[1], p[0]) for p in points))
+
+
+def scenario_for(graph: Graph, meta: GraphMeta, case: dict) -> Scenario:
+    """Dựng `Scenario` thật từ mô tả ngắn `scenario` của một tình huống trong mini_expected.json.
+
+    Fixture có 3 dạng: `null` (cơ sở), `{"circle": {"center", "radius_m"}, "alpha"}` (một vùng
+    tròn quanh một node) và `{"all": alpha}` (mọi cạnh, xem `covering_zone`). Kịch bản cơ sở giữ
+    id `"baseline"` như `baseline_snapshot` của backend.
+    """
+    spec = case.get("scenario")
+    if not spec:
+        return Scenario(id="baseline")
+    if "all" in spec:
+        rule = CongestionRule(covering_zone(meta), spec["all"])
+        return Scenario(id=case["name"], rules=(rule,))
+    circle = spec["circle"]
+    center = node_by_name(meta, circle["center"])
+    zone = CongestionZone(graph.node_lat[center], graph.node_lon[center], circle["radius_m"])
+    return Scenario(id=case["name"], rules=(CongestionRule(zone, spec["alpha"]),))
+
+
 def snapshot_for(graph: Graph, meta: GraphMeta, case: dict) -> Snapshot:
     """Snapshot theo mô tả `scenario` + `blocked` của một tình huống trong mini_expected.json.
 
-    Luật ùn tắc tạm thời cho test: cạnh có trung điểm (giữa hai đầu) trong vòng tròn thì nhân alpha.
-    Luật thật của snapshot làm ở T40.
+    Luật ùn tắc dựng thành `Scenario` rồi để `build_snapshot` của backend tính hệ số, nên test
+    dùng đúng luật thật (docs/DATA_MODEL.md mục 4.1) thay vì tự nhân alpha.
     """
-    scenario = case.get("scenario")
     blocked = frozenset(edge_id(graph, meta, b) for b in case.get("blocked", []))
-    if not scenario:
-        return baseline_snapshot(graph) if not blocked else make_snapshot(
-            graph, graph.edge_base_time_s, blocked, scenario_id="baseline")
-    weights = list(graph.edge_base_time_s)
-    if "all" in scenario:
-        weights = [w * scenario["all"] for w in weights]
-    else:
-        c = scenario["circle"]
-        center = node_by_name(meta, c["center"])
-        for e in range(len(weights)):
-            u, v = graph.edge_u[e], graph.edge_v[e]
-            mid_lat = (graph.node_lat[u] + graph.node_lat[v]) / 2
-            mid_lon = (graph.node_lon[u] + graph.node_lon[v]) / 2
-            if haversine_m(mid_lat, mid_lon, graph.node_lat[center], graph.node_lon[center]) <= c["radius_m"]:
-                weights[e] *= scenario["alpha"]
-    return make_snapshot(graph, weights, blocked, scenario_id=case["name"])
+    return build_snapshot(graph, meta, scenario_for(graph, meta, case), blocked)
 
 
 def path_names(meta: GraphMeta, node_ids: list[int]) -> list[str]:
