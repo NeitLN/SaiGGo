@@ -1,12 +1,12 @@
 ## 📉 Burndown SaiGo
 
-_Tự động cập nhật 01:44 29/10/2026 (giờ VN) bởi workflow `tracking.yml` từ trạng thái issue/PR thật. Số những ngày đã qua được chốt cuối ngày và không bị sửa lại; số hôm nay là tạm tính. Cách tính ở đầu file `scripts/tracking/burndown.py`._
+_Tự động cập nhật 04:49 30/10/2026 (giờ VN) bởi workflow `tracking.yml` từ trạng thái issue/PR thật. Số những ngày đã qua được chốt cuối ngày và không bị sửa lại; số hôm nay là tạm tính. Cách tính ở đầu file `scripts/tracking/burndown.py`._
 
-![Burndown](https://raw.githubusercontent.com/NeitLN/SaiGo/tracking/burndown.png?v=40747922474)
+![Burndown](https://raw.githubusercontent.com/NeitLN/SaiGo/tracking/burndown.png?v=40960919917)
 
 - **Phạm vi hiện tại:** 136 giờ ước lượng, 46 task (đã cắt 3 giờ)
-- **Đã đóng:** 60 giờ — có bằng chứng (PR/commit) 60 giờ · **Còn lại:** 76 giờ, 25 task mở
-- **Đường lý tưởng hôm nay:** 86.8 giờ → nhanh hơn kế hoạch 10.8 giờ (trong đó 3 giờ là do cắt phạm vi, không phải do làm xong)
+- **Đã đóng:** 66 giờ — có bằng chứng (PR/commit) 66 giờ · **Còn lại:** 70 giờ, 23 task mở
+- **Đường lý tưởng hôm nay:** 80.6 giờ → nhanh hơn kế hoạch 10.6 giờ (trong đó 3 giờ là do cắt phạm vi, không phải do làm xong)
 - Mốc: cổng G1 05/11 · final ready 12/11 · thuyết trình 19/11 · nộp 22/11
 
 ### Theo tuần
@@ -14,7 +14,7 @@ _Tự động cập nhật 01:44 29/10/2026 (giờ VN) bởi workflow `tracking.
 | Tuần | Giờ đến hạn | Giờ hoàn thành | Task xong | Còn lại cuối tuần | PR merge | Lượt review |
 |---|---:|---:|---:|---:|---:|---:|
 | Tuần 1 · 19–25/10 | 27 | 10 | 3 | 129 | 2 | 3 |
-| Tuần 2 · 26/10–01/11 | 30 | 50 | 18 | 76 | 25 | 33 |
+| Tuần 2 · 26/10–01/11 | 30 | 56 | 20 | 70 | 27 | 48 |
 | Tuần 3 · 02–08/11 | 62 | 0 | 0 | — | 0 | 0 |
 | Tuần 4 · 09–15/11 | 17 | 0 | 0 | — | 0 | 0 |
 
@@ -22,13 +22,15 @@ _Tự động cập nhật 01:44 29/10/2026 (giờ VN) bởi workflow `tracking.
 
 | Thành viên | Giờ được giao | Giờ hoàn thành có bằng chứng | Task xong | Đóng tay | Task mở | PR đã merge | PR đã review (có nội dung) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| Bảo (@dobaovlu) | 18.2 | 2.0 | 1 | 0 | 8 | 1 | 9 |
-| Duy Anh (@anh7032) | 34.8 | 26.0 | 9 | 0 | 4 | 12 | 5 |
-| Minh (@Jayson135724) | 28.8 | 5.0 | 2 | 0 | 11 | 2 | 15 |
-| Tiến (@NeitLN) | 54.2 | 27.0 | 9 | 0 | 12 | 12 | 7 |
+| Bảo (@dobaovlu) | 18.2 | 2.0 | 1 | 0 | 8 | 1 | 18 |
+| Duy Anh (@anh7032) | 34.8 | 26.0 | 9 | 0 | 4 | 12 | 12 |
+| Minh (@Jayson135724) | 28.8 | 11.0 | 4 | 0 | 9 | 4 | 15 |
+| Tiến (@NeitLN) | 54.2 | 27.0 | 9 | 0 | 12 | 12 | 6 |
 
 ### Đóng trong 7 ngày qua
 
+- 30/10 · #21 T52 · UI: chọn hai điểm, vẽ hai tuyến, bảng so sánh (3 h, qua PR)
+- 30/10 · #12 T30 · Chốt vùng và tải dữ liệu một lần (3 h, qua PR)
 - 29/10 · #50 T14 · Skeleton phía bản đồ: bấm 2 điểm, vẽ tuyến (3 h, qua PR)
 - 29/10 · #4 T02 · Thử OSMnx trên Windows (2 h, qua PR)
 - 28/10 · #14 T32 · Vẽ mạng đường thật trên bản đồ *(đã cắt 26/10)* (3 h, đã cắt khỏi phạm vi)
@@ -50,7 +52,6 @@ _Tự động cập nhật 01:44 29/10/2026 (giờ VN) bởi workflow `tracking.
 - 26/10 · #2 T00 · Dựng môi trường và xác nhận khung chạy (2 h, qua PR)
 - 25/10 · #44 T05 · Hướng dẫn bắt đầu cho từng thành viên (3 h, qua PR)
 - 24/10 · #42 T04 · Sửa hệ thống theo dõi sau review (3 h, qua PR)
-- 23/10 · #1 T-PLAN · Lập kế hoạch triển khai và hệ thống theo dõi (4 h, qua commit)
 
 ### Ghi chú
 
