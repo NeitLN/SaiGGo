@@ -10,7 +10,7 @@
     {
       "id": "peak-center",
       "label": "Cao điểm mô phỏng — trung tâm",
-      "_comment": "Trục chính quanh Nguyễn Huệ – Lê Lợi – Đồng Khởi (r = 600 m, chỉ primary/secondary, x2) và quanh chợ Bến Thành (r = 400 m, mọi loại đường, x1,5). Theo ví dụ ở DATA_MODEL mục 4.1.",
+      "_comment": "Trục chính quanh Nguyễn Huệ – Lê Lợi – Đồng Khởi (r = 600 m, chỉ primary/secondary, x2) và quanh chợ Bến Thành (r = 400 m, mọi loại đường, x1,5). Theo ví dụ ở DATA_MODEL mục 4.1; cố ý thêm primary_link/secondary_link (so với ví dụ) để nhánh rẽ nối vào trục chính cũng bị nhân, không thành lối tắt.",
       "rules": [
         {
           "zone": {"type": "circle", "lat": 10.7769, "lon": 106.7009, "radius_m": 600},
