@@ -57,7 +57,7 @@ export const ALGORITHM_LABEL: Record<Algorithm, string> = { dijkstra: 'Dijkstra'
 // GET /api/dataset (T51). Kịch bản giữ đúng cấu trúc `saigo-scenarios/1` của data/config/scenarios.json
 // và `CongestionZone` của backend/app/graph/scenario.py (DATA_MODEL mục 4.1).
 export interface CongestionZone {
-  type: 'circle'
+  type: string // hiện backend chỉ có 'circle'
   lat: number
   lon: number
   radius_m: number
@@ -80,7 +80,12 @@ export interface DatasetResponse {
   scenarios: Scenario[]
 }
 
-export const BASELINE: Scenario = { id: 'baseline', label: 'Bình thường', rules: [] }
+// Cùng nhãn với data/config/scenarios.json; chỉ dùng khi API chưa có /api/dataset.
+export const BASELINE: Scenario = { id: 'baseline', label: 'Cơ sở — không ùn tắc, không đóng đường', rules: [] }
+
+export function escapeHtml(text: string): string {
+  return text.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
+}
 
 export async function getHealth(): Promise<HealthResponse> {
   const res = await fetch('/api/health')

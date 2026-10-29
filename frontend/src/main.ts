@@ -167,8 +167,11 @@ $('btn-clear').addEventListener('click', () => {
 
 function fillScenarios(list: Scenario[]) {
   scenarios = list.length ? list : [BASELINE]
-  scenarioSelect.innerHTML = scenarios.map((s) => `<option value="${s.id}">${s.label || s.id}</option>`).join('')
-  scenario = scenarios[0]
+  // Option + textContent: nhãn từ API không được chèn thẳng vào HTML.
+  scenarioSelect.replaceChildren(...scenarios.map((s) => new Option(s.label || s.id, s.id)))
+  // Giữ kịch bản đang chọn nếu còn (danh sách có thể về sau khi đã có kết quả); mặc định là baseline.
+  scenario = scenarios.find((s) => s.id === scenario.id) ?? scenarios.find((s) => s.id === 'baseline') ?? scenarios[0]
+  scenarioSelect.value = scenario.id
   layers.setZones(scenario)
 }
 
@@ -176,7 +179,8 @@ function fillScenarios(list: Scenario[]) {
 scenarioSelect.addEventListener('change', () => {
   scenario = scenarios.find((s) => s.id === scenarioSelect.value) ?? BASELINE
   layers.setZones(scenario)
-  if (shown) void findRoute()
+  // Tìm lại cả khi request trước còn đang chạy; findRoute tự hủy request cũ.
+  if (shown || pending) void findRoute()
 })
 
 refresh()

@@ -31,6 +31,7 @@ export class MapLayers {
     this.zones.clearLayers()
     for (const rule of scenario.rules) {
       const z = rule.zone
+      if (z.type !== 'circle') continue // chỉ biết vẽ vùng tròn (CongestionZone)
       const roads = rule.highway?.length ? ` · ${rule.highway.join(', ')}` : ''
       L.circle([z.lat, z.lon], {
         radius: z.radius_m, color: '#e8590c', weight: 1, fillColor: '#ff922b', fillOpacity: 0.18, interactive: false,
