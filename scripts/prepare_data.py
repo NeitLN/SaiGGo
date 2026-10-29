@@ -20,11 +20,15 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "backend"))
+from app.graph.geo import haversine_m  # noqa: E402  (dùng chung với backend, cùng bán kính 6 371 009 m)
+
 RAW = ROOT / "data" / "raw"
 PROCESSED = ROOT / "data" / "processed"
 CONFIG = ROOT / "data" / "config"
 VN = timezone(timedelta(hours=7))
 ATTRIBUTION = "© OpenStreetMap contributors, dữ liệu theo giấy phép ODbL (https://www.openstreetmap.org/copyright)"
+RELEASE = "data-raw-20261024"  # GitHub Release chứa outer.graphml đã đóng băng (T34)
 
 BEN_THANH = (10.7725, 106.6980)  # (lat, lon) chợ Bến Thành
 SMOKE_HALF_SIDE_M = 250          # bbox 500 m × 500 m
@@ -122,16 +126,6 @@ def download(force: bool) -> None:
 
 # ---------- build: GraphML thô → saigo-graph/1 (DATA_MODEL mục 2.1 và 8.2) ----------
 
-EARTH_R = 6_371_009  # mét, cùng giá trị OSMnx dùng để tính `length` (DATA_MODEL mục 5.1)
-
-
-def haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
-    import math
-    p1, p2 = math.radians(lat1), math.radians(lat2)
-    a = math.sin((p2 - p1) / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(math.radians(lon2 - lon1) / 2) ** 2
-    return 2 * EARTH_R * math.asin(min(1.0, math.sqrt(a)))
-
-
 def as_list(value) -> list:
     if value is None:
         return []
@@ -149,16 +143,20 @@ def main_highway(value, speeds: dict) -> str | None:
 
 
 def load_frozen_raw():
-    """Đọc outer.graphml đã đóng băng; dừng nếu thiếu file hoặc sha256 không khớp raw_manifest.json."""
-    ox = import_osmnx()
+    """Đọc outer.graphml đã đóng băng; dừng nếu thiếu file hoặc sha256 không khớp raw_manifest.json.
+
+    Kiểm file thô trước khi nạp OSMnx, để máy thiếu cả hai thấy đúng việc cần làm trước.
+    """
     raw_manifest = json.loads((PROCESSED / "raw_manifest.json").read_text(encoding="utf-8"))
     raw = ROOT / raw_manifest["file"]
     if not raw.exists():
-        sys.exit(f"thiếu {raw_manifest['file']}; tải đúng bản đã đóng băng từ Release data-raw-20261024: "
-                 "gh release download data-raw-20261024 -p outer.graphml -D data/raw "
+        sys.exit(f"thiếu {raw_manifest['file']}; tải đúng bản đã đóng băng từ Release {RELEASE}: "
+                 f"gh release download {RELEASE} -p {raw.name} -D {raw.parent.relative_to(ROOT).as_posix()} "
                  "(xem docs/team/ONBOARDING.md mục 3, \"Tải dữ liệu\"). Không tải lại từ OSM.")
     if sha256(raw) != raw_manifest["sha256"]:
-        sys.exit(f"{raw_manifest['file']} không khớp sha256 trong raw_manifest.json; dùng đúng bản đã đóng băng")
+        sys.exit(f"{raw_manifest['file']} không khớp sha256 trong raw_manifest.json; "
+                 f"tải lại đúng bản đã đóng băng từ Release {RELEASE} (thêm --clobber để ghi đè)")
+    ox = import_osmnx()
     return raw_manifest, ox.load_graphml(raw)
 
 
@@ -263,6 +261,8 @@ def build(area: str) -> None:
     raw_manifest, G = load_frozen_raw()
     areas = json.loads((CONFIG / "areas.json").read_text(encoding="utf-8"))
     speeds = json.loads((CONFIG / "speeds.json").read_text(encoding="utf-8"))
+    if area in ("center", "download") or not isinstance(areas.get(area), dict) or "half_side_m" not in areas[area]:
+        sys.exit(f"không có vùng {area!r} trong data/config/areas.json")
     half = areas[area]["half_side_m"]
 
     keep, utm = crop_nodes(G, areas["center"], half)
@@ -308,6 +308,9 @@ def main() -> None:
     ap.add_argument("--force", action="store_true", help="download: tải lại dù đã có dữ liệu thô")
     ap.add_argument("--area", default="demo", help="build: tên vùng trong data/config/areas.json (mặc định: demo)")
     a = ap.parse_args()
+    # Windows: stdout bị chuyển hướng dùng cp1252, in tiếng Việt sẽ lỗi sau khi file đã ghi xong.
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
     if a.smoke:
         smoke()
     elif a.command == "download":

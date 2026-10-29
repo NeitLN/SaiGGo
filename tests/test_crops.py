@@ -57,12 +57,28 @@ def test_crops_and_sccs_are_nested(graphs):
         assert small <= big
 
 
-def test_in_scc_is_strongly_connected(graphs):
+def test_in_scc_is_exactly_one_scc(graphs):
+    """`in_scc` đúng bằng một thành phần liên thông mạnh: không sót node, không lẫn node ngoài."""
     nx = pytest.importorskip("networkx")
     for g in graphs:
-        G = nx.DiGraph((e["u"], e["v"]) for e in g["edges"])
-        scc = [x["id"] for x in g["nodes"] if x["in_scc"]]
-        assert nx.is_strongly_connected(G.subgraph(scc))
+        G = nx.DiGraph()
+        G.add_nodes_from(x["id"] for x in g["nodes"])
+        G.add_edges_from((e["u"], e["v"]) for e in g["edges"])
+        marked = {x["id"] for x in g["nodes"] if x["in_scc"]}
+        component = next(c for c in nx.strongly_connected_components(G) if next(iter(marked)) in c)
+        assert marked == component
+
+
+def test_crop_2km_equals_demo_graph(manifest):
+    """Vùng 2 km phải trùng đồ thị demo của T31 (chỉ khác dataset_id)."""
+    crop = next((s for s in manifest["sizes"] if s["half_side_m"] == 2000), None)
+    demo = ROOT / "data" / "processed" / "hcm-benthanh-r2000-20261024.json"
+    if crop is None or not demo.exists():
+        pytest.skip("cần crop_r2000 và đồ thị demo (prepare_data.py build --area demo)")
+    a = json.loads((ROOT / crop["file"]).read_text(encoding="utf-8"))
+    b = json.loads(demo.read_text(encoding="utf-8"))
+    assert a["nodes"] == b["nodes"]
+    assert a["edges"] == b["edges"]
 
 
 def test_load_graph_reads_every_crop(manifest):

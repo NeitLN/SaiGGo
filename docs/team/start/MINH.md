@@ -1,5 +1,7 @@
 # Phiếu bắt đầu — Võ Hoàng Minh (@Jayson135724)
 
+> **Từ 26/10 phân công đã đổi** (cắt T32; Duy Anh vắng sáng 26/10 rồi quay lại chiều 26/10). Danh sách task dưới đây là của tuần 1; việc hiện tại xem [phiếu giao việc](../../tasks/README.md), [ROADMAP](../../ROADMAP.md) mục 6 và tab Issues.
+
 **Vai trò:** pipeline dữ liệu OpenStreetMap, bản đồ, giao diện.
 Làm xong [ONBOARDING.md](../ONBOARDING.md) mục 1–5 trước; chạy `scripts\setup_dev.ps1` **với `-Data`** để cài OSMnx.
 

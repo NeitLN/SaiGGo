@@ -156,10 +156,7 @@
     "seed": 42,
     "no_path": 0,
     "haversine_m_min": 9053.6,
-    "median_s": 0.014144049999231356,
-    "max_s": 0.019533600003342144,
-    "median_expanded": 8890.0,
-    "pass": true
+    "median_expanded": 8890.0
   },
   "speed_config": {
     "_comment": "Tốc độ theo loại đường (DATA_MODEL mục 3.2). [Giả định — số mô phỏng, không phải đo thực tế]. Bỏ qua thẻ maxspeed của OSM. Đổi bảng thì v_max và mọi kết quả benchmark phải tính lại.",

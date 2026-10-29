@@ -44,13 +44,17 @@ def nested_sccs(G, crops: dict[int, list]) -> dict[int, set]:
     out, prev = {}, None
     for half in sorted(crops):
         comps = list(nx.strongly_connected_components(G.subgraph(crops[half])))
+        largest = max(comps, key=len)
         if prev is None:
-            scc = max(comps, key=len)
+            scc = largest
         else:
             seed = next(iter(prev))
             scc = next(c for c in comps if seed in c)
             if not prev <= scc:
                 sys.exit(f"SCC của nửa cạnh {half} m không chứa SCC của kích thước nhỏ hơn")
+            if len(scc) < len(largest):
+                print(f"CẢNH BÁO: nửa cạnh {half} m: SCC lồng nhau ({len(scc)} node) không phải SCC lớn nhất "
+                      f"của vùng ({len(largest)} node)")
         out[half] = scc
         prev = scc
     return out
@@ -63,8 +67,8 @@ def pilot(path: Path, n: int, seed: int) -> dict:
     from app.graph.model import load_graph
     from app.graph.scenario import baseline_snapshot
 
-    graph, _ = load_graph(path)
-    in_scc = [i for i, x in enumerate(json.loads(path.read_text(encoding="utf-8"))["nodes"]) if x["in_scc"]]
+    graph, meta = load_graph(path)
+    in_scc = [i for i, flag in enumerate(meta.node_in_scc) if flag]
     rng = random.Random(seed)
     cand = [tuple(rng.sample(in_scc, 2)) for _ in range(50 * n)]
     dist = {p: haversine_m(graph.node_lat[p[0]], graph.node_lon[p[0]], graph.node_lat[p[1]], graph.node_lon[p[1]])
@@ -96,6 +100,7 @@ def main() -> None:
     ap.add_argument("--pilot", type=int, default=20, help="số truy vấn pilot ở kích thước lớn nhất (0 = bỏ qua)")
     ap.add_argument("--seed", type=int, default=42)
     a = ap.parse_args()
+    sys.stdout.reconfigure(encoding="utf-8")
 
     ox = import_osmnx()
     import networkx as nx
@@ -139,14 +144,21 @@ def main() -> None:
         "scc_rule": "lồng nhau: SCC lớn nhất của vùng nhỏ nhất; mỗi vùng lớn hơn lấy SCC chứa SCC trước",
         "nested_scc_checked": True,
         "sizes": sizes,
+        # Chỉ ghi phần không đổi giữa các lần chạy; thời gian đo nằm ở crop_pilot.json (không commit).
         "pilot": {"half_side_m": largest["half_side_m"], "algorithm": "dijkstra", "limit_s": PILOT_LIMIT_S,
-                  **(pilot_result or {})} if pilot_result else None,
+                  **{k: pilot_result[k] for k in ("queries", "seed", "no_path", "haversine_m_min", "median_expanded")}}
+        if pilot_result else None,
         "speed_config": speeds,
         "dependencies": {"python": platform.python_version(), "osmnx": ox.__version__, "networkx": nx.__version__},
         "attribution": ATTRIBUTION,
     }
     out = PROCESSED / "crop_manifest.json"
     out.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if pilot_result:
+        timing = {"half_side_m": largest["half_side_m"], "measured_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
+                  "python": platform.python_version(), "machine": platform.node(), **pilot_result}
+        (PROCESSED / "crop_pilot.json").write_text(json.dumps(timing, ensure_ascii=False, indent=2) + "\n",
+                                                   encoding="utf-8")
 
     print("\n| Nửa cạnh | `dataset_id` | \\|V\\| | \\|E\\| | SCC (node) | Cạnh một chiều | sha256 |")
     print("|---:|---|---:|---:|---:|---:|---|")
