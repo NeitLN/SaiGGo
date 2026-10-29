@@ -61,7 +61,7 @@ uvicorn app.main:app --reload --app-dir backend
 cd frontend; npm run dev
 ```
 
-Mở http://localhost:5173. Góc phải trên phải hiện "Server sẵn sàng · dataset mini" (backend mặc định nạp `tests/fixtures/mini.json`). Kiểm tra nhanh: bấm gần node S (khoảng 200 m bên trái tâm bản đồ lúc mới mở) rồi gần node T (khoảng 550 m bên phải tâm, cùng hàng ngang) → tuyến màu xanh, "Thời gian di chuyển ước tính" 80.0 s; đảo lại T → S được 100.0 s. Nền bản đồ lấy tile từ `tile.openstreetmap.org`, mạng chặn trang này thì nền xám nhưng tuyến vẫn vẽ đúng.
+Mở http://localhost:5173. Góc phải trên phải hiện "Server sẵn sàng · dataset mini" (backend mặc định nạp `tests/fixtures/mini.json`). Kiểm tra nhanh: bấm gần node S (khoảng 200 m bên trái tâm bản đồ lúc mới mở) rồi gần node T (khoảng 580 m bên phải tâm, gần mép phải bản đồ, cùng hàng ngang) → tuyến màu xanh, "Thời gian di chuyển ước tính" 80.0 s; đảo lại T → S được 100.0 s. Nền bản đồ lấy tile từ `tile.openstreetmap.org`, mạng chặn trang này thì nền xám nhưng tuyến vẫn vẽ đúng.
 
 Lỗi thường gặp:
 
