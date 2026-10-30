@@ -115,6 +115,8 @@ button:disabled {
 }
 
 .field select {
+  width: 100%;
+  min-width: 0;
   padding: 5px 6px;
   border: 1px solid #bcccdc;
   border-radius: 4px;
