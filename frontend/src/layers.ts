@@ -32,7 +32,9 @@ export class MapLayers {
     for (const rule of scenario.rules) {
       const z = rule.zone
       if (z.type !== 'circle') continue // chỉ biết vẽ vùng tròn (CongestionZone)
-      const roads = rule.highway?.length ? ` · ${rule.highway.join(', ')}` : ''
+      // Gộp primary/primary_link thành một tên cho nhãn ngắn (luật vẫn áp đúng danh sách gốc).
+      const kinds = [...new Set((rule.highway ?? []).map((h) => h.replace(/_link$/, '')))]
+      const roads = kinds.length ? ` · ${kinds.join(', ')}` : ''
       L.circle([z.lat, z.lon], {
         radius: z.radius_m, color: '#e8590c', weight: 1, fillColor: '#ff922b', fillOpacity: 0.18, interactive: false,
       }).addTo(this.zones)
