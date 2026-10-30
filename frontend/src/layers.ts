@@ -40,7 +40,7 @@ export class MapLayers {
       }).addTo(this.zones)
       L.tooltip({ permanent: true, direction: 'center', className: 'zone-label', interactive: false })
         .setLatLng([z.lat, z.lon])
-        .setContent(`Cao điểm mô phỏng · ×${rule.alpha}${roads}`)
+        .setContent(`Cao điểm mô phỏng · ×${rule.alpha.toLocaleString('vi-VN')}${roads}`)
         .addTo(this.zones)
     }
   }
