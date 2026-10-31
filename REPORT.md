@@ -1,8 +1,8 @@
 ## 📉 Burndown SaiGo
 
-_Tự động cập nhật 15:42 31/10/2026 (giờ VN) bởi workflow `tracking.yml` từ trạng thái issue/PR thật. Số những ngày đã qua được chốt cuối ngày và không bị sửa lại; số hôm nay là tạm tính. Cách tính ở đầu file `scripts/tracking/burndown.py`._
+_Tự động cập nhật 15:43 31/10/2026 (giờ VN) bởi workflow `tracking.yml` từ trạng thái issue/PR thật. Số những ngày đã qua được chốt cuối ngày và không bị sửa lại; số hôm nay là tạm tính. Cách tính ở đầu file `scripts/tracking/burndown.py`._
 
-![Burndown](https://raw.githubusercontent.com/NeitLN/SaiGo/tracking/burndown.png?v=41185670134)
+![Burndown](https://raw.githubusercontent.com/NeitLN/SaiGo/tracking/burndown.png?v=41185687040)
 
 - **Phạm vi hiện tại:** 136 giờ ước lượng, 46 task (đã cắt 3 giờ)
 - **Đã đóng:** 75 giờ — có bằng chứng (PR/commit) 75 giờ · **Còn lại:** 61 giờ, 20 task mở
@@ -14,7 +14,7 @@ _Tự động cập nhật 15:42 31/10/2026 (giờ VN) bởi workflow `tracking.
 | Tuần | Giờ đến hạn | Giờ hoàn thành | Task xong | Còn lại cuối tuần | PR merge | Lượt review |
 |---|---:|---:|---:|---:|---:|---:|
 | Tuần 1 · 19–25/10 | 27 | 10 | 3 | 129 | 2 | 3 |
-| Tuần 2 · 26/10–01/11 | 30 | 65 | 23 | 61 | 30 | 56 |
+| Tuần 2 · 26/10–01/11 | 30 | 65 | 23 | 61 | 31 | 56 |
 | Tuần 3 · 02–08/11 | 62 | 0 | 0 | — | 0 | 0 |
 | Tuần 4 · 09–15/11 | 17 | 0 | 0 | — | 0 | 0 |
 
@@ -25,7 +25,7 @@ _Tự động cập nhật 15:42 31/10/2026 (giờ VN) bởi workflow `tracking.
 | Bảo (@dobaovlu) | 18.2 | 7.0 | 3 | 0 | 6 | 3 | 16 |
 | Duy Anh (@anh7032) | 34.8 | 26.0 | 9 | 0 | 4 | 12 | 16 |
 | Minh (@Jayson135724) | 28.8 | 13.0 | 5 | 0 | 8 | 5 | 22 |
-| Tiến (@NeitLN) | 54.2 | 29.0 | 10 | 0 | 11 | 12 | 5 |
+| Tiến (@NeitLN) | 54.2 | 29.0 | 10 | 0 | 11 | 13 | 5 |
 
 ### Đóng trong 7 ngày qua
 
