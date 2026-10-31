@@ -20,7 +20,7 @@ Cập nhật 26/10 (chiều) theo [ROADMAP](ROADMAP.md) mục 2: Duy Anh quay l�
 | M4 Tìm đường trên dữ liệu thật | 03/11 | ⬜ | Chờ T34 |
 | M5 Ùn tắc & đóng đường | 04/11 | 🟨 | T40, T41 đã merge (còn CLI và kiểm trên dữ liệu thật); T42 có kịch bản đã thử trên đồ thị thật, chờ CLI `--scenario` |
 | M6 Bản đồ tương tác (rút gọn) | 07/11 | ⬜ | Không có lớp chấm node; đóng đường một chế độ trên bản đồ |
-| M7 Benchmark & tăng quy mô | 08/11 | 🟨 | Khung T60 và T64 đã merge; chưa có số đo thật. 3 kích thước, chỉ fixed trips |
+| M7 Benchmark & tăng quy mô | 08/11 | 🟨 | Khung T60 và T64 đã merge; chưa có số đo thật. 4 kích thước (chốt 28/10), chỉ fixed trips |
 | G1 Điểm kiểm bằng chứng | 05/11 | ⬜ | Không còn là cổng quyết định tour |
 | MVP tích hợp | 08/11 | ⬜ | Demo chạy trọn + bằng chứng thực nghiệm đã chốt |
 | M8 Tour (E1) | 08/11 | 🟨 | T70, T71 đã merge; T72–T74 trở lại phạm vi chiều 26/10 |
