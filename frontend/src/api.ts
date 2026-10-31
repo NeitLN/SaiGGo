@@ -17,6 +17,8 @@ export interface RouteRequest {
   source: LatLon
   target: LatLon
   algorithms?: Algorithm[]
+  scenario_id?: string
+  blocked_edge_ids?: number[]
 }
 
 export interface SnappedPoint {
@@ -35,6 +37,7 @@ export interface AlgorithmResult {
   status: 'ok' | 'no_path'
   cost_s: number | null
   distance_m: number | null
+  edge_ids?: number[] // thêm ngoài v1 (ARCHITECTURE mục 4); T54 dùng để đóng đoạn trên tuyến
   geometry: LineString
   expanded: number
   runtime_ms: number
@@ -42,9 +45,14 @@ export interface AlgorithmResult {
 
 export interface RouteResponse {
   dataset_id: string
+  snapshot_id?: string | null
   snapped: { source: SnappedPoint; target: SnappedPoint }
   results: Partial<Record<Algorithm, AlgorithmResult>>
+  costs_match?: boolean | null
+  warnings?: string[]
 }
+
+export const ALGORITHM_LABEL: Record<Algorithm, string> = { dijkstra: 'Dijkstra', astar: 'A*' }
 
 export async function getHealth(): Promise<HealthResponse> {
   const res = await fetch('/api/health')

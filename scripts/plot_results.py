@@ -2,12 +2,12 @@
 
 Cách dùng: `python scripts/plot_results.py <run_dir> [<run_dir> ...] [--out <dir>]` — đọc và **gộp**
 CSV của mọi thư mục rồi ghi `fig_*.png` vào `--out` (mặc định: thư mục kết quả đầu tiên).
-T60 đo một đồ thị mỗi lần chạy, nên E3 (3 kích thước) là 3 thư mục; khi gộp nhiều thư mục thì bắt
+T60 đo một đồ thị mỗi lần chạy, nên E3 (4 kích thước) là 4 thư mục; khi gộp nhiều thư mục thì bắt
 buộc truyền `--out` để không ghi hình E3 lẫn vào thư mục của riêng một kích thước. Backend `"Agg"`
 nên chạy được cả trên máy không có màn hình.
 
-Phạm vi chốt 26/10: RQ1b chỉ **3 kích thước** và chỉ workload **"fixed trips"**; **bỏ biểu đồ E5**
-(tour). Hình được chọn theo cột `suite`, đúng tên `--suite` trong docs/TASKS.md: `demo` = E2,
+Phạm vi (cập nhật 28/10): RQ1b chỉ workload **"fixed trips"**, **4 kích thước**; biểu đồ E5 (tour) thêm ở
+T74. Hình được chọn theo cột `suite`, đúng tên `--suite` trong docs/TASKS.md: `demo` = E2,
 `scaling` = E3, `scenario` = E4. Thiếu dữ liệu cho hình nào thì hình đó bị bỏ qua kèm lý do in ra
 màn hình; các hình còn lại vẫn được vẽ, không làm hỏng cả lần chạy.
 
